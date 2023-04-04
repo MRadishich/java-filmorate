@@ -5,7 +5,7 @@ import jakarta.validation.ConstraintValidatorContext;
 
 import java.time.Duration;
 
-public class DurationValidator implements ConstraintValidator<FilmeDuration, Duration> {
+public class DurationValidator implements ConstraintValidator<FilmDuration, Duration> {
     @Override
     public boolean isValid(Duration duration, ConstraintValidatorContext constraintValidatorContext) {
         return duration != null && !duration.isNegative();

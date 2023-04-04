@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = DurationValidator.class)
-public @interface FilmeDuration {
+public @interface FilmDuration {
     String message() default "Указана некорректная дата.";
 
     Class<?>[] groups() default {};

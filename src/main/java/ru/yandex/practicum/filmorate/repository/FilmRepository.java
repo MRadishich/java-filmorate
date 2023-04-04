@@ -5,15 +5,13 @@ import ru.yandex.practicum.filmorate.model.Film;
 import java.util.Collection;
 
 public interface FilmRepository {
-    Film create(Film film);
+    int create(Film film);
 
-    Collection<Film> readAll();
+    Collection<Film> getAll();
 
-    Film read(int id);
+    Film get(int id);
 
-    Film update(Film film);
-
-    void deleteAll();
+    boolean update(Film film);
 
     boolean delete(int id);
 }
