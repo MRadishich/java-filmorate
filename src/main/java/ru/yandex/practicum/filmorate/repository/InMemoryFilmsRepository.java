@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.repository;
 
 import org.springframework.stereotype.Repository;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.*;
@@ -10,14 +11,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class InMemoryFilmsRepository implements FilmRepository {
     private static final Map<Integer, Film> films = new HashMap<>();
     private static final AtomicInteger filmId = new AtomicInteger();
+    private static final String MESSAGE = "Фильм  с id = %s не найден.";
 
     @Override
-    public int create(Film film) {
+    public Film create(Film film) {
         int id = filmId.incrementAndGet();
         film.setId(id);
         films.put(id, film);
 
-        return id;
+        return film;
     }
 
     @Override
@@ -27,22 +29,29 @@ public class InMemoryFilmsRepository implements FilmRepository {
 
     @Override
     public Film get(int id) {
-        return films.get(id);
+        if (films.containsKey(id)) {
+            return films.get(id);
+        }
+
+        throw new NotFoundException(String.format(MESSAGE, id));
     }
 
     @Override
-    public boolean update(Film film) {
-        int filmId = film.getId();
-        if (films.containsKey(filmId)) {
-            films.put(filmId, film);
-            return true;
+    public Film update(Film film) {
+        if (films.containsKey(film.getId())) {
+            films.put(film.getId(), film);
+            return film;
         }
 
-        return false;
+        throw new NotFoundException(String.format(MESSAGE, film.getId()));
     }
 
     @Override
     public boolean delete(int id) {
-        return films.remove(id) != null;
+        if (films.remove(id) != null) {
+            return films.remove(id) != null;
+        }
+
+        throw new NotFoundException(String.format(MESSAGE, id));
     }
 }

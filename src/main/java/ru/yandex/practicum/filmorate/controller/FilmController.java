@@ -3,14 +3,16 @@ package ru.yandex.practicum.filmorate.controller;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.repository.FilmRepository;
 
 import java.util.Collection;
+
 @Slf4j
 @RestController
 @RequestMapping("/films")
@@ -22,19 +24,16 @@ public class FilmController {
         this.repository = repository;
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody Film film) {
         repository.create(film);
 
         log.info("Создан новый фильм: {}", film);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Location", "/films/" + film.getId());
-
-        return new ResponseEntity<>(responseHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(film, HttpStatus.CREATED);
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<Collection<Film>> getAll() {
         Collection<Film> films = repository.getAll();
 
@@ -44,24 +43,24 @@ public class FilmController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Film> get(@PathVariable int id) {
-        Film film = repository.get(id);
-
-        return film != null ?
-                new ResponseEntity<>(film, HttpStatus.OK) :
-                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> get(@PathVariable("id") int id) {
+        try {
+            return new ResponseEntity<>(repository.get(id), HttpStatus.OK);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> update(@Valid @PathVariable(name = "id") int id, @RequestBody Film film) {
-        boolean isUpdated = repository.update(film);
-        if (isUpdated) {
-            log.info("Обновлен фильм с id = {}. Новое значение: {}", id, film);
-            return new ResponseEntity<>(HttpStatus.OK);
+    @PutMapping
+    public ResponseEntity<?> update(@Valid @RequestBody Film film) {
+        try {
+            Film newFilm = repository.update(film);
+            log.info("Обновлен фильм с id = {}. Новое значение: {}", film.getId(), newFilm);
+            return new ResponseEntity<>(film, HttpStatus.OK);
+        } catch (NotFoundException e) {
+            log.info("{} Обновление не возможно.", e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
-
-        log.info("Фильм с id = {} не найден. Обновление не возможно.", id);
-        return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
     @DeleteMapping
@@ -70,15 +69,14 @@ public class FilmController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable int id) {
-        boolean isDeleted = repository.delete(id);
-
-        if (isDeleted) {
+    public ResponseEntity<?> delete(@PathVariable("id") int id) {
+        try {
+            repository.delete(id);
             log.info("Удален фильм с id = {}", id);
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NotFoundException e) {
+            log.info("{} Удаление не возможно.", e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
-
-        log.info("Фильм с id = {} не найден. Удаление не возможно.", id);
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

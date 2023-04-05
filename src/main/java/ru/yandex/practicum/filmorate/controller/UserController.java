@@ -3,10 +3,11 @@ package ru.yandex.practicum.filmorate.controller;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.repository.UserRepository;
 
@@ -24,15 +25,11 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody User user) {
-        int userId = repository.create(user);
-
+    public ResponseEntity<User> create(@Valid @RequestBody User user) {
+        repository.create(user);
         log.info("Создан новый пользователь: {}", user);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("Location", "/users/" + userId);
-
-        return new ResponseEntity<>(responseHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -45,25 +42,25 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> get(@PathVariable(name = "id") int id) {
-        final User user = repository.get(id);
-
-        return user != null ?
-                new ResponseEntity<>(user, HttpStatus.OK) :
-                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<User> get(@PathVariable("id") int id) {
+        try {
+            return new ResponseEntity<>(repository.get(id), HttpStatus.OK);
+        } catch (NotFoundException e) {
+            log.warn(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> update(@Valid @PathVariable(name = "id") int id, @RequestBody User user) {
-        boolean isUpdated = repository.update(id, user);
-
-        if (isUpdated) {
-            log.info("Обновлен пользователь с id = {}. Новое значение: {}", id, user);
-            return new ResponseEntity<>(HttpStatus.OK);
+    @PutMapping
+    public ResponseEntity<?> update(@Valid @RequestBody User user) {
+        try {
+            User newUser = repository.update(user);
+            log.info("Обновлен пользователь с id = {}. Новое значение: {}", user.getId(), newUser);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (NotFoundException e) {
+            log.warn("{} Обновление не возможно.", e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
-
-        log.info("Пользователь с id = {} не найден. Обновление не возможно.", id);
-        return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
     @DeleteMapping
@@ -72,15 +69,14 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable(name = "id") int id) {
-        boolean isDeleted = repository.delete(id);
-
-        if (isDeleted) {
+    public ResponseEntity<?> deleteUser(@PathVariable("id") int id) {
+        try {
+            repository.delete(id);
             log.info("Пользователь с id = {} удален.", id);
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NotFoundException e) {
+            log.warn("{} Удаление не возможно.", e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
-
-        log.info("Пользователь с id = {} не найден. Удаление не возможно.", id);
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

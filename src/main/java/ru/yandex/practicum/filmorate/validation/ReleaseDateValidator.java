@@ -6,9 +6,10 @@ import jakarta.validation.ConstraintValidatorContext;
 import java.time.LocalDate;
 
 public class ReleaseDateValidator implements ConstraintValidator<ReleaseDate, LocalDate> {
+    private static final LocalDate START_DATE = LocalDate.parse("1895-12-28");
+
     @Override
     public boolean isValid(LocalDate date, ConstraintValidatorContext constraintValidatorContext) {
-        LocalDate startDate = LocalDate.parse("1895-12-28");
-        return date.isAfter(startDate) || date.isEqual(startDate);
+        return date.isAfter(START_DATE) || date.isEqual(START_DATE);
     }
 }

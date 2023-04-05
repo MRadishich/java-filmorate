@@ -5,13 +5,13 @@ import ru.yandex.practicum.filmorate.model.User;
 import java.util.Collection;
 
 public interface UserRepository {
-    int create(User user);
+    User create(User user);
 
     Collection<User> getAll();
 
     User get(int id);
 
-    boolean update(int id, User user);
+    User update(User user);
 
     boolean delete(int id);
 }
