@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class Film {
     public static final int DESCRIPTION_MAX_LENGTH = 200;
-    public static final String MIN_DATE_RELEASE = "1985-12-28";
+    public static final String MIN_DATE_RELEASE = "1895-12-28";
 
     @EqualsAndHashCode.Exclude
     private int id;
