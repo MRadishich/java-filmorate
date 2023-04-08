@@ -13,5 +13,5 @@ public interface FilmRepository {
 
     Film update(Film film);
 
-    boolean delete(int id);
+    void delete(int id);
 }

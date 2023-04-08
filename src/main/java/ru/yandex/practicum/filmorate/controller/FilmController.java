@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,17 +15,13 @@ import java.util.Collection;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/films")
 public class FilmController {
     private final FilmRepository repository;
 
-    @Autowired
-    public FilmController(FilmRepository repository) {
-        this.repository = repository;
-    }
-
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody Film film) {
+    public ResponseEntity<Film> create(@Valid @RequestBody Film film) {
         repository.create(film);
 
         log.info("Создан новый фильм: {}", film);
@@ -43,7 +39,7 @@ public class FilmController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> get(@PathVariable("id") int id) {
+    public ResponseEntity<Film> get(@PathVariable("id") int id) {
         try {
             return new ResponseEntity<>(repository.get(id), HttpStatus.OK);
         } catch (NotFoundException e) {
@@ -52,19 +48,19 @@ public class FilmController {
     }
 
     @PutMapping
-    public ResponseEntity<?> update(@Valid @RequestBody Film film) {
+    public ResponseEntity<Film> update(@Valid @RequestBody Film film) {
         try {
-            Film newFilm = repository.update(film);
-            log.info("Обновлен фильм с id = {}. Новое значение: {}", film.getId(), newFilm);
+            repository.update(film);
+            log.info("Обновлен фильм с id = {}. Новое значение: {}", film.getId(), film);
             return new ResponseEntity<>(film, HttpStatus.OK);
         } catch (NotFoundException e) {
-            log.info("{} Обновление не возможно.", e.getMessage());
+            log.error("{} Обновление не возможно.", e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
     @DeleteMapping
-    public ResponseEntity<HttpStatus> deleteAll() {
+    public ResponseEntity<?> deleteAll() {
         return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
@@ -75,7 +71,7 @@ public class FilmController {
             log.info("Удален фильм с id = {}", id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (NotFoundException e) {
-            log.info("{} Удаление не возможно.", e.getMessage());
+            log.error("{} Удаление не возможно.", e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }

@@ -54,11 +54,9 @@ public class InMemoryUsersRepository implements UserRepository {
     }
 
     @Override
-    public boolean delete(int id) {
-        if (users.remove(id) != null) {
-            return true;
+    public void delete(int id) {
+        if (users.remove(id) == null) {
+            throw new NotFoundException(String.format(MESSAGE, id));
         }
-
-        throw new NotFoundException(String.format(MESSAGE, id));
     }
 }

@@ -1,6 +1,9 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.yandex.practicum.filmorate.validation.ReleaseDate;
 
 import javax.validation.constraints.NotBlank;
@@ -17,7 +20,6 @@ public class Film {
     public static final int DESCRIPTION_MAX_LENGTH = 200;
     public static final String MIN_DATE_RELEASE = "1895-12-28";
 
-    @EqualsAndHashCode.Exclude
     private int id;
 
     @NotBlank(message = "Название фильма не может быть пустым.")

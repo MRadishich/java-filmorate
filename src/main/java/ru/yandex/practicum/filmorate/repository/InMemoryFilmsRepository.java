@@ -4,7 +4,9 @@ import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
@@ -47,11 +49,9 @@ public class InMemoryFilmsRepository implements FilmRepository {
     }
 
     @Override
-    public boolean delete(int id) {
-        if (films.remove(id) != null) {
-            return films.remove(id) != null;
+    public void delete(int id) {
+        if (films.remove(id) == null) {
+            throw new NotFoundException(String.format(MESSAGE, id));
         }
-
-        throw new NotFoundException(String.format(MESSAGE, id));
     }
 }

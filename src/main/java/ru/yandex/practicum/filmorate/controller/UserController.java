@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,14 +15,10 @@ import java.util.Collection;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
     private final UserRepository repository;
-
-    @Autowired
-    public UserController(UserRepository repository) {
-        this.repository = repository;
-    }
 
     @PostMapping
     public ResponseEntity<User> create(@Valid @RequestBody User user) {
@@ -46,25 +42,25 @@ public class UserController {
         try {
             return new ResponseEntity<>(repository.get(id), HttpStatus.OK);
         } catch (NotFoundException e) {
-            log.warn(e.getMessage());
+            log.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
     @PutMapping
-    public ResponseEntity<?> update(@Valid @RequestBody User user) {
+    public ResponseEntity<User> update(@Valid @RequestBody User user) {
         try {
-            User newUser = repository.update(user);
-            log.info("Обновлен пользователь с id = {}. Новое значение: {}", user.getId(), newUser);
+            repository.update(user);
+            log.info("Обновлен пользователь с id = {}. Новое значение: {}", user.getId(), user);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (NotFoundException e) {
-            log.warn("{} Обновление не возможно.", e.getMessage());
+            log.error("{} Обновление не возможно.", e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
     @DeleteMapping
-    public ResponseEntity<HttpStatus> deleteAll() {
+    public ResponseEntity<?> deleteAll() {
         return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
@@ -75,7 +71,7 @@ public class UserController {
             log.info("Пользователь с id = {} удален.", id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (NotFoundException e) {
-            log.warn("{} Удаление не возможно.", e.getMessage());
+            log.error("{} Удаление не возможно.", e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
