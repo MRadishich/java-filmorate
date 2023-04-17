@@ -7,13 +7,15 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-    private int id;
+    private Long id;
 
     @Email(message = "Некорректный адрес электронной почты.")
     @NotBlank(message = "Адрес электронной почти - обязательное поле.")
@@ -27,4 +29,6 @@ public class User {
 
     @PastOrPresent(message = "Дата рождения не может быть в будущем.")
     private LocalDate birthday;
+
+    private final Set<Long> likes = new HashSet<>();
 }
