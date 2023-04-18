@@ -31,6 +31,8 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundException(NotFoundException ex) {
+        log.error(ex.getMessage());
+
         return new ErrorResponse(List.of(ex.getMessage()));
     }
 }
