@@ -98,6 +98,8 @@ public class UserService {
     }
 
     public Collection<User> findCommonFriends(long userId, long otherId) {
+        log.info("Получен запрос на поиск общих друзей пользователя с id = {} и пользователя с id = {}.", userId, otherId);
+
         return storage.findById(userId)
                 .orElseThrow(() -> new NotFoundException(String.format("Пользователь с id = %d не найден.", userId)))
                 .getFriends().stream()
