@@ -31,13 +31,24 @@ public class FilmController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Film> findById(@PathVariable("id") int id) {
+    public ResponseEntity<Film> findById(@PathVariable("id") long id) {
         return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/popular")
+    public ResponseEntity<Collection<Film>> findPopular(@RequestParam(value = "count", defaultValue = "10") long count) {
+        return new ResponseEntity<>(service.findPopular(count), HttpStatus.OK);
     }
 
     @PutMapping
     public ResponseEntity<Film> update(@Valid @RequestBody Film film) {
         return new ResponseEntity<>(service.update(film), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/like/{userId}")
+    public ResponseEntity<?> like(@PathVariable("id") long filmId, @PathVariable long userId) {
+        service.like(filmId, userId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping
@@ -48,6 +59,12 @@ public class FilmController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteById(@PathVariable("id") int id) {
         service.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}/like/{userId}")
+    public ResponseEntity<?> deleteLike(@PathVariable("id") long filmId, @PathVariable long userId) {
+        service.deleteLike(filmId, userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -43,5 +44,36 @@ public class FilmService {
         log.info("Получен запрос на удаление фильма с id = {}.", id);
 
         storage.deleteById(id);
+    }
+
+    public void like(long filmId, long userId) {
+        log.info("Получен запрос на добавление лайка фильму с id = {}, от пользователя с id = {}.", filmId, userId);
+
+        storage.findById(filmId).ifPresentOrElse(
+                film -> film.addLike(userId),
+                () -> {
+                    throw new NotFoundException(String.format("Фильм  с id = %d не найден.", filmId));
+                }
+        );
+    }
+
+    public void deleteLike(long filmId, long userId) {
+        log.info("Получен запрос на удаление лайка у фильма с id = {}, от пользователя с id = {}.", filmId, userId);
+
+        storage.findById(filmId).ifPresentOrElse(
+                film -> film.deleteLike(userId),
+                () -> {
+                    throw new NotFoundException(String.format("Фильм  с id = %d не найден.", filmId));
+                }
+        );
+    }
+
+    public Collection<Film> findPopular(long count) {
+        log.info("Получен запрос на поиск {} фильмов с наибольшим количеством лайков.", count);
+
+        return storage.findAll().stream()
+                .sorted((f1, f2) -> Integer.compare(f2.getLikes().size(), f1.getLikes().size()))
+                .limit(count)
+                .collect(Collectors.toList());
     }
 }
