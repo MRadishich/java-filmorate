@@ -31,8 +31,18 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> findById(@PathVariable("id") long id) {
+    public ResponseEntity<User> findById(@PathVariable long id) {
         return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/friends")
+    public ResponseEntity<Collection<User>> findFriends(@PathVariable long id) {
+        return new ResponseEntity<>(service.findFriends(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public ResponseEntity<Collection<User>> findCommonFriends(@PathVariable long id, @PathVariable long otherId) {
+        return new ResponseEntity<>(service.findCommonFriends(id, otherId), HttpStatus.OK);
     }
 
     @PutMapping
@@ -40,9 +50,21 @@ public class UserController {
         return new ResponseEntity<>(service.update(user), HttpStatus.OK);
     }
 
+    @PutMapping("/{id}/friends/{friendId}")
+    public ResponseEntity<?> addFriend(@PathVariable long id, @PathVariable long friendId) {
+        service.addFriend(id, friendId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @DeleteMapping
     public ResponseEntity<?> deleteAll() {
         return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public ResponseEntity<?> deleteFriend(@PathVariable long id, @PathVariable long friendId) {
+        service.deleteFriend(id, friendId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
