@@ -4,15 +4,13 @@ import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
 public class InMemoryUsersStorage implements UserStorage {
     private static final Map<Long, User> users = new HashMap<>();
+    private static final Map<Long, Set<User>> friends = new HashMap<>();
     private static final AtomicInteger userId = new AtomicInteger();
 
     @Override
@@ -26,6 +24,7 @@ public class InMemoryUsersStorage implements UserStorage {
         }
 
         users.put(id, user);
+        friends.put(id, new LinkedHashSet<>());
 
         return user;
     }
@@ -55,5 +54,47 @@ public class InMemoryUsersStorage implements UserStorage {
         if (users.remove(id) == null) {
             throw new NotFoundException(String.format("Пользователь с id = %s не найден.", id));
         }
+    }
+
+    @Override
+    public boolean existById(long userId) {
+        return users.containsKey(userId);
+    }
+
+    @Override
+    public Collection<User> findFriends(long userId) {
+        if (!existById(userId)) {
+            throw new NotFoundException(String.format("Пользователь с id = %d не найден.", userId));
+        }
+
+        return friends.get(userId);
+    }
+
+    @Override
+    public void addFriend(long userId, long friendId) {
+        if (!existById(userId)) {
+            throw new NotFoundException(String.format("Пользователь с id = %d не найден.", userId));
+        }
+
+        if (!existById(friendId)) {
+            throw new NotFoundException(String.format("Пользователь с id = %d не найден.", friendId));
+        }
+
+        friends.get(userId).add(users.get(friendId));
+        friends.get(friendId).add(users.get(userId));
+    }
+
+    @Override
+    public void deleteFriend(long userId, long friendId) {
+        if (!existById(userId)) {
+            throw new NotFoundException(String.format("Пользователь с id = %d не найден.", userId));
+        }
+
+        if (!existById(friendId)) {
+            throw new NotFoundException(String.format("Пользователь с id = %d не найден.", friendId));
+        }
+
+        friends.get(userId).remove(users.get(friendId));
+        friends.get(friendId).remove(users.get(userId));
     }
 }

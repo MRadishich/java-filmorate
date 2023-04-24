@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @Builder(toBuilder = true)
@@ -29,14 +27,4 @@ public class User {
 
     @PastOrPresent(message = "Дата рождения не может быть в будущем.")
     private LocalDate birthday;
-
-    private final Set<Long> friends = new HashSet<>();
-
-    public void addFriend(long id) {
-        friends.add(id);
-    }
-
-    public void deleteFriend(long id) {
-        friends.remove(id);
-    }
 }

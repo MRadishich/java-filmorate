@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.service.film.FilmService;
 
 import javax.validation.Valid;
 import java.util.Collection;
@@ -47,7 +47,7 @@ public class FilmController {
 
     @PutMapping("/{id}/like/{userId}")
     public ResponseEntity<?> like(@PathVariable("id") long filmId, @PathVariable long userId) {
-        service.like(filmId, userId);
+        service.addLike(filmId, userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

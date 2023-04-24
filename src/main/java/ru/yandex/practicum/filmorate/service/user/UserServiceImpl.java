@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.service;
+package ru.yandex.practicum.filmorate.service.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,13 +8,12 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.Collection;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class UserService {
+public class UserServiceImpl implements ru.yandex.practicum.filmorate.service.user.UserService {
     private final UserStorage storage;
 
     public User create(User user) {
@@ -32,7 +31,8 @@ public class UserService {
     public User findById(long userId) {
         log.info("Получен запрос на поиск пользователя с id = {}.", userId);
 
-        return storage.findById(userId).orElseThrow(() -> new NotFoundException(String.format("Пользователь с id = %d не найден.", userId)));
+        return storage.findById(userId)
+                .orElseThrow(() -> new NotFoundException(String.format("Пользователь с id = %d не найден.", userId)));
     }
 
     public User update(User user) {
@@ -51,63 +51,27 @@ public class UserService {
         log.info("Получен запрос на добавление в друзья. " +
                 "Пользователь с id = {} хочет добавить в друзья пользователя с id = {}", userId, friendId);
 
-        Optional<User> user = storage.findById(userId);
-        Optional<User> friend = storage.findById(friendId);
-
-        if (user.isEmpty()) {
-            throw new NotFoundException(String.format("Пользователь с id = %d не найден.", userId));
-        }
-
-        if (friend.isEmpty()) {
-            throw new NotFoundException(String.format("Пользователь с id = %d не найден.", friendId));
-        }
-
-        user.get().addFriend(friendId);
-        friend.get().addFriend(userId);
+        storage.addFriend(userId, friendId);
     }
 
     public void deleteFriend(long userId, long friendId) {
         log.info("Получен запрос на удаление из друзей. " +
                 "Пользователь с id = {} хочет удалить из друзей пользователя с id = {}", userId, friendId);
 
-        Optional<User> user = storage.findById(userId);
-        Optional<User> friend = storage.findById(friendId);
-
-        if (user.isEmpty()) {
-            throw new NotFoundException(String.format("Пользователь с id = %d не найден.", userId));
-        }
-
-        if (friend.isEmpty()) {
-            throw new NotFoundException(String.format("Пользователь с id = %d не найден.", friendId));
-        }
-
-        user.get().deleteFriend(friendId);
-        friend.get().deleteFriend(userId);
+        storage.deleteFriend(userId, friendId);
     }
 
     public Collection<User> findFriends(long userId) {
         log.info("Получен запрос на поиск друзей пользователя с id = {}.", userId);
 
-        return storage.findById(userId)
-                .orElseThrow(() -> new NotFoundException(String.format("Пользователь с id = %d не найден.", userId)))
-                .getFriends()
-                .stream()
-                .map(id -> storage.findById(id)
-                        .orElseThrow(() -> new NotFoundException(String.format("Друг с id = %d не найден.", id))))
-                .collect(Collectors.toList());
+        return storage.findFriends(userId);
     }
 
     public Collection<User> findCommonFriends(long userId, long otherId) {
         log.info("Получен запрос на поиск общих друзей пользователя с id = {} и пользователя с id = {}.", userId, otherId);
 
-        return storage.findById(userId)
-                .orElseThrow(() -> new NotFoundException(String.format("Пользователь с id = %d не найден.", userId)))
-                .getFriends().stream()
-                .filter(u -> storage.findById(otherId)
-                        .orElseThrow(() -> new NotFoundException(String.format("Пользователь с id = %d не найден.", otherId)))
-                        .getFriends()
-                        .contains(u))
-                .map(id -> storage.findById(id).orElseThrow())
+        return storage.findFriends(userId).stream()
+                .filter(user -> findFriends(otherId).contains(user))
                 .collect(Collectors.toList());
     }
 }
