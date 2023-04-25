@@ -81,7 +81,7 @@ public class InMemoryFilmsStorage implements FilmStorage {
         }
 
         if (!likes.get(filmId).remove(userId)) {
-            throw new NotFoundException(String.format("Лайк от пользователя  с id = %d не найден.", userId));
+            throw new NotFoundException(String.format("Лайк от пользователя с id = %d не найден.", userId));
         }
     }
 

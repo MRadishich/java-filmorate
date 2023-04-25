@@ -15,12 +15,4 @@ public interface UserStorage {
     User update(User user);
 
     void deleteById(long userId);
-
-    boolean existById(long userid);
-
-    Collection<User> findFriends(long userId);
-
-    void addFriend(long userId, long friendId);
-
-    void deleteFriend(long userId, long friendId);
 }
