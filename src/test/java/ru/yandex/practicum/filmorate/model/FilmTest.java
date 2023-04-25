@@ -20,7 +20,7 @@ public class FilmTest {
     @Test
     public void test1_shouldCreateFilmWithoutViolations() {
         Film film = Film.builder()
-                .id(1)
+                .id(1L)
                 .name("The best movie")
                 .description("The best movie of all time")
                 .duration(200)
@@ -34,7 +34,7 @@ public class FilmTest {
     @Test
     public void test2_shouldNotCreateFilmIfNameIsEmpty() {
         Film film = Film.builder()
-                .id(1)
+                .id(1L)
                 .name("")
                 .description("The best movie of all time")
                 .duration(200)
@@ -53,7 +53,7 @@ public class FilmTest {
     @Test
     public void test3_shouldNotCreateFilmIfNameIsBlank() {
         Film film = Film.builder()
-                .id(1)
+                .id(1L)
                 .name("  ")
                 .description("The best movie of all time")
                 .duration(200)
@@ -72,7 +72,7 @@ public class FilmTest {
     @Test
     public void test4_shouldNotCreateFilmIfNameIsNull() {
         Film film = Film.builder()
-                .id(1)
+                .id(1L)
                 .name(null)
                 .description("The best movie of all time")
                 .duration(200)
@@ -91,7 +91,7 @@ public class FilmTest {
     @Test
     public void test5_shouldNotCreateFilmIfDescriptionLengthMore200() {
         Film film = new Film().toBuilder()
-                .id(1)
+                .id(1L)
                 .name("The best film")
                 .description("a".repeat(Film.DESCRIPTION_MAX_LENGTH) + 1)
                 .duration(200)
@@ -110,7 +110,7 @@ public class FilmTest {
     @Test
     public void test6_shouldCreateFilmIfDescriptionLengthEquals200() {
         Film film = new Film().toBuilder()
-                .id(1)
+                .id(1L)
                 .name("The best film")
                 .description("a".repeat(Film.DESCRIPTION_MAX_LENGTH))
                 .duration(200)
@@ -125,7 +125,7 @@ public class FilmTest {
     @Test
     public void test7_shouldNotCreateFilmIfDateReleaseBeforeMinDateRelease() {
         Film film = new Film().toBuilder()
-                .id(1)
+                .id(1L)
                 .name("The best film")
                 .description("The best movie of all time")
                 .duration(200)
@@ -144,7 +144,7 @@ public class FilmTest {
     @Test
     public void test8_shouldCreateFilmIfDateReleaseEqualsMinDateRelease() {
         Film film = new Film().toBuilder()
-                .id(1)
+                .id(1L)
                 .name("The best film")
                 .description("The best movie of all time")
                 .duration(200)
@@ -159,7 +159,7 @@ public class FilmTest {
     @Test
     public void test9_shouldNotCreateFilmIfDurationIsNegative() {
         Film film = new Film().toBuilder()
-                .id(1)
+                .id(1L)
                 .name("The best film")
                 .description("The best movie of all time")
                 .duration(-10)
@@ -178,7 +178,7 @@ public class FilmTest {
     @Test
     public void test10_shouldNotCreateFilmIfDurationIsNull() {
         Film film = new Film().toBuilder()
-                .id(1)
+                .id(1L)
                 .name("The best film")
                 .description("The best movie of all time")
                 .duration(null)
