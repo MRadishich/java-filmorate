@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Repository
-public class InMemoryFilmsStorage implements FilmStorage {
+public class InMemoryFilmStorage implements FilmStorage {
     private static final Map<Long, Film> films = new HashMap<>();
     private static final AtomicInteger filmId = new AtomicInteger();
 

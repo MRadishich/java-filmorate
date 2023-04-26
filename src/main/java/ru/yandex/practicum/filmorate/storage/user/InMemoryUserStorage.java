@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
 @RequiredArgsConstructor
-public class InMemoryUsersStorage implements UserStorage {
+public class InMemoryUserStorage implements UserStorage {
     private static final Map<Long, User> users = new HashMap<>();
     private static final AtomicInteger userId = new AtomicInteger();
 
