@@ -35,8 +35,7 @@ public class FilmServiceImpl implements FilmService {
     public Film findById(long id) {
         log.info("Получен запрос на поиск фильма по id = {}", id);
 
-        return filmStorage.findById(id)
-                .orElseThrow(() -> new NotFoundException(String.format("Фильм  с id = %d не найден.", id)));
+        return filmStorage.findById(id);
     }
 
     public Film update(Film film) {
