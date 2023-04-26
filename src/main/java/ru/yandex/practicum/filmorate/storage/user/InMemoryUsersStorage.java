@@ -5,7 +5,9 @@ import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
@@ -20,13 +22,17 @@ public class InMemoryUsersStorage implements UserStorage {
 
         user.setId(id);
 
-        if (user.getName() == null || user.getName().isBlank()) {
-            user.setName(user.getLogin());
-        }
+        setNameIfNull(user);
 
         users.put(id, user);
 
         return user;
+    }
+
+    private void setNameIfNull(User user) {
+        if (user.getName() == null || user.getName().isBlank()) {
+            user.setName(user.getLogin());
+        }
     }
 
     @Override
