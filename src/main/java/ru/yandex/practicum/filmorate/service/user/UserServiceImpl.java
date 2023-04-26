@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.friends.FriendsStorage;
+import ru.yandex.practicum.filmorate.storage.friends.FriendStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.Collection;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements ru.yandex.practicum.filmorate.service.user.UserService {
     private final UserStorage userStorage;
-    private final FriendsStorage friendsStorage;
+    private final FriendStorage friendStorage;
 
     public User create(User user) {
         log.info("Получен запрос на создание нового пользователя: {}.", user);
@@ -53,7 +53,7 @@ public class UserServiceImpl implements ru.yandex.practicum.filmorate.service.us
         log.info("Получен запрос на добавление в друзья. " +
                 "Пользователь с id = {} хочет добавить в друзья пользователя с id = {}", userId, friendId);
 
-        friendsStorage.addFriend(
+        friendStorage.addFriend(
                 userStorage.findById(userId).orElseThrow(
                         () -> new NotFoundException(String.format("Пользователь с id = %d не найден.", userId))),
                 userStorage.findById(friendId).orElseThrow(
@@ -65,7 +65,7 @@ public class UserServiceImpl implements ru.yandex.practicum.filmorate.service.us
         log.info("Получен запрос на удаление из друзей. " +
                 "Пользователь с id = {} хочет удалить из друзей пользователя с id = {}", userId, friendId);
 
-        friendsStorage.deleteFriend(
+        friendStorage.deleteFriend(
                 userStorage.findById(userId).orElseThrow(
                         () -> new NotFoundException(String.format("Пользователь с id = %d не найден.", userId))),
                 userStorage.findById(friendId).orElseThrow(
@@ -76,13 +76,13 @@ public class UserServiceImpl implements ru.yandex.practicum.filmorate.service.us
     public Collection<User> findFriends(long userId) {
         log.info("Получен запрос на поиск друзей пользователя с id = {}.", userId);
 
-        return friendsStorage.findFriends(userId);
+        return friendStorage.findFriends(userId);
     }
 
     public Collection<User> findCommonFriends(long userId, long otherId) {
         log.info("Получен запрос на поиск общих друзей пользователя с id = {} и пользователя с id = {}.", userId, otherId);
 
-        return friendsStorage.findFriends(userId).stream()
+        return friendStorage.findFriends(userId).stream()
                 .filter(user -> findFriends(otherId).contains(user))
                 .collect(Collectors.toList());
     }

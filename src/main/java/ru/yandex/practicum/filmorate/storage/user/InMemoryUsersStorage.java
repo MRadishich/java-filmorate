@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.friends.FriendsStorage;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -14,8 +13,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class InMemoryUsersStorage implements UserStorage {
     private static final Map<Long, User> users = new HashMap<>();
     private static final AtomicInteger userId = new AtomicInteger();
-
-    private final FriendsStorage friendsStorage;
 
     @Override
     public User create(User user) {
@@ -28,7 +25,6 @@ public class InMemoryUsersStorage implements UserStorage {
         }
 
         users.put(id, user);
-        friendsStorage.createFriendList(user.getId());
 
         return user;
     }
