@@ -35,4 +35,12 @@ public class ErrorHandler {
 
         return new ErrorResponse(List.of(ex.getMessage()));
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleOtherException(Throwable ex) {
+        log.error(ex.getMessage());
+
+        return new ErrorResponse(List.of(ex.getMessage()));
+    }
 }
