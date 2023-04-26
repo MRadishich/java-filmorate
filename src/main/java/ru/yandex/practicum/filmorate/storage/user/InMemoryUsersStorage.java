@@ -35,8 +35,14 @@ public class InMemoryUsersStorage implements UserStorage {
     }
 
     @Override
-    public Optional<User> findById(long id) {
-        return Optional.ofNullable(users.get(id));
+    public User findById(long userId) {
+        User user = users.get(userId);
+
+        if (user == null) {
+            throw new NotFoundException(String.format("Пользователь с id = %s не найден.", userId));
+        }
+
+        return user;
     }
 
     @Override
@@ -50,9 +56,9 @@ public class InMemoryUsersStorage implements UserStorage {
     }
 
     @Override
-    public void deleteById(long id) {
-        if (users.remove(id) == null) {
-            throw new NotFoundException(String.format("Пользователь с id = %s не найден.", id));
+    public void deleteById(long userId) {
+        if (users.remove(userId) == null) {
+            throw new NotFoundException(String.format("Пользователь с userId = %s не найден.", userId));
         }
     }
 }

@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.service.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.friends.FriendStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
@@ -33,8 +32,7 @@ public class UserServiceImpl implements ru.yandex.practicum.filmorate.service.us
     public User findById(long userId) {
         log.info("Получен запрос на поиск пользователя с id = {}.", userId);
 
-        return userStorage.findById(userId)
-                .orElseThrow(() -> new NotFoundException(String.format("Пользователь с id = %d не найден.", userId)));
+        return userStorage.findById(userId);
     }
 
     public User update(User user) {
@@ -53,24 +51,14 @@ public class UserServiceImpl implements ru.yandex.practicum.filmorate.service.us
         log.info("Получен запрос на добавление в друзья. " +
                 "Пользователь с id = {} хочет добавить в друзья пользователя с id = {}", userId, friendId);
 
-        friendStorage.addFriend(
-                userStorage.findById(userId).orElseThrow(
-                        () -> new NotFoundException(String.format("Пользователь с id = %d не найден.", userId))),
-                userStorage.findById(friendId).orElseThrow(
-                        () -> new NotFoundException(String.format("Пользователь с id = %d не найден.", friendId)))
-        );
+        friendStorage.addFriend(userStorage.findById(userId), userStorage.findById(friendId));
     }
 
     public void deleteFriend(long userId, long friendId) {
         log.info("Получен запрос на удаление из друзей. " +
                 "Пользователь с id = {} хочет удалить из друзей пользователя с id = {}", userId, friendId);
 
-        friendStorage.deleteFriend(
-                userStorage.findById(userId).orElseThrow(
-                        () -> new NotFoundException(String.format("Пользователь с id = %d не найден.", userId))),
-                userStorage.findById(friendId).orElseThrow(
-                        () -> new NotFoundException(String.format("Пользователь с id = %d не найден.", friendId)))
-        );
+        friendStorage.deleteFriend(userStorage.findById(userId), userStorage.findById(friendId));
     }
 
     public Collection<User> findFriends(long userId) {
