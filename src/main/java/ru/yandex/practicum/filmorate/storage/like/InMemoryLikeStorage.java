@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage.likes;
+package ru.yandex.practicum.filmorate.storage.like;
 
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
