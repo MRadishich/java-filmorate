@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryFilmStorage implements FilmStorage {
-    private static final Map<Long, Film> films = new HashMap<>();
-    private static final AtomicInteger filmId = new AtomicInteger();
+    private final Map<Long, Film> films = new HashMap<>();
+    private final AtomicInteger filmId = new AtomicInteger();
 
     @Override
     public Film create(Film film) {
@@ -36,7 +36,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         Film film = films.get(filmId);
 
         if (film == null) {
-            throw new NotFoundException(String.format("Фильм  с id = %d не найден.", filmId));
+            throw new NotFoundException(String.format("Фильм с id = %d не найден.", filmId));
         }
 
         return film;
@@ -57,13 +57,13 @@ public class InMemoryFilmStorage implements FilmStorage {
             return film;
         }
 
-        throw new NotFoundException(String.format("Фильм  с id = %d не найден.", film.getId()));
+        throw new NotFoundException(String.format("Фильм с id = %d не найден.", film.getId()));
     }
 
     @Override
     public void deleteById(long filmId) {
         if (films.remove(filmId) == null) {
-            throw new NotFoundException(String.format("Фильм  с id = %d не найден.", filmId));
+            throw new NotFoundException(String.format("Фильм с id = %d не найден.", filmId));
         }
     }
 

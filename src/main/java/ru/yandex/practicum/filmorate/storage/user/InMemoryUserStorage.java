@@ -13,8 +13,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Repository
 @RequiredArgsConstructor
 public class InMemoryUserStorage implements UserStorage {
-    private static final Map<Long, User> users = new HashMap<>();
-    private static final AtomicInteger userId = new AtomicInteger();
+    private final Map<Long, User> users = new HashMap<>();
+    private final AtomicInteger userId = new AtomicInteger();
 
     @Override
     public User create(User user) {
@@ -45,7 +45,7 @@ public class InMemoryUserStorage implements UserStorage {
         User user = users.get(userId);
 
         if (user == null) {
-            throw new NotFoundException(String.format("Пользователь с id = %s не найден.", userId));
+            throw new NotFoundException(String.format("Пользователь с id = %d не найден.", userId));
         }
 
         return user;
@@ -58,13 +58,13 @@ public class InMemoryUserStorage implements UserStorage {
             return user;
         }
 
-        throw new NotFoundException(String.format(String.format("Пользователь с id = %s не найден.", user.getId())));
+        throw new NotFoundException(String.format(String.format("Пользователь с id = %d не найден.", user.getId())));
     }
 
     @Override
     public void deleteById(long userId) {
         if (users.remove(userId) == null) {
-            throw new NotFoundException(String.format("Пользователь с userId = %s не найден.", userId));
+            throw new NotFoundException(String.format("Пользователь с id = %d не найден.", userId));
         }
     }
 }

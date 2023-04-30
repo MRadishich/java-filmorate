@@ -7,12 +7,12 @@ import java.util.*;
 
 @Component
 public class InMemoryFriendStorage implements FriendStorage {
-    private static final Map<Long, Set<User>> friends = new HashMap<>();
+    private final Map<Long, Set<User>> friends = new HashMap<>();
 
     @Override
     public Collection<User> findFriends(long userId) {
         Collection<User> userFriends = friends.get(userId);
-        return friends.get(userId) == null ? List.of() : userFriends;
+        return friends.get(userId) == null ? new ArrayList<>() : userFriends;
     }
 
     @Override

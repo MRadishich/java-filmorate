@@ -54,7 +54,7 @@ public class FilmServiceImpl implements FilmService {
         log.info("Получен запрос на добавление лайка фильму с id = {}, от пользователя с id = {}.", filmId, userId);
 
         if (!filmStorage.existById(filmId)) {
-            throw new NotFoundException(String.format("Фильм  с id = %d не найден.", filmId));
+            throw new NotFoundException(String.format("Фильм с id = %d не найден.", filmId));
         }
 
         likeStorage.addLike(filmId, userId);
@@ -64,7 +64,7 @@ public class FilmServiceImpl implements FilmService {
         log.info("Получен запрос на удаление лайка у фильма с id = {}, от пользователя с id = {}.", filmId, userId);
 
         if (!filmStorage.existById(filmId)) {
-            throw new NotFoundException(String.format("Фильм  с id = %d не найден.", filmId));
+            throw new NotFoundException(String.format("Фильм с id = %d не найден.", filmId));
         }
 
         likeStorage.deleteLike(filmId, userId);

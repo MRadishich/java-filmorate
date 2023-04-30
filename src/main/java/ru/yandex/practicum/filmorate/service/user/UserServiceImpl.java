@@ -7,13 +7,13 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.friend.FriendStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class UserServiceImpl implements ru.yandex.practicum.filmorate.service.user.UserService {
+public class UserServiceImpl implements UserService {
     private final UserStorage userStorage;
     private final FriendStorage friendStorage;
 
@@ -70,8 +70,10 @@ public class UserServiceImpl implements ru.yandex.practicum.filmorate.service.us
     public Collection<User> findCommonFriends(long userId, long otherId) {
         log.info("Получен запрос на поиск общих друзей пользователя с id = {} и пользователя с id = {}.", userId, otherId);
 
-        return friendStorage.findFriends(userId).stream()
-                .filter(user -> findFriends(otherId).contains(user))
-                .collect(Collectors.toList());
+        Collection<User> userFriends = new ArrayList<>(friendStorage.findFriends(userId));
+        Collection<User> otherFriends = new ArrayList<>(friendStorage.findFriends(otherId));
+        userFriends.retainAll(otherFriends);
+
+        return userFriends;
     }
 }

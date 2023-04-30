@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class InMemoryLikeStorage implements LikeStorage {
-    private static final Map<Long, Set<Long>> likes = new HashMap<>();
+    private final Map<Long, Set<Long>> likes = new HashMap<>();
 
     @Override
     public void create(long filmId) {
