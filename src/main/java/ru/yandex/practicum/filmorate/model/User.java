@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-    private int id;
+    private Long id;
 
     @Email(message = "Некорректный адрес электронной почты.")
     @NotBlank(message = "Адрес электронной почти - обязательное поле.")

@@ -20,7 +20,7 @@ public class Film {
     public static final int DESCRIPTION_MAX_LENGTH = 200;
     public static final String MIN_DATE_RELEASE = "1895-12-28";
 
-    private int id;
+    private Long id;
 
     @NotBlank(message = "Название фильма не может быть пустым.")
     private String name;

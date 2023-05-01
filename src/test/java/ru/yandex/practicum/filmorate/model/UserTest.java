@@ -20,7 +20,7 @@ public class UserTest {
     @Test
     public void test1_shouldCreateUser() {
         User user = new User().toBuilder()
-                .id(1)
+                .id(1L)
                 .email("email@email.com")
                 .login("SuperUser")
                 .name("Super Name")
@@ -47,7 +47,7 @@ public class UserTest {
         Arrays.stream(invalidEmails).forEach(email -> {
             User user = new User()
                     .toBuilder()
-                    .id(1)
+                    .id(1L)
                     .email(email)
                     .login("SuperUser")
                     .name("Super Name")
@@ -63,7 +63,7 @@ public class UserTest {
     @Test
     public void test3_shouldNotCreateUserIfLoginIsEmpty() {
         User user = new User().toBuilder()
-                .id(1)
+                .id(1L)
                 .email("email@email.com")
                 .login("")
                 .name("Super Name")
@@ -82,7 +82,7 @@ public class UserTest {
     @Test
     public void test4_shouldNotCreateUserIfLoginIsBlank() {
         User user = new User().toBuilder()
-                .id(1)
+                .id(1L)
                 .email("email@email.com")
                 .login("  ")
                 .name("Super Name")
@@ -101,7 +101,7 @@ public class UserTest {
     @Test
     public void test5_shouldNotCreateUserIfLoginIsNull() {
         User user = new User().toBuilder()
-                .id(1)
+                .id(1L)
                 .email("email@email.com")
                 .login(null)
                 .name("Super Name")
@@ -120,7 +120,7 @@ public class UserTest {
     @Test
     public void test6_shouldNotCreateUserIfLoginHasWhitespace() {
         User user = new User().toBuilder()
-                .id(1)
+                .id(1L)
                 .email("email@email.com")
                 .login("Super User")
                 .name("Super Name")
@@ -139,7 +139,7 @@ public class UserTest {
     @Test
     public void test7_shouldCreateUserIfNameIsEmpty() {
         User user = new User().toBuilder()
-                .id(1)
+                .id(1L)
                 .email("email@email.com")
                 .login("SuperUser")
                 .birthday(LocalDate.parse("2020-02-02"))
@@ -153,7 +153,7 @@ public class UserTest {
     @Test
     public void test8_shouldNotCreateUserIfBirthDayInFuture() {
         User user = new User().toBuilder()
-                .id(1)
+                .id(1L)
                 .email("email@email.com")
                 .login("SuperUser")
                 .name("Super Name")
