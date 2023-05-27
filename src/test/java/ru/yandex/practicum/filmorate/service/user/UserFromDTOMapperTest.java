@@ -6,11 +6,12 @@ import ru.yandex.practicum.filmorate.model.user.User;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserFromDTOMapperTest {
 
     private final UserFromDTOMapper userFromDTOMapper = new UserFromDTOMapper();
+
     @Test
     void test1_shouldConversionUserDTOToUser() {
         // Given
