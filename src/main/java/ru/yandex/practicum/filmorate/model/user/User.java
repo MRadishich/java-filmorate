@@ -12,7 +12,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Builder(toBuilder = true)
 @AllArgsConstructor
-@NoArgsConstructor
 @Entity(name = "users")
 public class User {
     @Id
