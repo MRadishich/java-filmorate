@@ -9,7 +9,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.like.Like;
-import ru.yandex.practicum.filmorate.model.like.LikeId;
 import ru.yandex.practicum.filmorate.storage.film.FilmDbStorage;
 import ru.yandex.practicum.filmorate.storage.like.LikeDbStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserDbStorage;
@@ -43,8 +42,7 @@ class LikeServiceImplTest {
         long filmId = 1L;
         long userId = 2L;
 
-        LikeId likeId = new LikeId(filmId, userId);
-        Like like = new Like(likeId);
+        Like like = new Like(filmId, userId);
 
         given(filmStorage.existsById(filmId)).willReturn(true);
         given(userStorage.existsById(userId)).willReturn(true);
@@ -97,8 +95,7 @@ class LikeServiceImplTest {
         long filmId = 1L;
         long userId = 2L;
 
-        LikeId likeId = new LikeId(filmId, userId);
-        Like like = new Like(likeId);
+        Like like = new Like(filmId, userId);
 
         given(filmStorage.existsById(filmId)).willReturn(true);
         given(userStorage.existsById(userId)).willReturn(true);

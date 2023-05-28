@@ -2,10 +2,11 @@ package ru.yandex.practicum.filmorate.model.film;
 
 import lombok.*;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -14,33 +15,21 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "films")
 public class Film {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
-    @Column(name = "title")
     @NotNull
     private String name;
 
-    @Column(name = "description", length = 200)
     private String description;
 
-    @Column(name = "release_date")
     private LocalDate releaseDate;
 
-    @Column(name = "duration")
     @NotNull
     private Integer duration;
 
-    @Column(name = "mpa_rating_id")
     private Integer mpaId;
 
-    @ManyToMany(fetch = FetchType.EAGER)
     private List<Genre> genres;
 
     @Override
@@ -67,6 +56,18 @@ public class Film {
                 ", mpaId=" + mpaId +
                 ", genres=" + genres +
                 '}';
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", id);
+        map.put("title", name);
+        map.put("description", description);
+        map.put("release_date", releaseDate);
+        map.put("duration", duration);
+        map.put("mpa_rating_id", mpaId);
+
+        return map;
     }
 }
 

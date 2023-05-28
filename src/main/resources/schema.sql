@@ -13,6 +13,12 @@ CREATE TABLE IF NOT EXISTS mpa_rating
     CONSTRAINT mpa_rating_pkey PRIMARY KEY (id)
 );
 
+CREATE TABLE IF NOT EXISTS friendship_status
+(
+    id   int4 PRIMARY KEY NOT NULL,
+    name varchar(100)     NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS users
 (
     id       int8         NOT NULL GENERATED ALWAYS AS IDENTITY,
@@ -62,10 +68,4 @@ CREATE TABLE IF NOT EXISTS films_genres
     CONSTRAINT film_genres_pk PRIMARY KEY (film_id, genre_id),
     CONSTRAINT film_genres_film_id_fkey FOREIGN KEY (film_id) REFERENCES films (id),
     CONSTRAINT film_genres_genre_id_fkey FOREIGN KEY (genre_id) REFERENCES genres (id)
-);
-
-CREATE TABLE IF NOT EXISTS friendship_status
-(
-    id   int4 PRIMARY KEY NOT NULL,
-    name varchar(100)     NOT NULL
 );

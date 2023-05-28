@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.friendship.Friendship;
-import ru.yandex.practicum.filmorate.model.friendship.FriendshipId;
 import ru.yandex.practicum.filmorate.model.friendship.FriendshipStatus;
 import ru.yandex.practicum.filmorate.storage.friend.FriendDbStorage;
 
@@ -21,20 +20,20 @@ public class FriendshipServiceImpl implements FriendshipService {
     public void addFriend(long userId, long friendId) {
         FriendshipStatus status;
 
-        if (friendStorage.existsById(new FriendshipId(friendId, userId))) {
+        if (friendStorage.existsById(new Friendship(friendId, userId))) {
             status = FriendshipStatus.APPROVED;
-            friendStorage.save(new Friendship(new FriendshipId(friendId, userId), status));
+            friendStorage.save(new Friendship(friendId, userId, status));
         } else {
             status = FriendshipStatus.NOTAPPROVED;
         }
 
-        friendStorage.save(new Friendship(new FriendshipId(userId, friendId), status));
+        friendStorage.save(new Friendship(userId, friendId, status));
     }
 
     @Override
     public void deleteFriend(long userId, long friendId) {
-        friendStorage.delete(new Friendship(new FriendshipId(userId, friendId)));
-        friendStorage.save(new Friendship(new FriendshipId(friendId, userId), FriendshipStatus.NOTAPPROVED));
+        friendStorage.delete(new Friendship(userId, friendId));
+        friendStorage.save(new Friendship(friendId, userId, FriendshipStatus.NOTAPPROVED));
     }
 
     @Override

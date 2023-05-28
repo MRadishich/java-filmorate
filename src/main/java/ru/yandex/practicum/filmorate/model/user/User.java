@@ -1,10 +1,10 @@
 package ru.yandex.practicum.filmorate.model.user;
 
 import lombok.*;
-import org.hibernate.Hibernate;
 
-import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @Getter
@@ -12,23 +12,26 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Builder(toBuilder = true)
 @AllArgsConstructor
-@Entity(name = "users")
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "email")
     private String email;
 
-    @Column(name = "login")
     private String login;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "birthday")
     private LocalDate birthday;
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("email", email);
+        map.put("login", login);
+        map.put("name", name);
+        map.put("birthday", birthday);
+
+        return map;
+    }
 
     @Override
     public String toString() {
@@ -44,13 +47,13 @@ public class User {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return getId() != null && Objects.equals(getId(), user.getId());
+        return Objects.equals(id, user.id) && Objects.equals(email, user.email) && Objects.equals(login, user.login) && Objects.equals(name, user.name) && Objects.equals(birthday, user.birthday);
     }
 
     @Override
     public int hashCode() {
-        return getClass().hashCode();
+        return Objects.hash(id, email, login, name, birthday);
     }
 }

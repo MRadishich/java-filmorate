@@ -1,9 +1,20 @@
 package ru.yandex.practicum.filmorate.storage.film;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.film.Film;
 
-@Repository
-public interface FilmDbStorage extends JpaRepository<Film, Long> {
+import java.util.List;
+import java.util.Optional;
+
+public interface FilmDbStorage {
+    Film save(Film film);
+
+    Optional<Film> findById(Long filmId);
+
+    List<Film> findAll();
+
+    boolean existsById(Long id);
+
+    void deleteById(Long id);
+
+    List<Film> findAllById(List<Long> ids);
 }

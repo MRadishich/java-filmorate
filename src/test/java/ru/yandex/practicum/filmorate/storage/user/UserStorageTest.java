@@ -1,205 +1,171 @@
-//package ru.yandex.practicum.filmorate.storage.user;
-//
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import ru.yandex.practicum.filmorate.exception.NotFoundException;
-//import ru.yandex.practicum.filmorate.model.user.User;
-//
-//import java.lang.reflect.Field;
-//import java.time.LocalDate;
-//import java.util.Collection;
-//import java.util.HashMap;
-//import java.util.Map;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//
-//class UserStorageTest {
-//
-//    UserStorage userStorage;
-//
-//    @BeforeEach
-//    void setUp() {
-//        userStorage = new InMemoryUserStorage();
-//    }
-//
-//    @Test
-//    void test1_shouldSaveNewUserInStorage() throws NoSuchFieldException, IllegalAccessException {
-//        User user = new User().toBuilder()
-//                .email("email@email.ru")
-//                .login("petro20")
-//                .name("Petrov Petr Petrovich")
-//                .birthday(LocalDate.now())
-//                .build();
-//
-//        userStorage.create(user);
-//
-//        Field field = userStorage.getClass().getDeclaredField("users");
-//
-//        field.setAccessible(true);
-//
-//        Map<Long, User> map = (HashMap<Long, User>) field.get(userStorage);
-//
-//        assertEquals(user, map.get(1L));
-//    }
-//
-//    @Test
-//    void test2_shouldReturnAllUsers() {
-//        User user1 = new User().toBuilder()
-//                .email("email@email.ru")
-//                .login("petro20")
-//                .name("Petrov Petr Petrovich")
-//                .birthday(LocalDate.now())
-//                .build();
-//
-//        User user2 = new User().toBuilder()
-//                .email("email@ya.ru")
-//                .login("petro22")
-//                .name("Petrov Petr Petrovich")
-//                .birthday(LocalDate.now())
-//                .build();
-//
-//        userStorage.create(user1);
-//        userStorage.create(user2);
-//
-//        Collection<User> users = userStorage.findAll();
-//
-//        assertEquals(2, users.size());
-//        assertTrue(users.contains(user1));
-//        assertTrue(users.contains(user2));
-//    }
-//
-//    @Test
-//    void test3_shouldReturnUserById() {
-//        User user = new User().toBuilder()
-//                .email("email@email.ru")
-//                .login("petro20")
-//                .name("Petrov Petr Petrovich")
-//                .birthday(LocalDate.now())
-//                .build();
-//
-//        userStorage.create(user);
-//
-//        assertEquals(user, userStorage.findById(1L));
-//    }
-//
-//    @Test
-//    void test4_shouldThrowExceptionIfTryToFindUnknownUser() {
-//        Exception exception = assertThrows(NotFoundException.class, () -> userStorage.findById(1L));
-//
-//        String expectedMessage = "Пользователь с id = 1 не найден.";
-//
-//        assertEquals(expectedMessage, exception.getMessage());
-//    }
-//
-//    @Test
-//    void test5_shouldUpdateUserAndReturnUpdateUser() throws NoSuchFieldException, IllegalAccessException {
-//        User user = new User().toBuilder()
-//                .email("email@email.ru")
-//                .login("petro20")
-//                .name("Petrov Petr Petrovich")
-//                .birthday(LocalDate.now())
-//                .build();
-//
-//        userStorage.create(user);
-//
-//        User updatedUser = new User().toBuilder()
-//                .id(1L)
-//                .email("updatedEmail@email.ru")
-//                .login("updatedPetro20")
-//                .name("Updated Petrov Petr Petrovich")
-//                .birthday(LocalDate.now())
-//                .build();
-//
-//        userStorage.update(updatedUser);
-//
-//        Field field = userStorage.getClass().getDeclaredField("users");
-//
-//        field.setAccessible(true);
-//
-//        Map<Long, User> map = (HashMap<Long, User>) field.get(userStorage);
-//
-//        assertEquals("updatedEmail@email.ru", map.get(1L).getEmail());
-//        assertEquals("updatedPetro20", map.get(1L).getLogin());
-//        assertEquals("Updated Petrov Petr Petrovich", map.get(1L).getName());
-//        assertEquals(LocalDate.now(), map.get(1L).getBirthday());
-//    }
-//
-//    @Test
-//    void test6_shouldThrowExceptionIfUpdateUnknownUser() {
-//        User user = new User().toBuilder()
-//                .email("email@email.ru")
-//                .login("petro20")
-//                .name("Petrov Petr Petrovich")
-//                .birthday(LocalDate.now())
-//                .build();
-//
-//        userStorage.create(user);
-//
-//        User updatedUser = new User().toBuilder()
-//                .id(2L)
-//                .email("updatedEmail@email.ru")
-//                .login("updatedPetro20")
-//                .name("Updated Petrov Petr Petrovich")
-//                .birthday(LocalDate.now())
-//                .build();
-//
-//        Exception exception = assertThrows(NotFoundException.class, () -> userStorage.update(updatedUser));
-//        String expectedMessage = "Пользователь с id = 2 не найден.";
-//
-//        assertEquals(expectedMessage, exception.getMessage());
-//    }
-//
-//    @Test
-//    void test7_shouldDeleteUserById() throws NoSuchFieldException, IllegalAccessException {
-//        User user = new User().toBuilder()
-//                .email("email@email.ru")
-//                .login("petro20")
-//                .name("Petrov Petr Petrovich")
-//                .birthday(LocalDate.now())
-//                .build();
-//
-//        userStorage.create(user);
-//
-//        Field field = userStorage.getClass().getDeclaredField("users");
-//        field.setAccessible(true);
-//        Map<Long, User> map = (HashMap<Long, User>) field.get(userStorage);
-//
-//        assertEquals(1, map.size());
-//
-//        userStorage.deleteById(1L);
-//
-//        field = userStorage.getClass().getDeclaredField("users");
-//        field.setAccessible(true);
-//        map = (HashMap<Long, User>) field.get(userStorage);
-//
-//        assertEquals(0, map.size());
-//    }
-//
-//    @Test
-//    void test8_shouldTrowExceptionIfTryToDeleteUnknownUser() {
-//        Exception exception = assertThrows(NotFoundException.class, () -> userStorage.deleteById(1L));
-//
-//        String expectedMessage = "Пользователь с id = 1 не найден.";
-//
-//        assertEquals(expectedMessage, exception.getMessage());
-//    }
-//
-//    @Test
-//    void test9_shouldSetNameOnLoginIfNameIsNull() throws NoSuchFieldException, IllegalAccessException {
-//        User user = new User().toBuilder()
-//                .email("email@email.ru")
-//                .login("petro20")
-//                .birthday(LocalDate.now())
-//                .build();
-//
-//        userStorage.create(user);
-//
-//        Field field = userStorage.getClass().getDeclaredField("users");
-//
-//        field.setAccessible(true);
-//
-//        Map<Long, User> map = (HashMap<Long, User>) field.get(userStorage);
-//
-//        assertEquals(user.getLogin(), map.get(1L).getName());
-//    }
-//}
+package ru.yandex.practicum.filmorate.storage.user;
+
+import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import ru.yandex.practicum.filmorate.FilmorateApplication;
+import ru.yandex.practicum.filmorate.model.user.User;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+
+@SpringBootTest(classes = FilmorateApplication.class)
+@AutoConfigureTestDatabase
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+public class UserStorageTest {
+    private final UserDbStorage userStorage;
+    private User newUser;
+
+    @BeforeEach
+    void setUp() {
+        newUser = new User().toBuilder()
+                .name("User")
+                .login("SuperUser")
+                .email("email@email.ru")
+                .birthday(LocalDate.now())
+                .build();
+    }
+
+    @Test
+    public void test1_shouldSaveUser() {
+        User savedUser = userStorage.save(newUser);
+
+        assertThat(savedUser).hasFieldOrPropertyWithValue("id", 1L);
+        assertThat(savedUser).hasFieldOrPropertyWithValue("name", "User");
+        assertThat(savedUser).hasFieldOrPropertyWithValue("login", "SuperUser");
+        assertThat(savedUser).hasFieldOrPropertyWithValue("email", "email@email.ru");
+        assertThat(savedUser).hasFieldOrPropertyWithValue("birthday", LocalDate.now());
+    }
+
+    @Test
+    public void test2_shouldUpdateUser() {
+        userStorage.save(newUser);
+
+        newUser.setName("Updated User");
+        newUser.setLogin("UpdateSuperUser");
+
+        User updatedUser = userStorage.save(newUser);
+
+        assertThat(updatedUser).hasFieldOrPropertyWithValue("id", 1L);
+        assertThat(updatedUser).hasFieldOrPropertyWithValue("name", "Updated User");
+        assertThat(updatedUser).hasFieldOrPropertyWithValue("login", "UpdateSuperUser");
+        assertThat(updatedUser).hasFieldOrPropertyWithValue("email", "email@email.ru");
+        assertThat(updatedUser).hasFieldOrPropertyWithValue("birthday", LocalDate.now());
+    }
+
+    @Test
+    public void test3_shouldReturnUserById() {
+        userStorage.save(newUser);
+
+        Optional<User> foundUser = userStorage.findById(1L);
+
+        assertThat(foundUser)
+                .isPresent()
+                .hasValueSatisfying(user -> {
+                    assertThat(user).hasFieldOrPropertyWithValue("id", 1L);
+                    assertThat(user).hasFieldOrPropertyWithValue("name", "User");
+                    assertThat(user).hasFieldOrPropertyWithValue("login", "SuperUser");
+                    assertThat(user).hasFieldOrPropertyWithValue("email", "email@email.ru");
+                    assertThat(user).hasFieldOrPropertyWithValue("birthday", LocalDate.now());
+                });
+    }
+
+    @Test
+    public void test4_shouldReturnAllUsers() {
+        userStorage.save(newUser);
+
+        List<User> users = userStorage.findAll();
+
+        assertEquals(1, users.size());
+        assertThat(users.get(0)).hasFieldOrPropertyWithValue("id", 1L);
+        assertThat(users.get(0)).hasFieldOrPropertyWithValue("name", "User");
+        assertThat(users.get(0)).hasFieldOrPropertyWithValue("login", "SuperUser");
+        assertThat(users.get(0)).hasFieldOrPropertyWithValue("email", "email@email.ru");
+        assertThat(users.get(0)).hasFieldOrPropertyWithValue("birthday", LocalDate.now());
+
+        User otherUser = new User().toBuilder()
+                .name("Other User")
+                .login("OtherSuperUser")
+                .email("OtherEmail@email.ru")
+                .birthday(LocalDate.now())
+                .build();
+
+        userStorage.save(otherUser);
+
+        users = userStorage.findAll();
+
+        assertEquals(2, users.size());
+        assertThat(users.get(0)).hasFieldOrPropertyWithValue("id", 1L);
+        assertThat(users.get(0)).hasFieldOrPropertyWithValue("name", "User");
+        assertThat(users.get(0)).hasFieldOrPropertyWithValue("login", "SuperUser");
+        assertThat(users.get(0)).hasFieldOrPropertyWithValue("email", "email@email.ru");
+        assertThat(users.get(0)).hasFieldOrPropertyWithValue("birthday", LocalDate.now());
+        assertThat(users.get(1)).hasFieldOrPropertyWithValue("id", 2L);
+        assertThat(users.get(1)).hasFieldOrPropertyWithValue("name", "Other User");
+        assertThat(users.get(1)).hasFieldOrPropertyWithValue("login", "OtherSuperUser");
+        assertThat(users.get(1)).hasFieldOrPropertyWithValue("email", "OtherEmail@email.ru");
+        assertThat(users.get(1)).hasFieldOrPropertyWithValue("birthday", LocalDate.now());
+    }
+
+    @Test
+    public void test5_shouldReturnUsersByListIds() {
+        userStorage.save(newUser);
+
+        List<User> users = userStorage.findAll();
+
+        User otherUser = new User().toBuilder()
+                .name("Other User #1")
+                .login("OtherSuperUserOne")
+                .email("OtherEmailOne@email.ru")
+                .birthday(LocalDate.now())
+                .build();
+
+        userStorage.save(otherUser);
+
+        otherUser = new User().toBuilder()
+                .name("Other User #2")
+                .login("OtherSuperUserTwo")
+                .email("OtherEmailTwo@email.ru")
+                .birthday(LocalDate.now())
+                .build();
+
+        userStorage.save(otherUser);
+
+        List<Long> userIds = List.of(1L, 2L);
+        List<User> foundUsers = userStorage.findAllById(userIds);
+
+        assertEquals(2, foundUsers.size());
+        assertThat(foundUsers.get(0)).hasFieldOrPropertyWithValue("id", 1L);
+        assertThat(foundUsers.get(0)).hasFieldOrPropertyWithValue("name", "User");
+        assertThat(foundUsers.get(0)).hasFieldOrPropertyWithValue("login", "SuperUser");
+        assertThat(foundUsers.get(0)).hasFieldOrPropertyWithValue("email", "email@email.ru");
+        assertThat(foundUsers.get(0)).hasFieldOrPropertyWithValue("birthday", LocalDate.now());
+        assertThat(foundUsers.get(1)).hasFieldOrPropertyWithValue("id", 2L);
+        assertThat(foundUsers.get(1)).hasFieldOrPropertyWithValue("name", "Other User #1");
+        assertThat(foundUsers.get(1)).hasFieldOrPropertyWithValue("login", "OtherSuperUserOne");
+        assertThat(foundUsers.get(1)).hasFieldOrPropertyWithValue("email", "OtherEmailOne@email.ru");
+        assertThat(foundUsers.get(1)).hasFieldOrPropertyWithValue("birthday", LocalDate.now());
+    }
+
+    @Test
+    public void test6_shouldReturnTrueIfUserExists() {
+        userStorage.save(newUser);
+
+        assertTrue(userStorage.existsById(1L));
+    }
+
+    @Test
+    public void test7_shouldReturnFalseIfUserExists() {
+
+        assertFalse(userStorage.existsById(1L));
+    }
+}
