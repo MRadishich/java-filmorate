@@ -4,7 +4,6 @@ import ru.yandex.practicum.filmorate.model.film.Film;
 import ru.yandex.practicum.filmorate.model.film.Genre;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 public interface GenreDbStorage {
