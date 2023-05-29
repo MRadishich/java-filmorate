@@ -10,6 +10,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import ru.yandex.practicum.filmorate.FilmorateApplication;
 import ru.yandex.practicum.filmorate.model.film.Film;
 import ru.yandex.practicum.filmorate.model.film.Genre;
+import ru.yandex.practicum.filmorate.model.film.Mpa;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -32,7 +33,7 @@ public class FilmStorageTest {
                 .name("New Film")
                 .description("New Film")
                 .releaseDate(LocalDate.now())
-                .mpaId(1)
+                .mpa(new Mpa(1, "G", "У фильма нет возрастных ограничений"))
                 .duration(200)
                 .genres(List.of(new Genre(1, "Комедия")))
                 .build();
@@ -46,7 +47,7 @@ public class FilmStorageTest {
         assertThat(savedFilm).hasFieldOrPropertyWithValue("name", "New Film");
         assertThat(savedFilm).hasFieldOrPropertyWithValue("description", "New Film");
         assertThat(savedFilm).hasFieldOrPropertyWithValue("releaseDate", LocalDate.now());
-        assertThat(savedFilm).hasFieldOrPropertyWithValue("mpaId", 1);
+        assertThat(savedFilm).hasFieldOrPropertyWithValue("mpa", new Mpa(1, "G", "У фильма нет возрастных ограничений"));
         assertThat(savedFilm).hasFieldOrPropertyWithValue("duration", 200);
         assertThat(savedFilm).hasFieldOrPropertyWithValue("genres", List.of(new Genre(1, "Комедия")));
     }
@@ -60,7 +61,7 @@ public class FilmStorageTest {
                 .name("Update Film")
                 .description("Update Film")
                 .releaseDate(LocalDate.now())
-                .mpaId(1)
+                .mpa(new Mpa(1, "G", "У фильма нет возрастных ограничений"))
                 .duration(200)
                 .genres(List.of(new Genre(2, "Драма")))
                 .build();
@@ -71,7 +72,7 @@ public class FilmStorageTest {
         assertThat(updatedFilm).hasFieldOrPropertyWithValue("name", "Update Film");
         assertThat(updatedFilm).hasFieldOrPropertyWithValue("description", "Update Film");
         assertThat(updatedFilm).hasFieldOrPropertyWithValue("releaseDate", LocalDate.now());
-        assertThat(updatedFilm).hasFieldOrPropertyWithValue("mpaId", 1);
+        assertThat(updatedFilm).hasFieldOrPropertyWithValue("mpa", new Mpa(1, "G", "У фильма нет возрастных ограничений"));
         assertThat(updatedFilm).hasFieldOrPropertyWithValue("duration", 200);
         assertThat(updatedFilm).hasFieldOrPropertyWithValue("genres", List.of(new Genre(2, "Драма")));
     }
@@ -89,7 +90,7 @@ public class FilmStorageTest {
                     assertThat(film).hasFieldOrPropertyWithValue("name", "New Film");
                     assertThat(film).hasFieldOrPropertyWithValue("description", "New Film");
                     assertThat(film).hasFieldOrPropertyWithValue("releaseDate", LocalDate.now());
-                    assertThat(film).hasFieldOrPropertyWithValue("mpaId", 1);
+                    assertThat(film).hasFieldOrPropertyWithValue("mpa", new Mpa(1, "G", "У фильма нет возрастных ограничений"));
                     assertThat(film).hasFieldOrPropertyWithValue("duration", 200);
                     assertThat(film).hasFieldOrPropertyWithValue("genres", List.of(new Genre(1, "Комедия")));
                 });
@@ -106,7 +107,7 @@ public class FilmStorageTest {
         assertThat(films.get(0)).hasFieldOrPropertyWithValue("name", "New Film");
         assertThat(films.get(0)).hasFieldOrPropertyWithValue("description", "New Film");
         assertThat(films.get(0)).hasFieldOrPropertyWithValue("releaseDate", LocalDate.now());
-        assertThat(films.get(0)).hasFieldOrPropertyWithValue("mpaId", 1);
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("mpa", new Mpa(1, "G", "У фильма нет возрастных ограничений"));
         assertThat(films.get(0)).hasFieldOrPropertyWithValue("duration", 200);
         assertThat(films.get(0)).hasFieldOrPropertyWithValue("genres", List.of(new Genre(1, "Комедия")));
 
@@ -114,7 +115,7 @@ public class FilmStorageTest {
                 .name("Other Film")
                 .description("Other Film")
                 .releaseDate(LocalDate.now())
-                .mpaId(1)
+                .mpa(new Mpa(1, "G", "У фильма нет возрастных ограничений"))
                 .duration(200)
                 .genres(List.of(new Genre(2, "Боевик")))
                 .build();
@@ -128,13 +129,14 @@ public class FilmStorageTest {
         assertThat(films.get(0)).hasFieldOrPropertyWithValue("name", "New Film");
         assertThat(films.get(0)).hasFieldOrPropertyWithValue("description", "New Film");
         assertThat(films.get(0)).hasFieldOrPropertyWithValue("releaseDate", LocalDate.now());
-        assertThat(films.get(0)).hasFieldOrPropertyWithValue("mpaId", 1);
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("mpa", new Mpa(1, "G", "У фильма нет возрастных ограничений"));
         assertThat(films.get(0)).hasFieldOrPropertyWithValue("duration", 200);
-        assertThat(films.get(0)).hasFieldOrPropertyWithValue("genres", List.of(new Genre(1, "Комедия")));assertThat(films.get(0)).hasFieldOrPropertyWithValue("id", 1L);
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("genres", List.of(new Genre(1, "Комедия")));
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("id", 1L);
         assertThat(films.get(1)).hasFieldOrPropertyWithValue("name", "Other Film");
         assertThat(films.get(1)).hasFieldOrPropertyWithValue("description", "Other Film");
         assertThat(films.get(1)).hasFieldOrPropertyWithValue("releaseDate", LocalDate.now());
-        assertThat(films.get(1)).hasFieldOrPropertyWithValue("mpaId", 1);
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("mpa", new Mpa(1, "G", "У фильма нет возрастных ограничений"));
         assertThat(films.get(1)).hasFieldOrPropertyWithValue("duration", 200);
         assertThat(films.get(1)).hasFieldOrPropertyWithValue("genres", List.of(new Genre(2, "Драма")));
     }
@@ -147,7 +149,7 @@ public class FilmStorageTest {
                 .name("Other Film")
                 .description("Other Film")
                 .releaseDate(LocalDate.now())
-                .mpaId(1)
+                .mpa(new Mpa(1, "G", "У фильма нет возрастных ограничений"))
                 .duration(200)
                 .genres(List.of(new Genre(2, "Боевик")))
                 .build();
@@ -158,7 +160,7 @@ public class FilmStorageTest {
                 .name("Other Film Two")
                 .description("Other Film Two")
                 .releaseDate(LocalDate.now())
-                .mpaId(1)
+                .mpa(new Mpa(1, "G", "У фильма нет возрастных ограничений"))
                 .duration(200)
                 .genres(List.of(new Genre(2, "Боевик")))
                 .build();
@@ -172,13 +174,14 @@ public class FilmStorageTest {
         assertThat(films.get(0)).hasFieldOrPropertyWithValue("name", "New Film");
         assertThat(films.get(0)).hasFieldOrPropertyWithValue("description", "New Film");
         assertThat(films.get(0)).hasFieldOrPropertyWithValue("releaseDate", LocalDate.now());
-        assertThat(films.get(0)).hasFieldOrPropertyWithValue("mpaId", 1);
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("mpa", new Mpa(1, "G", "У фильма нет возрастных ограничений"));
         assertThat(films.get(0)).hasFieldOrPropertyWithValue("duration", 200);
-        assertThat(films.get(0)).hasFieldOrPropertyWithValue("genres", List.of(new Genre(1, "Комедия")));assertThat(films.get(0)).hasFieldOrPropertyWithValue("id", 1L);
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("genres", List.of(new Genre(1, "Комедия")));
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("id", 1L);
         assertThat(films.get(1)).hasFieldOrPropertyWithValue("name", "Other Film");
         assertThat(films.get(1)).hasFieldOrPropertyWithValue("description", "Other Film");
         assertThat(films.get(1)).hasFieldOrPropertyWithValue("releaseDate", LocalDate.now());
-        assertThat(films.get(1)).hasFieldOrPropertyWithValue("mpaId", 1);
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("mpa", new Mpa(1, "G", "У фильма нет возрастных ограничений"));
         assertThat(films.get(1)).hasFieldOrPropertyWithValue("duration", 200);
         assertThat(films.get(1)).hasFieldOrPropertyWithValue("genres", List.of(new Genre(2, "Драма")));
     }

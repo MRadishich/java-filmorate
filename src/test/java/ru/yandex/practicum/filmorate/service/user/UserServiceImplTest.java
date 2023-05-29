@@ -29,15 +29,11 @@ class UserServiceImplTest {
     private UserDbStorage userStorage;
     @Mock
     private FriendshipService friendshipService;
-    private final UserToDTOMapper userToDTO = new UserToDTOMapper();
-    private final UserFromDTOMapper userFromDTO = new UserFromDTOMapper();
 
     @BeforeEach
     void setUp() {
         userService = new UserServiceImpl(
                 userStorage,
-                userToDTO,
-                userFromDTO,
                 friendshipService
         );
     }

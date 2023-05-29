@@ -15,14 +15,13 @@ import java.util.stream.Collectors;
 @Slf4j
 public class GenreServiceImpl implements GenreService {
     private final GenreDbStorage genreStorage;
-    private final GenreDTOMapper genreDTOMapper;
 
     @Override
     public GenreDTO getById(Integer genreId) {
         log.info("Получен запрос на поиск жанра с id = {}", genreId);
 
         return genreStorage.findById(genreId)
-                .map(genreDTOMapper)
+                .map(GenreMapper::toDto)
                 .orElseThrow(() -> new NotFoundException("Жанр с id = " + genreId + " не найден."));
     }
 
@@ -31,7 +30,7 @@ public class GenreServiceImpl implements GenreService {
         log.info("Получен запрос на поиск всех жанров");
 
         return genreStorage.findAll().stream()
-                .map(genreDTOMapper)
+                .map(GenreMapper::toDto)
                 .collect(Collectors.toList());
     }
 }

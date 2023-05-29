@@ -22,17 +22,15 @@ public class FilmServiceImpl implements FilmService {
     private final GenreDbStorage genreStorage;
     private final FilmDbStorage filmStorage;
     private final LikeService likeService;
-    private final FilmToDTOMapper filmToDTO;
-    private final FilmFromDTOMapper filmFromDTO;
 
     public FilmDTO createFilm(FilmDTO filmDTO) {
         log.info("Получен запрос на создание нового фильма: {}", filmDTO);
 
-        Film film = filmFromDTO.apply(filmDTO);
+        Film film = FilmMapper.toFilm(filmDTO);
         film.setGenres(getGenresByIds(filmDTO));
         film = filmStorage.save(film);
 
-        return filmToDTO.apply(film);
+        return FilmMapper.toDto(film);
     }
 
     private List<Genre> getGenresByIds(FilmDTO filmDTO) {
@@ -54,7 +52,7 @@ public class FilmServiceImpl implements FilmService {
 
         return filmStorage.findAll()
                 .stream()
-                .map(filmToDTO)
+                .map(FilmMapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -62,7 +60,7 @@ public class FilmServiceImpl implements FilmService {
         log.info("Получен запрос на поиск фильма по filmId = {}", filmId);
 
         return filmStorage.findById(filmId)
-                .map(filmToDTO)
+                .map(FilmMapper::toDto)
                 .orElseThrow(() -> new NotFoundException("Фильм с id = " + filmId + " не найден."));
     }
 
@@ -75,11 +73,11 @@ public class FilmServiceImpl implements FilmService {
             throw new NotFoundException("Фильм с id = " + filmId + " не найден.");
         }
 
-        Film film = filmFromDTO.apply(filmDTO);
+        Film film = FilmMapper.toFilm((filmDTO));
         film.setGenres(getGenresByIds(filmDTO));
         film = filmStorage.save(film);
 
-        return filmToDTO.apply(filmStorage.save(film));
+        return FilmMapper.toDto(filmStorage.save(film));
     }
 
     public void deleteFilmById(Long filmId) {
@@ -96,7 +94,7 @@ public class FilmServiceImpl implements FilmService {
         return filmStorage.findAllById(
                         likeService.findTopFilmsByLikes(limit))
                 .stream()
-                .map(filmToDTO)
+                .map(FilmMapper::toDto)
                 .collect(Collectors.toList());
     }
 }

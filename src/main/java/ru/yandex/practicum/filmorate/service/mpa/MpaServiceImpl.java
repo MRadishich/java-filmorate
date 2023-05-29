@@ -14,11 +14,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MpaServiceImpl implements MpaService {
     private final MpaDbStorage mpaStorage;
-    private final MpaDTOMapper mpaDTOMapper;
 
     public MpaDTO getById(Integer mpaId) {
         return mpaStorage.findById(mpaId)
-                .map(mpaDTOMapper)
+                .map(MpaMapper::toDto)
                 .orElseThrow(() -> new NotFoundException(
                         "Рейтинг Ассоциации кинокомпаний с id = " + mpaId + " не найден."));
     }
@@ -26,7 +25,7 @@ public class MpaServiceImpl implements MpaService {
     @Override
     public Collection<MpaDTO> getAll() {
         return mpaStorage.findAll().stream()
-                .map(mpaDTOMapper)
+                .map(MpaMapper::toDto)
                 .collect(Collectors.toList());
     }
 

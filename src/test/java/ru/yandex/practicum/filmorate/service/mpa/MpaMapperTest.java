@@ -4,11 +4,9 @@ import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.dto.MpaDTO;
 import ru.yandex.practicum.filmorate.model.film.Mpa;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class MpaDTOMapperTest {
-    private final MpaDTOMapper mpaDTOMapper = new MpaDTOMapper();
-
+class MpaMapperTest {
     @Test
     void test1_shouldConvertedMpaToMpaDTO() {
         // Given
@@ -16,7 +14,7 @@ class MpaDTOMapperTest {
         MpaDTO expectedMpaDTO = new MpaDTO(1, "G", "General Audiences");
 
         // When
-        MpaDTO convertedMpaDTO = mpaDTOMapper.apply(mpa);
+        MpaDTO convertedMpaDTO = MpaMapper.toDto(mpa);
 
         //
         assertEquals(expectedMpaDTO, convertedMpaDTO);

@@ -9,6 +9,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import ru.yandex.practicum.filmorate.FilmorateApplication;
 import ru.yandex.practicum.filmorate.model.film.Film;
 import ru.yandex.practicum.filmorate.model.film.Genre;
+import ru.yandex.practicum.filmorate.model.film.Mpa;
 import ru.yandex.practicum.filmorate.storage.film.FilmDbStorage;
 
 import java.time.LocalDate;
@@ -63,7 +64,7 @@ public class GenreStorageTest {
                 .name("New Film")
                 .description("New Film")
                 .releaseDate(LocalDate.now())
-                .mpaId(1)
+                .mpa(new Mpa(1, "G", "General Audiences"))
                 .duration(200)
                 .genres(List.of(
                         new Genre(1, "Комедия"),

@@ -28,7 +28,7 @@ public class Film {
     @NotNull
     private Integer duration;
 
-    private Integer mpaId;
+    private Mpa mpa;
 
     private List<Genre> genres;
 
@@ -37,25 +37,12 @@ public class Film {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Film film = (Film) o;
-        return Objects.equals(id, film.id) && Objects.equals(name, film.name) && Objects.equals(description, film.description) && Objects.equals(releaseDate, film.releaseDate) && Objects.equals(duration, film.duration) && Objects.equals(mpaId, film.mpaId) && Objects.equals(genres, film.genres);
+        return Objects.equals(id, film.id) && Objects.equals(name, film.name) && Objects.equals(description, film.description) && Objects.equals(releaseDate, film.releaseDate) && Objects.equals(duration, film.duration) && Objects.equals(mpa, film.mpa) && Objects.equals(genres, film.genres);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, releaseDate, duration, mpaId, genres);
-    }
-
-    @Override
-    public String toString() {
-        return "Film{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", releaseDate=" + releaseDate +
-                ", duration=" + duration +
-                ", mpaId=" + mpaId +
-                ", genres=" + genres +
-                '}';
+        return Objects.hash(id, name, description, releaseDate, duration, mpa, genres);
     }
 
     public Map<String, Object> toMap() {
@@ -65,7 +52,7 @@ public class Film {
         map.put("description", description);
         map.put("release_date", releaseDate);
         map.put("duration", duration);
-        map.put("mpa_rating_id", mpaId);
+        map.put("mpa_rating_id", mpa.getId());
 
         return map;
     }

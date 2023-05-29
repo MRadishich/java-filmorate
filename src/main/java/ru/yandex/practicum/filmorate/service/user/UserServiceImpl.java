@@ -17,23 +17,21 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserDbStorage userStorage;
-    private final UserToDTOMapper userToDTO;
-    private final UserFromDTOMapper userFromDTO;
     private final FriendshipService friendshipService;
 
     public UserDTO createUser(UserDTO userDTO) {
         log.info("Получен запрос на создание нового пользователя: {}.", userDTO);
 
-        User user = userFromDTO.apply(userDTO);
+        User user = UserMapper.toUser(userDTO);
 
-        return userToDTO.apply(userStorage.save(user));
+        return UserMapper.toDto(userStorage.save(user));
     }
 
     public Collection<UserDTO> findAllUsers() {
         log.info("Получен запрос на поиск всех пользователей.");
 
         return userStorage.findAll().stream()
-                .map(userToDTO)
+                .map(UserMapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -41,7 +39,7 @@ public class UserServiceImpl implements UserService {
         log.info("Получен запрос на поиск пользователя с id = {}.", userId);
 
         return userStorage.findById(userId)
-                .map(userToDTO)
+                .map(UserMapper::toDto)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id = " + userId + " не найден."));
     }
 
@@ -54,9 +52,9 @@ public class UserServiceImpl implements UserService {
             throw new NotFoundException("Пользователь с id = " + userId + " не найден.");
         }
 
-        User user = userFromDTO.apply(userDTO);
+        User user = UserMapper.toUser(userDTO);
 
-        return userToDTO.apply(userStorage.save(user));
+        return UserMapper.toDto(userStorage.save(user));
     }
 
     public void deleteUserById(long userId) {
@@ -108,7 +106,7 @@ public class UserServiceImpl implements UserService {
 
         return userStorage.findAllById(friendshipService.findFriendsIds(userId))
                 .stream()
-                .map(userToDTO)
+                .map(UserMapper::toDto)
                 .collect(Collectors.toList());
     }
 

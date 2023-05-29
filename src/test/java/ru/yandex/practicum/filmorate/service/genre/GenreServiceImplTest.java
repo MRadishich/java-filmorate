@@ -22,12 +22,11 @@ import static org.mockito.BDDMockito.given;
 class GenreServiceImplTest {
     @Mock
     private GenreDbStorage genreStorage;
-    private final GenreDTOMapper genreDTOMapper = new GenreDTOMapper();
     private GenreService genreService;
 
     @BeforeEach
     void setUp() {
-        genreService = new GenreServiceImpl(genreStorage, genreDTOMapper);
+        genreService = new GenreServiceImpl(genreStorage);
     }
 
     @Test

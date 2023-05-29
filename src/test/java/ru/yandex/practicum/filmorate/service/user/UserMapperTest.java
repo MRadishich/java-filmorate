@@ -8,12 +8,36 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class UserFromDTOMapperTest {
-
-    private final UserFromDTOMapper userFromDTOMapper = new UserFromDTOMapper();
+class UserMapperTest {
 
     @Test
-    void test1_shouldConversionUserDTOToUser() {
+    void test1_shouldConversionUserToUserDTO() {
+        // Given
+        User user = new User().toBuilder()
+                .id(1L)
+                .email("email@email.ru")
+                .login("petro20")
+                .name("Petrov Petr Petrovich")
+                .birthday(LocalDate.now())
+                .build();
+
+        UserDTO userDTO = new UserDTO(
+                1L,
+                "email@email.ru",
+                "petro20",
+                "Petrov Petr Petrovich",
+                LocalDate.now()
+        );
+
+        // When
+        UserDTO convertedUserDTO = UserMapper.toDto(user);
+
+        // Then
+        assertEquals(userDTO, convertedUserDTO);
+    }
+
+    @Test
+    void test2_shouldConversionUserDTOToUser() {
         // Given
         UserDTO userDTO = new UserDTO(
                 1L,
@@ -32,14 +56,14 @@ class UserFromDTOMapperTest {
                 .build();
 
         // When
-        User convertedUser = userFromDTOMapper.apply(userDTO);
+        User convertedUser = UserMapper.toUser(userDTO);
 
         // Then
         assertEquals(user, convertedUser);
     }
 
     @Test
-    void test2_shouldConversionUserDTOToUserAndSetNameIfNull() {
+    void test3_shouldConversionUserDTOToUserAndSetNameIfNull() {
         // Given
         UserDTO userDTO = new UserDTO(
                 1L,
@@ -58,14 +82,14 @@ class UserFromDTOMapperTest {
                 .build();
 
         // When
-        User convertedUser = userFromDTOMapper.apply(userDTO);
+        User convertedUser = UserMapper.toUser(userDTO);
 
         // Then
         assertEquals(user, convertedUser);
     }
 
     @Test
-    void test3_shouldConversionUserDTOToUserAndSetNameIfEmpty() {
+    void test4_shouldConversionUserDTOToUserAndSetNameIfEmpty() {
         // Given
         UserDTO userDTO = new UserDTO(
                 1L,
@@ -84,14 +108,14 @@ class UserFromDTOMapperTest {
                 .build();
 
         // When
-        User convertedUser = userFromDTOMapper.apply(userDTO);
+        User convertedUser = UserMapper.toUser(userDTO);
 
         // Then
         assertEquals(user, convertedUser);
     }
 
     @Test
-    void test4_shouldConversionUserDTOToUserAndSetNameIfBlank() {
+    void test5_shouldConversionUserDTOToUserAndSetNameIfBlank() {
         // Given
         UserDTO userDTO = new UserDTO(
                 1L,
@@ -110,9 +134,10 @@ class UserFromDTOMapperTest {
                 .build();
 
         // When
-        User convertedUser = userFromDTOMapper.apply(userDTO);
+        User convertedUser = UserMapper.toUser(userDTO);
 
         // Then
         assertEquals(user, convertedUser);
     }
+
 }

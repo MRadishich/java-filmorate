@@ -14,7 +14,6 @@ import ru.yandex.practicum.filmorate.model.film.Mpa;
 import ru.yandex.practicum.filmorate.service.like.LikeService;
 import ru.yandex.practicum.filmorate.storage.film.FilmDbStorage;
 import ru.yandex.practicum.filmorate.storage.genre.GenreDbStorage;
-import ru.yandex.practicum.filmorate.storage.mpa.MpaDbStorage;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -34,22 +33,15 @@ class FilmServiceImplTest {
     private FilmDbStorage filmStorage;
     @Mock
     private LikeService likeService;
-    @Mock
-    private MpaDbStorage mpaDbStorage;
     private FilmService filmService;
 
 
     @BeforeEach
     void setUp() {
-        FilmToDTOMapper filmToDTO = new FilmToDTOMapper(mpaDbStorage);
-        FilmFromDTOMapper filmFromDTO = new FilmFromDTOMapper();
-
         filmService = new FilmServiceImpl(
                 genreStorage,
                 filmStorage,
-                likeService,
-                filmToDTO,
-                filmFromDTO
+                likeService
         );
     }
 
@@ -61,7 +53,7 @@ class FilmServiceImplTest {
                 new Genre(2, "Комедия"),
                 new Genre(3, "Ужасы")
         );
-        Mpa mpa = new Mpa(1, "G", "General Audiences");
+        Mpa mpa = new Mpa(1, "G", "У фильма нет возрастных ограничений");
 
         FilmDTO filmDTO = new FilmDTO(
                 1L,
@@ -87,13 +79,12 @@ class FilmServiceImplTest {
                 .description("The best film in your live")
                 .duration(240)
                 .releaseDate(LocalDate.now())
-                .mpaId(1)
+                .mpa(new Mpa(1, "G", "У фильма нет возрастных ограничений"))
                 .genres(genres)
                 .build();
 
         given(genreStorage.findAllById(anyList())).willReturn(genres);
         given(filmStorage.save(any(Film.class))).willReturn(film);
-        given(mpaDbStorage.findById(anyInt())).willReturn(Optional.of(mpa));
 
         // When
         FilmDTO savedFilmDTO = filmService.createFilm(filmDTO);
@@ -117,7 +108,7 @@ class FilmServiceImplTest {
                 new Genre(2, "Комедия"),
                 new Genre(3, "Ужасы")
         );
-        Mpa mpa = new Mpa(1, "G", "General Audiences");
+        Mpa mpa = new Mpa(1, "G", "У фильма нет возрастных ограничений");
 
         List<Film> films = List.of(
                 new Film().toBuilder()
@@ -126,7 +117,7 @@ class FilmServiceImplTest {
                         .description("The best film in your live")
                         .duration(240)
                         .releaseDate(LocalDate.now())
-                        .mpaId(mpa.getId())
+                        .mpa(mpa)
                         .genres(genres)
                         .build(),
                 new Film().toBuilder()
@@ -135,7 +126,7 @@ class FilmServiceImplTest {
                         .description("The best film in your live")
                         .duration(240)
                         .releaseDate(LocalDate.now())
-                        .mpaId(mpa.getId())
+                        .mpa(mpa)
                         .genres(genres)
                         .build(),
                 new Film().toBuilder()
@@ -144,7 +135,7 @@ class FilmServiceImplTest {
                         .description("The best film in your live")
                         .duration(240)
                         .releaseDate(LocalDate.now())
-                        .mpaId(mpa.getId())
+                        .mpa(mpa)
                         .genres(genres)
                         .build()
         );
@@ -180,7 +171,6 @@ class FilmServiceImplTest {
         );
 
         given(filmStorage.findAll()).willReturn(films);
-        given(mpaDbStorage.findById(anyInt())).willReturn(Optional.of(mpa));
 
         // When
         Collection<FilmDTO> foundFilmDTOs = filmService.findAllFilms();
@@ -198,7 +188,7 @@ class FilmServiceImplTest {
                 new Genre(2, "Комедия"),
                 new Genre(3, "Ужасы")
         );
-        Mpa mpa = new Mpa(1, "G", "General Audiences");
+        Mpa mpa = new Mpa(1, "G", "У фильма нет возрастных ограничений");
 
         FilmDTO expectedFilmDTO = new FilmDTO(
                 1L,
@@ -216,12 +206,11 @@ class FilmServiceImplTest {
                 .description("The best film in your live")
                 .duration(240)
                 .releaseDate(LocalDate.now())
-                .mpaId(mpa.getId())
+                .mpa(mpa)
                 .genres(genres)
                 .build();
 
         given(filmStorage.findById(anyLong())).willReturn(Optional.of(film));
-        given(mpaDbStorage.findById(anyInt())).willReturn(Optional.of(mpa));
 
         // When
         FilmDTO foundFilmDTO = filmService.findFilmById(1L);
@@ -238,7 +227,7 @@ class FilmServiceImplTest {
                 new Genre(2, "Комедия"),
                 new Genre(3, "Ужасы")
         );
-        Mpa mpa = new Mpa(1, "G", "General Audiences");
+        Mpa mpa = new Mpa(1, "G", "У фильма нет возрастных ограничений");
 
         Film film = new Film().toBuilder()
                 .id(1L)
@@ -246,7 +235,7 @@ class FilmServiceImplTest {
                 .description("The best film in your live")
                 .duration(240)
                 .releaseDate(LocalDate.now())
-                .mpaId(mpa.getId())
+                .mpa(mpa)
                 .genres(genres)
                 .build();
 
@@ -269,7 +258,7 @@ class FilmServiceImplTest {
                 new Genre(2, "Комедия"),
                 new Genre(3, "Ужасы")
         );
-        Mpa mpa = new Mpa(1, "G", "General Audiences");
+        Mpa mpa = new Mpa(1, "G", "У фильма нет возрастных ограничений");
 
         FilmDTO filmDTO = new FilmDTO(
                 1L,
@@ -287,13 +276,12 @@ class FilmServiceImplTest {
                 .description("Updated the best film in your live")
                 .duration(240)
                 .releaseDate(LocalDate.now())
-                .mpaId(mpa.getId())
+                .mpa(mpa)
                 .genres(genres)
                 .build();
 
         given(filmStorage.existsById(film.getId())).willReturn(true);
         given(filmStorage.save(any(Film.class))).willReturn(film);
-        given(mpaDbStorage.findById(anyInt())).willReturn(Optional.of(mpa));
 
         // When
         FilmDTO updatedFilmDTo = filmService.updateFilm(filmDTO);
@@ -310,7 +298,7 @@ class FilmServiceImplTest {
                 new Genre(2, "Комедия"),
                 new Genre(3, "Ужасы")
         );
-        Mpa mpa = new Mpa(1, "G", "General Audiences");
+        Mpa mpa = new Mpa(1, "G", "У фильма нет возрастных ограничений");
 
         FilmDTO filmDTO = new FilmDTO(
                 1L,
@@ -328,7 +316,7 @@ class FilmServiceImplTest {
                 .description("Updated the best film in your live")
                 .duration(240)
                 .releaseDate(LocalDate.now())
-                .mpaId(mpa.getId())
+                .mpa(mpa)
                 .genres(genres)
                 .build();
 
@@ -378,7 +366,7 @@ class FilmServiceImplTest {
                 new Genre(2, "Комедия"),
                 new Genre(3, "Ужасы")
         );
-        Mpa mpa = new Mpa(1, "G", "General Audiences");
+        Mpa mpa = new Mpa(1, "G", "У фильма нет возрастных ограничений");
 
         List<Film> films = List.of(
                 new Film().toBuilder()
@@ -387,7 +375,7 @@ class FilmServiceImplTest {
                         .description("The best film in your live")
                         .duration(240)
                         .releaseDate(LocalDate.now())
-                        .mpaId(mpa.getId())
+                        .mpa(mpa)
                         .genres(genres)
                         .build(),
                 new Film().toBuilder()
@@ -396,7 +384,7 @@ class FilmServiceImplTest {
                         .description("The best film in your live")
                         .duration(240)
                         .releaseDate(LocalDate.now())
-                        .mpaId(mpa.getId())
+                        .mpa(mpa)
                         .genres(genres)
                         .build(),
                 new Film().toBuilder()
@@ -405,7 +393,7 @@ class FilmServiceImplTest {
                         .description("The best film in your live")
                         .duration(240)
                         .releaseDate(LocalDate.now())
-                        .mpaId(mpa.getId())
+                        .mpa(mpa)
                         .genres(genres)
                         .build()
         );
@@ -443,7 +431,6 @@ class FilmServiceImplTest {
 
         given(likeService.findTopFilmsByLikes(3)).willReturn(List.of(1L, 2L, 3L));
         given(filmStorage.findAllById(anyList())).willReturn(films);
-        given(mpaDbStorage.findById(anyInt())).willReturn(Optional.of(mpa));
 
         // When
         Collection<FilmDTO> popularFilms = filmService.findPopularFilms(3);

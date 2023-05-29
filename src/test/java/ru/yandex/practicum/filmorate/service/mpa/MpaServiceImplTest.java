@@ -22,12 +22,11 @@ import static org.mockito.BDDMockito.given;
 class MpaServiceImplTest {
     @Mock
     private MpaDbStorage mpaStorage;
-    private final MpaDTOMapper mpaDTOMapper = new MpaDTOMapper();
     private MpaService mpaService;
 
     @BeforeEach
     void setUp() {
-        mpaService = new MpaServiceImpl(mpaStorage, mpaDTOMapper);
+        mpaService = new MpaServiceImpl(mpaStorage);
     }
 
     @Test

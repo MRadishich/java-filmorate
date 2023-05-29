@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.filmorate.model.film.Film;
 import ru.yandex.practicum.filmorate.model.film.Genre;
-import ru.yandex.practicum.filmorate.service.film.MapRowToFilm;
 import ru.yandex.practicum.filmorate.storage.filmGenre.FilmGenreDbStorage;
 import ru.yandex.practicum.filmorate.storage.genre.GenreDbStorage;
 
@@ -90,7 +89,7 @@ public class FilmDbStorageImpl implements FilmDbStorage {
                 film.getDescription(),
                 film.getReleaseDate(),
                 film.getDuration(),
-                film.getMpaId(),
+                film.getMpa().getId(),
                 film.getId()
         );
 
@@ -103,7 +102,13 @@ public class FilmDbStorageImpl implements FilmDbStorage {
     @Override
     @Transactional
     public Optional<Film> findById(Long id) {
-        String sql = "SELECT * FROM films WHERE id = ?";
+        String sql = "SELECT f.*, " +
+                "mr.id AS mpa_rating_id, " +
+                "mr.name AS mpa_rating_name, " +
+                "mr.description AS mpa_rating_description " +
+                "FROM films f " +
+                "LEFT JOIN mpa_rating mr ON f.mpa_rating_id = mr.id " +
+                "WHERE f.id = ?";
 
         Film film;
 
@@ -124,7 +129,12 @@ public class FilmDbStorageImpl implements FilmDbStorage {
 
     @Override
     public List<Film> findAll() {
-        String sql = "SELECT * FROM films";
+        String sql = "SELECT f.*, " +
+                "mr.id AS mpa_rating_id, " +
+                "mr.name AS mpa_rating_name, " +
+                "mr.description AS mpa_rating_description " +
+                "FROM films f " +
+                "LEFT JOIN mpa_rating mr ON f.mpa_rating_id = mr.id ";
 
         List<Film> films = jdbcTemplate.query(sql, mapRowToFilm);
 
@@ -163,7 +173,13 @@ public class FilmDbStorageImpl implements FilmDbStorage {
     public List<Film> findAllById(List<Long> ids) {
         String inSql = String.join(",", Collections.nCopies(ids.size(), "?"));
 
-        String sql = String.format("SELECT * FROM films WHERE id IN (%s)", inSql);
+        String sql = String.format("SELECT f.*, " +
+                "mr.id AS mpa_rating_id, " +
+                "mr.name AS mpa_rating_name, " +
+                "mr.description AS mpa_rating_description " +
+                "FROM films f " +
+                "LEFT JOIN mpa_rating mr ON f.mpa_rating_id = mr.id " +
+                "WHERE f.id IN (%s)", inSql);
 
         List<Film> films = jdbcTemplate.query(sql, mapRowToFilm, ids.toArray());
 

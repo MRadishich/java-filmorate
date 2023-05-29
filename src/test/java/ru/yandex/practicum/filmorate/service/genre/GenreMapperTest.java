@@ -4,10 +4,9 @@ import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.dto.GenreDTO;
 import ru.yandex.practicum.filmorate.model.film.Genre;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class GenreDTOMapperTest {
-    private final GenreDTOMapper genreDTOMapper = new GenreDTOMapper();
+class GenreMapperTest {
 
     @Test
     public void test1_shouldConvertedGenreToGenreDTO() {
@@ -16,7 +15,7 @@ class GenreDTOMapperTest {
         GenreDTO expectedGenreDTO = new GenreDTO(1, "Боевик");
 
         // When
-        GenreDTO convertedGenreDTO = genreDTOMapper.apply(genre);
+        GenreDTO convertedGenreDTO = GenreMapper.toDto(genre);
 
         // Then
         assertEquals(expectedGenreDTO, convertedGenreDTO);
