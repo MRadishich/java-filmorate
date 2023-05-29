@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.friendship.Friendship;
 import ru.yandex.practicum.filmorate.model.friendship.FriendshipStatus;
-import ru.yandex.practicum.filmorate.storage.friend.FriendDbStorage;
+import ru.yandex.practicum.filmorate.storage.friend.FriendStorage;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class FriendshipServiceImpl implements FriendshipService {
-    private final FriendDbStorage friendStorage;
+    private final FriendStorage friendStorage;
 
     @Override
     public void addFriend(long userId, long friendId) {

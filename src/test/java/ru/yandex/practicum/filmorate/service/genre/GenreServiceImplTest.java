@@ -8,7 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ru.yandex.practicum.filmorate.dto.GenreDTO;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.film.Genre;
-import ru.yandex.practicum.filmorate.storage.genre.GenreDbStorage;
+import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
 
 import java.util.Collection;
 import java.util.List;
@@ -21,7 +21,7 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class GenreServiceImplTest {
     @Mock
-    private GenreDbStorage genreStorage;
+    private GenreStorage genreStorage;
     private GenreService genreService;
 
     @BeforeEach

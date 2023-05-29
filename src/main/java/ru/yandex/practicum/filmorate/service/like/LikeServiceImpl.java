@@ -6,9 +6,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.like.Like;
-import ru.yandex.practicum.filmorate.storage.film.FilmDbStorage;
-import ru.yandex.practicum.filmorate.storage.like.LikeDbStorage;
-import ru.yandex.practicum.filmorate.storage.user.UserDbStorage;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.like.LikeStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.List;
 
@@ -16,9 +16,9 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class LikeServiceImpl implements LikeService {
-    private final LikeDbStorage likeStorage;
-    private final FilmDbStorage filmStorage;
-    private final UserDbStorage userStorage;
+    private final LikeStorage likeStorage;
+    private final FilmStorage filmStorage;
+    private final UserStorage userStorage;
 
     @Override
     public void addLike(long filmId, long userId) {

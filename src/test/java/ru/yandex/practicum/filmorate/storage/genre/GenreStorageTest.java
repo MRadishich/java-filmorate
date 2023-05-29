@@ -10,7 +10,7 @@ import ru.yandex.practicum.filmorate.FilmorateApplication;
 import ru.yandex.practicum.filmorate.model.film.Film;
 import ru.yandex.practicum.filmorate.model.film.Genre;
 import ru.yandex.practicum.filmorate.model.film.Mpa;
-import ru.yandex.practicum.filmorate.storage.film.FilmDbStorage;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,8 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class GenreStorageTest {
-    private final GenreDbStorage genreStorage;
-    private final FilmDbStorage filmStorage;
+    private final GenreStorage genreStorage;
+    private final FilmStorage filmStorage;
 
     @Test
     public void test1_shouldReturnGenreById() {

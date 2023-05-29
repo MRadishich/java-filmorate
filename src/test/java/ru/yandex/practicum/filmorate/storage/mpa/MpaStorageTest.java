@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class MpaStorageTest {
-    private final MpaDbStorage mpaStorage;
+    private final MpaStorage mpaStorage;
 
     @Test
     public void test1_shouldReturnMpaById() {

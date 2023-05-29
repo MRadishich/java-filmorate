@@ -8,8 +8,8 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.film.Film;
 import ru.yandex.practicum.filmorate.model.film.Genre;
 import ru.yandex.practicum.filmorate.service.like.LikeService;
-import ru.yandex.practicum.filmorate.storage.film.FilmDbStorage;
-import ru.yandex.practicum.filmorate.storage.genre.GenreDbStorage;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class FilmServiceImpl implements FilmService {
-    private final GenreDbStorage genreStorage;
-    private final FilmDbStorage filmStorage;
+    private final GenreStorage genreStorage;
+    private final FilmStorage filmStorage;
     private final LikeService likeService;
 
     public FilmDTO createFilm(FilmDTO filmDTO) {

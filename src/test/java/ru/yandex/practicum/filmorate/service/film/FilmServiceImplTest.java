@@ -12,8 +12,8 @@ import ru.yandex.practicum.filmorate.model.film.Film;
 import ru.yandex.practicum.filmorate.model.film.Genre;
 import ru.yandex.practicum.filmorate.model.film.Mpa;
 import ru.yandex.practicum.filmorate.service.like.LikeService;
-import ru.yandex.practicum.filmorate.storage.film.FilmDbStorage;
-import ru.yandex.practicum.filmorate.storage.genre.GenreDbStorage;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -28,9 +28,9 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class FilmServiceImplTest {
     @Mock
-    private GenreDbStorage genreStorage;
+    private GenreStorage genreStorage;
     @Mock
-    private FilmDbStorage filmStorage;
+    private FilmStorage filmStorage;
     @Mock
     private LikeService likeService;
     private FilmService filmService;

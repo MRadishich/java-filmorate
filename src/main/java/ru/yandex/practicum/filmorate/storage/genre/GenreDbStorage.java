@@ -1,17 +1,61 @@
 package ru.yandex.practicum.filmorate.storage.genre;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.film.Film;
 import ru.yandex.practicum.filmorate.model.film.Genre;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public interface GenreDbStorage {
-    Optional<Genre> findById(int id);
+@Repository
+@RequiredArgsConstructor
+public class GenreDbStorage implements GenreStorage {
+    private final JdbcTemplate jdbcTemplate;
+    private final MapRowToGenre mapRowToGenre;
 
-    List<Genre> findAll();
+    @Override
+    public Optional<Genre> findById(int id) {
+        String sql = "SELECT * FROM genres WHERE id = ?";
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject(sql, mapRowToGenre, id));
+        } catch (DataAccessException e) {
+            return Optional.empty();
+        }
+    }
 
-    List<Genre> findAllById(List<Integer> ids);
+    @Override
+    public List<Genre> findAll() {
+        String sql = "SELECT * FROM genres";
 
-    List<Genre> findAllByFilm(Film film);
+        return jdbcTemplate.query(sql, mapRowToGenre);
+    }
+
+    @Override
+    public List<Genre> findAllById(List<Integer> ids) {
+        String inSql = String.join(",", Collections.nCopies(ids.size(), "?"));
+        String sql = String.format("SELECT * FROM genres WHERE id IN (%s)", inSql);
+
+        return jdbcTemplate.query(sql, mapRowToGenre, ids.toArray());
+    }
+
+    @Override
+    public List<Genre> findAllByFilm(Film film) {
+        String sqlFindGenres = "SELECT " +
+                "g.id, " +
+                "g.name " +
+                "FROM genres g " +
+                "LEFT JOIN films_genres fg ON g.id = fg.genre_id " +
+                "WHERE fg.film_id = ? " +
+                "ORDER BY g.id";
+
+        try {
+            return jdbcTemplate.query(sqlFindGenres, mapRowToGenre, film.getId());
+        } catch (DataAccessException e) {
+            return List.of();
+        }
+    }
 }

@@ -8,7 +8,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.yandex.practicum.filmorate.model.friendship.Friendship;
 import ru.yandex.practicum.filmorate.model.friendship.FriendshipStatus;
-import ru.yandex.practicum.filmorate.storage.friend.FriendDbStorage;
+import ru.yandex.practicum.filmorate.storage.friend.FriendStorage;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class FriendshipServiceImplTest {
     @Mock
-    private FriendDbStorage friendStorage;
+    private FriendStorage friendStorage;
     private FriendshipService friendshipService;
 
     @BeforeEach

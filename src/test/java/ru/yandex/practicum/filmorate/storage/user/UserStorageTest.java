@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class UserStorageTest {
-    private final UserDbStorage userStorage;
+    private final UserStorage userStorage;
     private User newUser;
 
     @BeforeEach
@@ -119,8 +119,6 @@ public class UserStorageTest {
     @Test
     public void test5_shouldReturnUsersByListIds() {
         userStorage.save(newUser);
-
-        List<User> users = userStorage.findAll();
 
         User otherUser = new User().toBuilder()
                 .name("Other User #1")

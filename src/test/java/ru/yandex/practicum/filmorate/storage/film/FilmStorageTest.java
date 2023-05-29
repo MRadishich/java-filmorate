@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class FilmStorageTest {
-    private final FilmDbStorage filmStorage;
+    private final FilmStorage filmStorage;
     private Film newFilm;
 
     @BeforeEach
