@@ -41,6 +41,6 @@ public class ErrorHandler {
     public ErrorResponse handleOtherException(Throwable ex) {
         log.error(ex.getMessage());
 
-        return new ErrorResponse(List.of(ex.getMessage()));
+        return new ErrorResponse(List.of("Что-то пошло не так"));
     }
 }

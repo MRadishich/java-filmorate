@@ -29,6 +29,8 @@ CREATE TABLE IF NOT EXISTS users
     CONSTRAINT users_pkey PRIMARY KEY (id)
 );
 
+CREATE UNIQUE INDEX users_unique ON users (email);
+
 CREATE TABLE IF NOT EXISTS films
 (
     id            int8         NOT NULL GENERATED ALWAYS AS IDENTITY,
