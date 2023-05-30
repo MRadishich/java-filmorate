@@ -1,228 +1,201 @@
 package ru.yandex.practicum.filmorate.storage.film;
 
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.model.Film;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import ru.yandex.practicum.filmorate.FilmorateApplication;
+import ru.yandex.practicum.filmorate.model.film.Film;
+import ru.yandex.practicum.filmorate.model.film.Genre;
+import ru.yandex.practicum.filmorate.model.film.Mpa;
 
-import java.lang.reflect.Field;
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-class FilmStorageTest {
-    FilmStorage filmStorage;
+@SpringBootTest(classes = FilmorateApplication.class)
+@AutoConfigureTestDatabase
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+public class FilmStorageTest {
+    private final FilmStorage filmStorage;
+    private Film newFilm;
 
     @BeforeEach
     void setUp() {
-        filmStorage = new InMemoryFilmStorage();
+        newFilm = new Film().toBuilder()
+                .name("New Film")
+                .description("New Film")
+                .releaseDate(LocalDate.now())
+                .mpa(new Mpa(1, "G", "У фильма нет возрастных ограничений"))
+                .duration(200)
+                .genres(List.of(new Genre(1, "Комедия")))
+                .build();
     }
 
     @Test
-    void test1_shouldSaveNewFilmInStorage() throws NoSuchFieldException, IllegalAccessException {
-        Film film = new Film().toBuilder()
-                .name("The best film")
-                .description("The best film in your life.")
-                .releaseDate(LocalDate.now())
-                .duration(150)
-                .build();
+    public void test1_shouldSaveFilm() {
+        Film savedFilm = filmStorage.save(newFilm);
 
-        filmStorage.create(film);
-
-        Field field = filmStorage.getClass().getDeclaredField("films");
-
-        field.setAccessible(true);
-
-        Map<Long, Film> map = (HashMap<Long, Film>) field.get(filmStorage);
-
-        assertEquals(film, map.get(1L));
+        assertThat(savedFilm).hasFieldOrPropertyWithValue("id", 1L);
+        assertThat(savedFilm).hasFieldOrPropertyWithValue("name", "New Film");
+        assertThat(savedFilm).hasFieldOrPropertyWithValue("description", "New Film");
+        assertThat(savedFilm).hasFieldOrPropertyWithValue("releaseDate", LocalDate.now());
+        assertThat(savedFilm).hasFieldOrPropertyWithValue("mpa", new Mpa(1, "G", "У фильма нет возрастных ограничений"));
+        assertThat(savedFilm).hasFieldOrPropertyWithValue("duration", 200);
+        assertThat(savedFilm).hasFieldOrPropertyWithValue("genres", List.of(new Genre(1, "Комедия")));
     }
 
     @Test
-    void test2_shouldReturnAllFilmFromStorage() {
-        Film film1 = new Film().toBuilder()
-                .name("The best film")
-                .description("The best film in your life.")
-                .releaseDate(LocalDate.now())
-                .duration(150)
-                .build();
+    public void test2_shouldUpdateFilm() {
+        filmStorage.save(newFilm);
 
-        Film film2 = new Film().toBuilder()
-                .name("New the best film")
-                .description("New the best film in your life.")
-                .releaseDate(LocalDate.now())
-                .duration(150)
-                .build();
-
-        filmStorage.create(film1);
-        filmStorage.create(film2);
-
-        Collection<Film> films = filmStorage.findAll();
-
-        assertEquals(2, films.size());
-        assertTrue(films.contains(film1));
-        assertTrue(films.contains(film2));
-    }
-
-    @Test
-    void test3_shouldReturnFilmById() {
-        Film film1 = new Film().toBuilder()
-                .name("The best film")
-                .description("The best film in your life.")
-                .releaseDate(LocalDate.now())
-                .duration(150)
-                .build();
-
-        filmStorage.create(film1);
-
-        Film film2 = filmStorage.findById(1L);
-
-        assertEquals("The best film", film2.getName());
-        assertEquals("The best film in your life.", film2.getDescription());
-        assertEquals(LocalDate.now(), film2.getReleaseDate());
-        assertEquals(150, film2.getDuration());
-    }
-
-    @Test
-    void test4_shouldThrowExceptionIfUpdateUnknownFilm() {
-        Film film1 = new Film().toBuilder()
-                .name("The best film")
-                .description("The best film in your life.")
-                .releaseDate(LocalDate.now())
-                .duration(150)
-                .build();
-
-        filmStorage.create(film1);
-
-        Exception exception = assertThrows(NotFoundException.class, () -> filmStorage.findById(2L));
-        String expectedMessage = "Фильм с id = 2 не найден.";
-
-        assertEquals(expectedMessage, exception.getMessage());
-    }
-
-    @Test
-    void test5_shouldReturnCollectionFilmsByIds() {
-        Film film1 = new Film().toBuilder()
-                .name("The best film")
-                .description("The best film in your life.")
-                .releaseDate(LocalDate.now())
-                .duration(150)
-                .build();
-
-        Film film2 = new Film().toBuilder()
-                .name("New the best film")
-                .description("New the best film in your life.")
-                .releaseDate(LocalDate.now())
-                .duration(150)
-                .build();
-
-        filmStorage.create(film1);
-        filmStorage.create(film2);
-
-        Collection<Film> films = filmStorage.findByIds(List.of(1L, 2L));
-
-        assertEquals(2, films.size());
-        assertTrue(films.contains(film1));
-        assertTrue(films.contains(film2));
-    }
-
-    @Test
-    void test6_shouldUpdateFilmAndReturnUpdatedFilm() {
-        Film film = new Film().toBuilder()
-                .name("The best film")
-                .description("The best film in your life.")
-                .releaseDate(LocalDate.now())
-                .duration(150)
-                .build();
-
-        filmStorage.create(film);
-
-        Film updatedFilm = new Film().toBuilder()
+        newFilm = new Film().toBuilder()
                 .id(1L)
-                .name("Updated the best film")
-                .description("Updated the best film in your life.")
+                .name("Update Film")
+                .description("Update Film")
                 .releaseDate(LocalDate.now())
-                .duration(150)
+                .mpa(new Mpa(1, "G", "У фильма нет возрастных ограничений"))
+                .duration(200)
+                .genres(List.of(new Genre(2, "Драма")))
                 .build();
 
-        filmStorage.update(updatedFilm);
+        Film updatedFilm = filmStorage.save(newFilm);
 
-        Film verifaibleFilm = filmStorage.findById(1L);
-
-        assertEquals("Updated the best film", verifaibleFilm.getName());
-        assertEquals("Updated the best film in your life.", verifaibleFilm.getDescription());
-        assertEquals(LocalDate.now(), verifaibleFilm.getReleaseDate());
-        assertEquals(150, verifaibleFilm.getDuration());
+        assertThat(updatedFilm).hasFieldOrPropertyWithValue("id", 1L);
+        assertThat(updatedFilm).hasFieldOrPropertyWithValue("name", "Update Film");
+        assertThat(updatedFilm).hasFieldOrPropertyWithValue("description", "Update Film");
+        assertThat(updatedFilm).hasFieldOrPropertyWithValue("releaseDate", LocalDate.now());
+        assertThat(updatedFilm).hasFieldOrPropertyWithValue("mpa", new Mpa(1, "G", "У фильма нет возрастных ограничений"));
+        assertThat(updatedFilm).hasFieldOrPropertyWithValue("duration", 200);
+        assertThat(updatedFilm).hasFieldOrPropertyWithValue("genres", List.of(new Genre(2, "Драма")));
     }
 
     @Test
-    void test7_shouldThrowExceptionIfUpdateUnknownFilm() {
-        Film film = new Film().toBuilder()
-                .name("The best film")
-                .description("The best film in your life.")
-                .releaseDate(LocalDate.now())
-                .duration(150)
-                .build();
+    public void test3_shouldReturnFilmById() {
+        filmStorage.save(newFilm);
 
-        filmStorage.create(film);
+        Optional<Film> foundFilm = filmStorage.findById(1L);
 
-        Film updatedFilm = new Film().toBuilder()
-                .id(2L)
-                .name("Updated the best film")
-                .description("Updated the best film in your life.")
-                .releaseDate(LocalDate.now())
-                .duration(150)
-                .build();
-
-        Exception exception = assertThrows(NotFoundException.class, () -> filmStorage.update(updatedFilm));
-        String expectedMessage = "Фильм с id = 2 не найден.";
-
-        assertEquals(expectedMessage, exception.getMessage());
+        assertThat(foundFilm)
+                .isPresent()
+                .hasValueSatisfying(film -> {
+                    assertThat(film).hasFieldOrPropertyWithValue("id", 1L);
+                    assertThat(film).hasFieldOrPropertyWithValue("name", "New Film");
+                    assertThat(film).hasFieldOrPropertyWithValue("description", "New Film");
+                    assertThat(film).hasFieldOrPropertyWithValue("releaseDate", LocalDate.now());
+                    assertThat(film).hasFieldOrPropertyWithValue("mpa", new Mpa(1, "G", "У фильма нет возрастных ограничений"));
+                    assertThat(film).hasFieldOrPropertyWithValue("duration", 200);
+                    assertThat(film).hasFieldOrPropertyWithValue("genres", List.of(new Genre(1, "Комедия")));
+                });
     }
 
     @Test
-    void test8_shouldDeleteFilmById() {
-        Film film1 = new Film().toBuilder()
-                .name("The best film")
-                .description("The best film in your life.")
+    public void test4_shouldReturnAllFilm() {
+        filmStorage.save(newFilm);
+
+        List<Film> films = filmStorage.findAll();
+
+        assertEquals(1, films.size());
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("id", 1L);
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("name", "New Film");
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("description", "New Film");
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("releaseDate", LocalDate.now());
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("mpa", new Mpa(1, "G", "У фильма нет возрастных ограничений"));
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("duration", 200);
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("genres", List.of(new Genre(1, "Комедия")));
+
+        Film otherFilm = new Film().toBuilder()
+                .name("Other Film")
+                .description("Other Film")
                 .releaseDate(LocalDate.now())
-                .duration(150)
+                .mpa(new Mpa(1, "G", "У фильма нет возрастных ограничений"))
+                .duration(200)
+                .genres(List.of(new Genre(2, "Боевик")))
                 .build();
 
-        Film film2 = new Film().toBuilder()
-                .name("New the best film")
-                .description("New the best film in your life.")
-                .releaseDate(LocalDate.now())
-                .duration(150)
-                .build();
-
-        filmStorage.create(film1);
-        filmStorage.create(film2);
-
-        Collection<Film> films = filmStorage.findAll();
-
-        assertEquals(2, films.size());
-        assertTrue(films.contains(film1));
-        assertTrue(films.contains(film2));
-
-        filmStorage.deleteById(1L);
+        filmStorage.save(otherFilm);
 
         films = filmStorage.findAll();
 
-        assertEquals(1, films.size());
-        assertFalse(films.contains(film1));
-        assertTrue(films.contains(film2));
+        assertEquals(2, films.size());
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("id", 1L);
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("name", "New Film");
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("description", "New Film");
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("releaseDate", LocalDate.now());
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("mpa", new Mpa(1, "G", "У фильма нет возрастных ограничений"));
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("duration", 200);
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("genres", List.of(new Genre(1, "Комедия")));
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("id", 1L);
+        assertThat(films.get(1)).hasFieldOrPropertyWithValue("name", "Other Film");
+        assertThat(films.get(1)).hasFieldOrPropertyWithValue("description", "Other Film");
+        assertThat(films.get(1)).hasFieldOrPropertyWithValue("releaseDate", LocalDate.now());
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("mpa", new Mpa(1, "G", "У фильма нет возрастных ограничений"));
+        assertThat(films.get(1)).hasFieldOrPropertyWithValue("duration", 200);
+        assertThat(films.get(1)).hasFieldOrPropertyWithValue("genres", List.of(new Genre(2, "Драма")));
     }
 
     @Test
-    void test9_shouldThrowExceptionIfDeleteUnknownFilmById() {
-        Exception exception = assertThrows(NotFoundException.class, () -> filmStorage.deleteById(1L));
-        String expectedMessage = "Фильм с id = 1 не найден.";
+    public void test5_shouldReturnFilmsByIds() {
+        filmStorage.save(newFilm);
 
-        assertEquals(expectedMessage, exception.getMessage());
+        Film otherFilm = new Film().toBuilder()
+                .name("Other Film")
+                .description("Other Film")
+                .releaseDate(LocalDate.now())
+                .mpa(new Mpa(1, "G", "У фильма нет возрастных ограничений"))
+                .duration(200)
+                .genres(List.of(new Genre(2, "Боевик")))
+                .build();
+
+        filmStorage.save(otherFilm);
+
+        Film otherFilmTwo = new Film().toBuilder()
+                .name("Other Film Two")
+                .description("Other Film Two")
+                .releaseDate(LocalDate.now())
+                .mpa(new Mpa(1, "G", "У фильма нет возрастных ограничений"))
+                .duration(200)
+                .genres(List.of(new Genre(2, "Боевик")))
+                .build();
+
+        filmStorage.save(otherFilmTwo);
+
+        List<Film> films = filmStorage.findAllById(List.of(1L, 2L));
+
+        assertEquals(2, films.size());
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("id", 1L);
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("name", "New Film");
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("description", "New Film");
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("releaseDate", LocalDate.now());
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("mpa", new Mpa(1, "G", "У фильма нет возрастных ограничений"));
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("duration", 200);
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("genres", List.of(new Genre(1, "Комедия")));
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("id", 1L);
+        assertThat(films.get(1)).hasFieldOrPropertyWithValue("name", "Other Film");
+        assertThat(films.get(1)).hasFieldOrPropertyWithValue("description", "Other Film");
+        assertThat(films.get(1)).hasFieldOrPropertyWithValue("releaseDate", LocalDate.now());
+        assertThat(films.get(0)).hasFieldOrPropertyWithValue("mpa", new Mpa(1, "G", "У фильма нет возрастных ограничений"));
+        assertThat(films.get(1)).hasFieldOrPropertyWithValue("duration", 200);
+        assertThat(films.get(1)).hasFieldOrPropertyWithValue("genres", List.of(new Genre(2, "Драма")));
+    }
+
+    @Test
+    public void test6_shouldReturnTrueIfUserExists() {
+        filmStorage.save(newFilm);
+
+        assertTrue(filmStorage.existsById(1L));
+    }
+
+    @Test
+    public void test7_shouldReturnFalseIfUserExists() {
+
+        assertFalse(filmStorage.existsById(1L));
     }
 }

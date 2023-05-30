@@ -2,11 +2,9 @@ package ru.yandex.practicum.filmorate.storage.film;
 
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.film.Film;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -16,7 +14,11 @@ public class InMemoryFilmStorage implements FilmStorage {
     private final AtomicInteger filmId = new AtomicInteger();
 
     @Override
-    public Film create(Film film) {
+    public Film save(Film film) {
+        if (film.getId() == null) {
+            return update(film);
+        }
+
         long id = filmId.incrementAndGet();
 
         film.setId(id);
@@ -27,32 +29,27 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Collection<Film> findAll() {
-        return films.values();
+    public List<Film> findAll() {
+        return new ArrayList<>(films.values());
     }
 
     @Override
-    public Film findById(long filmId) {
-        Film film = films.get(filmId);
+    public Optional<Film> findById(Long filmId) {
 
-        if (film == null) {
-            throw new NotFoundException(String.format("Фильм с id = %d не найден.", filmId));
-        }
+        return Optional.ofNullable(films.get(filmId));
 
-        return film;
     }
 
     @Override
-    public Collection<Film> findByIds(Collection<Long> ids) {
+    public List<Film> findAllById(List<Long> ids) {
         return films.entrySet().stream()
                 .filter(k -> ids.contains(k.getKey()))
                 .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public Film update(Film film) {
-        if (existById(film.getId())) {
+    private Film update(Film film) {
+        if (existsById(film.getId())) {
             films.put(film.getId(), film);
             return film;
         }
@@ -61,14 +58,14 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public void deleteById(long filmId) {
+    public void deleteById(Long filmId) {
         if (films.remove(filmId) == null) {
             throw new NotFoundException(String.format("Фильм с id = %d не найден.", filmId));
         }
     }
 
     @Override
-    public boolean existById(long filmId) {
+    public boolean existsById(Long filmId) {
         return films.containsKey(filmId);
     }
 }

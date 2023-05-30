@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.dto.UserDTO;
 import ru.yandex.practicum.filmorate.service.user.UserService;
 
 import javax.validation.Valid;
@@ -17,13 +17,13 @@ public class UserController {
     private final UserService service;
 
     @PostMapping
-    public ResponseEntity<User> create(@Valid @RequestBody User user) {
-        return new ResponseEntity<>(service.create(user), HttpStatus.CREATED);
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO user) {
+        return new ResponseEntity<>(service.createUser(user), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<Collection<User>> findAll() {
-        final Collection<User> users = service.findAll();
+    public ResponseEntity<Collection<UserDTO>> findAll() {
+        final Collection<UserDTO> users = service.findAllUsers();
 
         return !users.isEmpty() ?
                 new ResponseEntity<>(users, HttpStatus.OK) :
@@ -31,23 +31,23 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> findById(@PathVariable long id) {
-        return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
+    public ResponseEntity<UserDTO> findById(@PathVariable long id) {
+        return new ResponseEntity<>(service.findUserById(id), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/friends")
-    public ResponseEntity<Collection<User>> findFriends(@PathVariable long id) {
+    public ResponseEntity<Collection<UserDTO>> findFriends(@PathVariable long id) {
         return new ResponseEntity<>(service.findFriends(id), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
-    public ResponseEntity<Collection<User>> findCommonFriends(@PathVariable long id, @PathVariable long otherId) {
+    public ResponseEntity<Collection<UserDTO>> findCommonFriends(@PathVariable long id, @PathVariable long otherId) {
         return new ResponseEntity<>(service.findCommonFriends(id, otherId), HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<User> update(@Valid @RequestBody User user) {
-        return new ResponseEntity<>(service.update(user), HttpStatus.OK);
+    public ResponseEntity<UserDTO> update(@Valid @RequestBody UserDTO user) {
+        return new ResponseEntity<>(service.updateUser(user), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/friends/{friendId}")
@@ -69,7 +69,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteById(@PathVariable("id") long id) {
-        service.deleteById(id);
+        service.deleteUserById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

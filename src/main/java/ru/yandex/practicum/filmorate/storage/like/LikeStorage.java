@@ -1,13 +1,14 @@
 package ru.yandex.practicum.filmorate.storage.like;
 
-import java.util.Collection;
+import org.springframework.data.domain.Pageable;
+import ru.yandex.practicum.filmorate.model.like.Like;
+
+import java.util.List;
 
 public interface LikeStorage {
-    void create(long filmId);
+    void save(Like like);
 
-    void addLike(long filmId, long userId);
+    void delete(Like like);
 
-    void deleteLike(long filmId, long userId);
-
-    Collection<Long> findPopular(long count);
+    List<Long> findTopFilmIdByCountLikes(Pageable pageable);
 }

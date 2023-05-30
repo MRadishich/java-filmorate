@@ -4,8 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.dto.FilmDTO;
 import ru.yandex.practicum.filmorate.service.film.FilmService;
+import ru.yandex.practicum.filmorate.service.like.LikeService;
 
 import javax.validation.Valid;
 import java.util.Collection;
@@ -14,16 +15,17 @@ import java.util.Collection;
 @RequiredArgsConstructor
 @RequestMapping("/films")
 public class FilmController {
-    private final FilmService service;
+    private final FilmService filmService;
+    private final LikeService likeService;
 
     @PostMapping
-    public ResponseEntity<Film> create(@Valid @RequestBody Film film) {
-        return new ResponseEntity<>(service.create(film), HttpStatus.CREATED);
+    public ResponseEntity<FilmDTO> createFilm(@Valid @RequestBody FilmDTO film) {
+        return new ResponseEntity<>(filmService.createFilm(film), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<Collection<Film>> findAll() {
-        Collection<Film> films = service.findAll();
+    public ResponseEntity<Collection<FilmDTO>> findAllFilms() {
+        Collection<FilmDTO> films = filmService.findAllFilms();
 
         return films != null ?
                 new ResponseEntity<>(films, HttpStatus.OK) :
@@ -31,40 +33,40 @@ public class FilmController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Film> findById(@PathVariable("id") long id) {
-        return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
+    public ResponseEntity<FilmDTO> findFilmById(@PathVariable("id") long id) {
+        return new ResponseEntity<>(filmService.findFilmById(id), HttpStatus.OK);
     }
 
     @GetMapping("/popular")
-    public ResponseEntity<Collection<Film>> findPopular(@RequestParam(value = "count", defaultValue = "10") long count) {
-        return new ResponseEntity<>(service.findPopular(count), HttpStatus.OK);
+    public ResponseEntity<Collection<FilmDTO>> findPopularFilms(@RequestParam(value = "count", defaultValue = "10") int count) {
+        return new ResponseEntity<>(filmService.findPopularFilms(count), HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<Film> update(@Valid @RequestBody Film film) {
-        return new ResponseEntity<>(service.update(film), HttpStatus.OK);
+    public ResponseEntity<FilmDTO> updateFilm(@Valid @RequestBody FilmDTO film) {
+        return new ResponseEntity<>(filmService.updateFilm(film), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/like/{userId}")
-    public ResponseEntity<?> like(@PathVariable("id") long filmId, @PathVariable long userId) {
-        service.addLike(filmId, userId);
+    public ResponseEntity<?> addLike(@PathVariable("id") long filmId, @PathVariable long userId) {
+        likeService.addLike(filmId, userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteAll() {
+    public ResponseEntity<?> deleteAllFilms() {
         return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable("id") int id) {
-        service.deleteById(id);
+    public ResponseEntity<?> deleteFilmById(@PathVariable("id") long id) {
+        filmService.deleteFilmById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}/like/{userId}")
     public ResponseEntity<?> deleteLike(@PathVariable("id") long filmId, @PathVariable long userId) {
-        service.deleteLike(filmId, userId);
+        likeService.deleteLike(filmId, userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
