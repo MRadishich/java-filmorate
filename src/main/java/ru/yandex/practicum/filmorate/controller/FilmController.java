@@ -9,7 +9,7 @@ import ru.yandex.practicum.filmorate.service.film.FilmService;
 import ru.yandex.practicum.filmorate.service.like.LikeService;
 
 import javax.validation.Valid;
-import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,8 +24,8 @@ public class FilmController {
     }
 
     @GetMapping
-    public ResponseEntity<Collection<FilmDTO>> findAllFilms() {
-        Collection<FilmDTO> films = filmService.findAllFilms();
+    public ResponseEntity<List<FilmDTO>> findAllFilms() {
+        List<FilmDTO> films = filmService.findAllFilms();
 
         return films != null ?
                 new ResponseEntity<>(films, HttpStatus.OK) :
@@ -38,7 +38,7 @@ public class FilmController {
     }
 
     @GetMapping("/popular")
-    public ResponseEntity<Collection<FilmDTO>> findPopularFilms(@RequestParam(value = "count", defaultValue = "10") int count) {
+    public ResponseEntity<List<FilmDTO>> findPopularFilms(@RequestParam(value = "count", defaultValue = "10") int count) {
         return new ResponseEntity<>(filmService.findPopularFilms(count), HttpStatus.OK);
     }
 

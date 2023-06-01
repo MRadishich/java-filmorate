@@ -8,7 +8,7 @@ import ru.yandex.practicum.filmorate.dto.GenreDTO;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +29,7 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     @Transactional
-    public Collection<GenreDTO> getAll() {
+    public List<GenreDTO> getAll() {
         log.info("Получен запрос на поиск всех жанров");
 
         return genreStorage.findAll().stream()

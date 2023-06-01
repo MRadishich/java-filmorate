@@ -7,7 +7,7 @@ import ru.yandex.practicum.filmorate.dto.MpaDTO;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.storage.mpa.MpaStorage;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -27,7 +27,7 @@ public class MpaServiceImpl implements MpaService {
 
     @Override
     @Transactional
-    public Collection<MpaDTO> getAll() {
+    public List<MpaDTO> getAll() {
         return mpaStorage.findAll().stream()
                 .map(MpaMapper::toDto)
                 .collect(Collectors.toList());

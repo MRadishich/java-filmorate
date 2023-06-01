@@ -2,12 +2,12 @@ package ru.yandex.practicum.filmorate.service.film;
 
 import ru.yandex.practicum.filmorate.dto.FilmDTO;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface FilmService {
     FilmDTO createFilm(FilmDTO film);
 
-    Collection<FilmDTO> findAllFilms();
+    List<FilmDTO> findAllFilms();
 
     FilmDTO findFilmById(Long id);
 
@@ -15,5 +15,5 @@ public interface FilmService {
 
     void deleteFilmById(Long id);
 
-    Collection<FilmDTO> findPopularFilms(int count);
+    List<FilmDTO> findPopularFilms(int count);
 }

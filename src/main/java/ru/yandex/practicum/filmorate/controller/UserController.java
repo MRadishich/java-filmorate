@@ -8,7 +8,7 @@ import ru.yandex.practicum.filmorate.dto.UserDTO;
 import ru.yandex.practicum.filmorate.service.user.UserService;
 
 import javax.validation.Valid;
-import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,8 +22,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<Collection<UserDTO>> findAll() {
-        final Collection<UserDTO> users = service.findAllUsers();
+    public ResponseEntity<List<UserDTO>> findAll() {
+        final List<UserDTO> users = service.findAllUsers();
 
         return !users.isEmpty() ?
                 new ResponseEntity<>(users, HttpStatus.OK) :
@@ -36,12 +36,12 @@ public class UserController {
     }
 
     @GetMapping("/{id}/friends")
-    public ResponseEntity<Collection<UserDTO>> findFriends(@PathVariable long id) {
+    public ResponseEntity<List<UserDTO>> findFriends(@PathVariable long id) {
         return new ResponseEntity<>(service.findFriends(id), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
-    public ResponseEntity<Collection<UserDTO>> findCommonFriends(@PathVariable long id, @PathVariable long otherId) {
+    public ResponseEntity<List<UserDTO>> findCommonFriends(@PathVariable long id, @PathVariable long otherId) {
         return new ResponseEntity<>(service.findCommonFriends(id, otherId), HttpStatus.OK);
     }
 

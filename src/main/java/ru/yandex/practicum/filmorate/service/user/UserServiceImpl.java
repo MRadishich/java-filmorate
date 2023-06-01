@@ -10,7 +10,7 @@ import ru.yandex.practicum.filmorate.model.user.User;
 import ru.yandex.practicum.filmorate.service.friendship.FriendshipService;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Collection<UserDTO> findAllUsers() {
+    public List<UserDTO> findAllUsers() {
         log.info("Получен запрос на поиск всех пользователей.");
 
         return userStorage.findAll().stream()
@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Collection<UserDTO> findFriends(long userId) {
+    public List<UserDTO> findFriends(long userId) {
         log.info("Получен запрос на поиск друзей пользователя с id = {}.", userId);
 
         if (!userStorage.existsById(userId)) {
@@ -129,7 +129,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Collection<UserDTO> findCommonFriends(long userId, long otherId) {
+    public List<UserDTO> findCommonFriends(long userId, long otherId) {
         log.info("Получен запрос на поиск общих друзей пользователя с id = {} и пользователя с id = {}.", userId, otherId);
 
         if (!userStorage.existsById(userId)) {
@@ -140,8 +140,8 @@ public class UserServiceImpl implements UserService {
             throw new NotFoundException("Пользователь с id = " + otherId + " не найден.");
         }
 
-        Collection<UserDTO> friends = findFriends(userId);
-        Collection<UserDTO> otherFriend = findFriends(otherId);
+        List<UserDTO> friends = findFriends(userId);
+        List<UserDTO> otherFriend = findFriends(otherId);
         friends.retainAll(otherFriend);
 
         return friends;

@@ -13,7 +13,6 @@ import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
 import ru.yandex.practicum.filmorate.storage.mpa.MpaStorage;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,7 +58,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     @Transactional
-    public Collection<FilmDTO> findAllFilms() {
+    public List<FilmDTO> findAllFilms() {
         log.info("Получен запрос на поиск всех фильмов.");
 
         return filmStorage.findAll()
@@ -110,7 +109,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     @Transactional
-    public Collection<FilmDTO> findPopularFilms(int limit) {
+    public List<FilmDTO> findPopularFilms(int limit) {
         return filmStorage.findAllById(
                         likeService.findTopFilmsByLikes(limit))
                 .stream()
