@@ -44,6 +44,7 @@ public class FilmDbStorage implements FilmStorage {
                 .usingGeneratedKeyColumns("id");
 
         Long filmId = simpleJdbcInsert.executeAndReturnKey(film.toMap()).longValue();
+
         film.setId(filmId);
 
         saveGenres(film);

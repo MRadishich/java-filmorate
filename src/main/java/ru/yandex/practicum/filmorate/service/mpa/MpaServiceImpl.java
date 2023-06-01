@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.service.mpa;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.filmorate.dto.MpaDTO;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.storage.mpa.MpaStorage;
@@ -15,6 +16,8 @@ import java.util.stream.Collectors;
 public class MpaServiceImpl implements MpaService {
     private final MpaStorage mpaStorage;
 
+    @Override
+    @Transactional
     public MpaDTO getById(Integer mpaId) {
         return mpaStorage.findById(mpaId)
                 .map(MpaMapper::toDto)
@@ -23,6 +26,7 @@ public class MpaServiceImpl implements MpaService {
     }
 
     @Override
+    @Transactional
     public Collection<MpaDTO> getAll() {
         return mpaStorage.findAll().stream()
                 .map(MpaMapper::toDto)

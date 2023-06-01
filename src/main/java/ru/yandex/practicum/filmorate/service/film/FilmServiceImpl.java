@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.service.film;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.filmorate.dto.FilmDTO;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.film.Film;
@@ -10,6 +11,7 @@ import ru.yandex.practicum.filmorate.model.film.Genre;
 import ru.yandex.practicum.filmorate.service.like.LikeService;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
+import ru.yandex.practicum.filmorate.storage.mpa.MpaStorage;
 
 import java.util.Collection;
 import java.util.List;
@@ -22,13 +24,21 @@ public class FilmServiceImpl implements FilmService {
     private final GenreStorage genreStorage;
     private final FilmStorage filmStorage;
     private final LikeService likeService;
+    private final MpaStorage mpaStorage;
 
+    @Override
+    @Transactional
     public FilmDTO createFilm(FilmDTO filmDTO) {
         log.info("Получен запрос на создание нового фильма: {}", filmDTO);
 
         Film film = FilmMapper.toFilm(filmDTO);
-        film.setGenres(getGenresByIds(filmDTO));
+
         film = filmStorage.save(film);
+
+        film.setGenres(getGenresByIds(filmDTO));
+
+        film.setMpa(mpaStorage.findById(film.getMpa().getId()).orElse(null));
+
 
         return FilmMapper.toDto(film);
     }
@@ -47,6 +57,8 @@ public class FilmServiceImpl implements FilmService {
                         .collect(Collectors.toList()));
     }
 
+    @Override
+    @Transactional
     public Collection<FilmDTO> findAllFilms() {
         log.info("Получен запрос на поиск всех фильмов.");
 
@@ -56,6 +68,8 @@ public class FilmServiceImpl implements FilmService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    @Transactional
     public FilmDTO findFilmById(Long filmId) {
         log.info("Получен запрос на поиск фильма по filmId = {}", filmId);
 
@@ -64,6 +78,8 @@ public class FilmServiceImpl implements FilmService {
                 .orElseThrow(() -> new NotFoundException("Фильм с id = " + filmId + " не найден."));
     }
 
+    @Override
+    @Transactional
     public FilmDTO updateFilm(FilmDTO filmDTO) {
         final Long filmId = filmDTO.getId();
 
@@ -80,6 +96,8 @@ public class FilmServiceImpl implements FilmService {
         return FilmMapper.toDto(filmStorage.save(film));
     }
 
+    @Override
+    @Transactional
     public void deleteFilmById(Long filmId) {
         log.info("Получен запрос на удаление фильма с filmId = {}.", filmId);
 
@@ -90,6 +108,8 @@ public class FilmServiceImpl implements FilmService {
         filmStorage.deleteById(filmId);
     }
 
+    @Override
+    @Transactional
     public Collection<FilmDTO> findPopularFilms(int limit) {
         return filmStorage.findAllById(
                         likeService.findTopFilmsByLikes(limit))

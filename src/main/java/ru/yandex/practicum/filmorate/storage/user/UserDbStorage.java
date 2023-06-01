@@ -84,6 +84,7 @@ public class UserDbStorage implements UserStorage {
     }
 
     @Override
+    @Transactional
     public void deleteById(long userId) {
         String sql = "DELETE FROM users WHERE id = ?";
 
@@ -91,6 +92,7 @@ public class UserDbStorage implements UserStorage {
     }
 
     @Override
+    @Transactional
     public List<User> findAllById(List<Long> ids) {
         String inSql = String.join(", ", Collections.nCopies(ids.size(), "?"));
         String sql = String.format("SELECt * FROM users WHERE id IN (%s)", inSql);

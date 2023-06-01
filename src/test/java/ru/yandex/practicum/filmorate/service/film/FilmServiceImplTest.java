@@ -14,6 +14,7 @@ import ru.yandex.practicum.filmorate.model.film.Mpa;
 import ru.yandex.practicum.filmorate.service.like.LikeService;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
+import ru.yandex.practicum.filmorate.storage.mpa.MpaStorage;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -32,6 +33,8 @@ class FilmServiceImplTest {
     @Mock
     private FilmStorage filmStorage;
     @Mock
+    private MpaStorage mpaStorage;
+    @Mock
     private LikeService likeService;
     private FilmService filmService;
 
@@ -41,7 +44,8 @@ class FilmServiceImplTest {
         filmService = new FilmServiceImpl(
                 genreStorage,
                 filmStorage,
-                likeService
+                likeService,
+                mpaStorage
         );
     }
 
@@ -79,11 +83,16 @@ class FilmServiceImplTest {
                 .description("The best film in your live")
                 .duration(240)
                 .releaseDate(LocalDate.now())
-                .mpa(new Mpa(1, "G", "У фильма нет возрастных ограничений"))
-                .genres(genres)
+                .mpa(new Mpa(1, null, null))
+                .genres(List.of(
+                        new Genre(1, null),
+                        new Genre(2, null),
+                        new Genre(3, null)
+                ))
                 .build();
 
         given(genreStorage.findAllById(anyList())).willReturn(genres);
+        given(mpaStorage.findById(film.getMpa().getId())).willReturn(Optional.of(mpa));
         given(filmStorage.save(any(Film.class))).willReturn(film);
 
         // When

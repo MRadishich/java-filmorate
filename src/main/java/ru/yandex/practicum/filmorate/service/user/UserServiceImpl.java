@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.service.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.filmorate.dto.UserDTO;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.user.User;
@@ -19,6 +20,8 @@ public class UserServiceImpl implements UserService {
     private final UserStorage userStorage;
     private final FriendshipService friendshipService;
 
+    @Override
+    @Transactional
     public UserDTO createUser(UserDTO userDTO) {
         log.info("Получен запрос на создание нового пользователя: {}.", userDTO);
 
@@ -27,6 +30,8 @@ public class UserServiceImpl implements UserService {
         return UserMapper.toDto(userStorage.save(user));
     }
 
+    @Override
+    @Transactional
     public Collection<UserDTO> findAllUsers() {
         log.info("Получен запрос на поиск всех пользователей.");
 
@@ -35,6 +40,8 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    @Transactional
     public UserDTO findUserById(Long userId) {
         log.info("Получен запрос на поиск пользователя с id = {}.", userId);
 
@@ -43,6 +50,8 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new NotFoundException("Пользователь с id = " + userId + " не найден."));
     }
 
+    @Override
+    @Transactional
     public UserDTO updateUser(UserDTO userDTO) {
         Long userId = userDTO.getId();
 
@@ -57,6 +66,8 @@ public class UserServiceImpl implements UserService {
         return UserMapper.toDto(userStorage.save(user));
     }
 
+    @Override
+    @Transactional
     public void deleteUserById(long userId) {
         log.info("Получен запрос на удаление пользователя с id = {}.", userId);
 
@@ -67,6 +78,8 @@ public class UserServiceImpl implements UserService {
         userStorage.deleteById(userId);
     }
 
+    @Override
+    @Transactional
     public void addFriend(long userId, long friendId) {
         log.info("Получен запрос на добавление в друзья. " +
                 "Пользователь с id = {} хочет добавить в друзья пользователя с id = {}", userId, friendId);
@@ -82,6 +95,8 @@ public class UserServiceImpl implements UserService {
         friendshipService.addFriend(userId, friendId);
     }
 
+    @Override
+    @Transactional
     public void deleteFriend(long userId, long friendId) {
         log.info("Получен запрос на удаление из друзей. " +
                 "Пользователь с id = {} хочет удалить из друзей пользователя с id = {}", userId, friendId);
@@ -97,6 +112,8 @@ public class UserServiceImpl implements UserService {
         friendshipService.deleteFriend(userId, friendId);
     }
 
+    @Override
+    @Transactional
     public Collection<UserDTO> findFriends(long userId) {
         log.info("Получен запрос на поиск друзей пользователя с id = {}.", userId);
 
@@ -110,6 +127,8 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    @Transactional
     public Collection<UserDTO> findCommonFriends(long userId, long otherId) {
         log.info("Получен запрос на поиск общих друзей пользователя с id = {} и пользователя с id = {}.", userId, otherId);
 
