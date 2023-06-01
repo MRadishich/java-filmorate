@@ -3,6 +3,8 @@ package ru.yandex.practicum.filmorate.service.film;
 import ru.yandex.practicum.filmorate.dto.FilmDTO;
 import ru.yandex.practicum.filmorate.model.film.Film;
 
+import java.util.List;
+
 class FilmMapper {
     public static FilmDTO toDto(Film film) {
         return new FilmDTO(
@@ -24,7 +26,7 @@ class FilmMapper {
                 .releaseDate(filmDTO.getReleaseDate())
                 .duration(filmDTO.getDuration())
                 .mpa(filmDTO.getMpa())
-                .genres(filmDTO.getGenres())
+                .genres(filmDTO.getGenres() == null ? List.of() : filmDTO.getGenres())
                 .build();
     }
 }
