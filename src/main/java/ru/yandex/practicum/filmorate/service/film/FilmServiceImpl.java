@@ -10,10 +10,13 @@ import ru.yandex.practicum.filmorate.model.film.Film;
 import ru.yandex.practicum.filmorate.model.film.Genre;
 import ru.yandex.practicum.filmorate.service.like.LikeService;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.filmGenre.FilmGenreStorage;
 import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
 import ru.yandex.practicum.filmorate.storage.mpa.MpaStorage;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,8 +25,9 @@ import java.util.stream.Collectors;
 public class FilmServiceImpl implements FilmService {
     private final GenreStorage genreStorage;
     private final FilmStorage filmStorage;
-    private final LikeService likeService;
     private final MpaStorage mpaStorage;
+    private final FilmGenreStorage filmGenreStorage;
+    private final LikeService likeService;
 
     @Override
     @Transactional
@@ -33,27 +37,23 @@ public class FilmServiceImpl implements FilmService {
         Film film = FilmMapper.toFilm(filmDTO);
 
         film = filmStorage.save(film);
-
-        film.setGenres(getGenresByIds(filmDTO));
-
+        film.setGenres(getGenresByIds(film.getGenres()));
         film.setMpa(mpaStorage.findById(film.getMpa().getId()).orElse(null));
-
 
         return FilmMapper.toDto(film);
     }
 
-    private List<Genre> getGenresByIds(FilmDTO filmDTO) {
+    private List<Genre> getGenresByIds(List<Genre> genres) {
         log.info("Получаем список жанров по их id");
 
-        if (filmDTO.getGenres() == null) {
+        if (genres == null) {
             return List.of();
         }
 
-        return genreStorage.findAllById(
-                filmDTO.getGenres()
-                        .stream()
-                        .map(Genre::getId)
-                        .collect(Collectors.toList()));
+        return genreStorage.findAllById(genres
+                .stream()
+                .map(Genre::getId)
+                .collect(Collectors.toList()));
     }
 
     @Override
@@ -61,10 +61,22 @@ public class FilmServiceImpl implements FilmService {
     public List<FilmDTO> findAllFilms() {
         log.info("Получен запрос на поиск всех фильмов.");
 
-        return filmStorage.findAll()
-                .stream()
+        List<Film> films = filmStorage.findAll();
+
+        setGenres(films);
+
+        return films.stream()
                 .map(FilmMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    private void setGenres(List<Film> films) {
+        Map<Long, List<Genre>> allFilmGenres = filmGenreStorage.getAllFilmGenres(films);
+
+        films.forEach(film -> {
+            Long filmId = film.getId();
+            film.setGenres(allFilmGenres.getOrDefault(filmId, new ArrayList<>()));
+        });
     }
 
     @Override
@@ -72,9 +84,12 @@ public class FilmServiceImpl implements FilmService {
     public FilmDTO findFilmById(Long filmId) {
         log.info("Получен запрос на поиск фильма по filmId = {}", filmId);
 
-        return filmStorage.findById(filmId)
-                .map(FilmMapper::toDto)
+        Film film = filmStorage.findById(filmId)
                 .orElseThrow(() -> new NotFoundException("Фильм с id = " + filmId + " не найден."));
+
+        film.setGenres(genreStorage.findAllByFilmId(filmId));
+
+        return FilmMapper.toDto(film);
     }
 
     @Override
@@ -89,10 +104,10 @@ public class FilmServiceImpl implements FilmService {
         }
 
         Film film = FilmMapper.toFilm((filmDTO));
-        film.setGenres(getGenresByIds(filmDTO));
         film = filmStorage.save(film);
+        film.setGenres(getGenresByIds(film.getGenres()));
 
-        return FilmMapper.toDto(filmStorage.save(film));
+        return FilmMapper.toDto(film);
     }
 
     @Override
@@ -110,9 +125,14 @@ public class FilmServiceImpl implements FilmService {
     @Override
     @Transactional
     public List<FilmDTO> findPopularFilms(int limit) {
-        return filmStorage.findAllById(
-                        likeService.findTopFilmsByLikes(limit))
-                .stream()
+
+        List<Film> films = filmStorage.findAllById(
+                likeService.findTopFilmsByLikes(limit)
+        );
+
+        setGenres(films);
+
+        return films.stream()
                 .map(FilmMapper::toDto)
                 .collect(Collectors.toList());
     }

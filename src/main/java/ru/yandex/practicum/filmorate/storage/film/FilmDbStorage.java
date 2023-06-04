@@ -10,12 +10,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.filmorate.model.film.Film;
 import ru.yandex.practicum.filmorate.model.film.Genre;
-import ru.yandex.practicum.filmorate.storage.filmGenre.FilmGenreStorage;
-import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -23,9 +24,6 @@ import java.util.*;
 public class FilmDbStorage implements FilmStorage {
     private final JdbcTemplate jdbcTemplate;
     private final MapRowToFilm mapRowToFilm;
-    private final GenreStorage genreStorage;
-    private final FilmGenreStorage filmGenreStorage;
-
 
     @Override
     @Transactional
@@ -86,7 +84,6 @@ public class FilmDbStorage implements FilmStorage {
                 "    mpa_rating_id = ? " +
                 "WHERE id = ?";
 
-
         jdbcTemplate.update(sqlUpdateFilms,
                 film.getName(),
                 film.getDescription(),
@@ -121,13 +118,7 @@ public class FilmDbStorage implements FilmStorage {
             return Optional.empty();
         }
 
-        assert film != null;
-
-        List<Genre> genres = genreStorage.findAllByFilm(film);
-
-        film.setGenres(genres);
-
-        return Optional.of(film);
+        return Optional.ofNullable(film);
     }
 
     @Override
@@ -139,20 +130,7 @@ public class FilmDbStorage implements FilmStorage {
                 "FROM films f " +
                 "LEFT JOIN mpa_rating mr ON f.mpa_rating_id = mr.id ";
 
-        List<Film> films = jdbcTemplate.query(sql, mapRowToFilm);
-
-        setGenres(films);
-
-        return films;
-    }
-
-    private void setGenres(List<Film> films) {
-        Map<Long, List<Genre>> allFilmGenres = filmGenreStorage.getAllFilmGenres(films);
-
-        films.forEach(film -> {
-            Long filmId = film.getId();
-            film.setGenres(allFilmGenres.getOrDefault(filmId, new ArrayList<>()));
-        });
+        return jdbcTemplate.query(sql, mapRowToFilm);
     }
 
     @Override
@@ -184,10 +162,6 @@ public class FilmDbStorage implements FilmStorage {
                 "LEFT JOIN mpa_rating mr ON f.mpa_rating_id = mr.id " +
                 "WHERE f.id IN (%s)", inSql);
 
-        List<Film> films = jdbcTemplate.query(sql, mapRowToFilm, ids.toArray());
-
-        setGenres(films);
-
-        return films;
+        return jdbcTemplate.query(sql, mapRowToFilm, ids.toArray());
     }
 }

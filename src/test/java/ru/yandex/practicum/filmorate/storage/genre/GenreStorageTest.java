@@ -74,7 +74,7 @@ public class GenreStorageTest {
 
         filmStorage.save(newFilm);
 
-        List<Genre> genres = genreStorage.findAllByFilm(newFilm);
+        List<Genre> genres = genreStorage.findAllByFilmId(newFilm.getId());
 
         assertEquals(3, genres.size());
         assertThat(genres.get(0)).hasFieldOrPropertyWithValue("id", 1);

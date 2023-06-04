@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ru.yandex.practicum.filmorate.model.film.Film;
 import ru.yandex.practicum.filmorate.model.film.Genre;
 
 import java.util.Collections;
@@ -43,7 +42,7 @@ public class GenreDbStorage implements GenreStorage {
     }
 
     @Override
-    public List<Genre> findAllByFilm(Film film) {
+    public <T> List<Genre> findAllByFilmId(T filmId) {
         String sqlFindGenres = "SELECT " +
                 "g.id, " +
                 "g.name " +
@@ -53,7 +52,7 @@ public class GenreDbStorage implements GenreStorage {
                 "ORDER BY g.id";
 
         try {
-            return jdbcTemplate.query(sqlFindGenres, mapRowToGenre, film.getId());
+            return jdbcTemplate.query(sqlFindGenres, mapRowToGenre, filmId);
         } catch (DataAccessException e) {
             return List.of();
         }
