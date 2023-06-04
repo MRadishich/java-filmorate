@@ -104,8 +104,8 @@ public class FilmServiceImpl implements FilmService {
         }
 
         Film film = FilmMapper.toFilm((filmDTO));
+        film.setGenres(getGenresByIds(filmDTO.getGenres()));
         film = filmStorage.save(film);
-        film.setGenres(getGenresByIds(film.getGenres()));
 
         return FilmMapper.toDto(film);
     }
