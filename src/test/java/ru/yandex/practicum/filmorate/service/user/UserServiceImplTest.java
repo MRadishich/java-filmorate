@@ -125,7 +125,7 @@ class UserServiceImplTest {
         given(userStorage.findAll()).willReturn(users);
 
         // When
-        Collection<UserDTO> foundUserDTOs = userService.findAllUsers();
+        Collection<UserDTO> foundUserDTOs = userService.getAllUsers();
 
         // Then
         assertEquals(userDTOs, foundUserDTOs);
@@ -154,7 +154,7 @@ class UserServiceImplTest {
         given(userStorage.findById(user.getId())).willReturn(Optional.of(user));
 
         // When
-        UserDTO foundUserDTO = userService.findUserById(user.getId());
+        UserDTO foundUserDTO = userService.getUserById(user.getId());
 
         // Then
         assertEquals(userDTO, foundUserDTO);
@@ -169,7 +169,7 @@ class UserServiceImplTest {
         String expectedMessage = "Пользователь с id = 1 не найден.";
 
         // When
-        Exception exception = assertThrows(NotFoundException.class, () -> userService.findUserById(userId));
+        Exception exception = assertThrows(NotFoundException.class, () -> userService.getUserById(userId));
 
         // Then
         assertEquals(expectedMessage, exception.getMessage());
@@ -408,11 +408,11 @@ class UserServiceImplTest {
         );
 
         given(userStorage.existsById(userId)).willReturn(true);
-        given(friendshipService.findFriendsIds(userId)).willReturn(List.of());
+        given(friendshipService.getFriendsIds(userId)).willReturn(List.of());
         given(userStorage.findAllById(anyList())).willReturn(users);
 
         // Then
-        Collection<UserDTO> foundFriendsDTO = userService.findFriends(userId);
+        Collection<UserDTO> foundFriendsDTO = userService.getFriends(userId);
 
         assertEquals(userDTOs, foundFriendsDTO);
     }
@@ -426,7 +426,7 @@ class UserServiceImplTest {
         String expectedMessage = "Пользователь с id = " + userId + " не найден.";
 
         // When
-        Exception exception = assertThrows(NotFoundException.class, () -> userService.findFriends(userId));
+        Exception exception = assertThrows(NotFoundException.class, () -> userService.getFriends(userId));
 
         // Then
         assertEquals(expectedMessage, exception.getMessage());
@@ -505,13 +505,13 @@ class UserServiceImplTest {
 
         given(userStorage.existsById(userId)).willReturn(true);
         given(userStorage.existsById(otherId)).willReturn(true);
-        given(friendshipService.findFriendsIds(userId)).willReturn(List.of(1L, 2L, 3L));
+        given(friendshipService.getFriendsIds(userId)).willReturn(List.of(1L, 2L, 3L));
         given(userStorage.findAllById(List.of(1L, 2L, 3L))).willReturn(users);
-        given(friendshipService.findFriendsIds(otherId)).willReturn(List.of(1L, 2L, 4L));
+        given(friendshipService.getFriendsIds(otherId)).willReturn(List.of(1L, 2L, 4L));
         given(userStorage.findAllById(List.of(1L, 2L, 4L))).willReturn(otherUsers);
 
         // When
-        Collection<UserDTO> commonFriends = userService.findCommonFriends(userId, otherId);
+        Collection<UserDTO> commonFriends = userService.getCommonFriends(userId, otherId);
 
         // Then
         assertEquals(expectedUserDTOs, commonFriends);
@@ -527,7 +527,7 @@ class UserServiceImplTest {
         String expectedMessage = "Пользователь с id = " + userId + " не найден.";
 
         // When
-        Exception exception = assertThrows(NotFoundException.class, () -> userService.findCommonFriends(userId, otherId));
+        Exception exception = assertThrows(NotFoundException.class, () -> userService.getCommonFriends(userId, otherId));
 
         // Then
         assertEquals(expectedMessage, exception.getMessage());
@@ -544,7 +544,7 @@ class UserServiceImplTest {
         String expectedMessage = "Пользователь с id = " + otherId + " не найден.";
 
         // When
-        Exception exception = assertThrows(NotFoundException.class, () -> userService.findCommonFriends(userId, otherId));
+        Exception exception = assertThrows(NotFoundException.class, () -> userService.getCommonFriends(userId, otherId));
 
         // Then
         assertEquals(expectedMessage, exception.getMessage());

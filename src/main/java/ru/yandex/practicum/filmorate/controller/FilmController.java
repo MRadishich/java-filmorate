@@ -25,7 +25,7 @@ public class FilmController {
 
     @GetMapping
     public ResponseEntity<List<FilmDTO>> findAllFilms() {
-        List<FilmDTO> films = filmService.findAllFilms();
+        List<FilmDTO> films = filmService.getAllFilms();
 
         return films != null ?
                 new ResponseEntity<>(films, HttpStatus.OK) :
@@ -34,12 +34,12 @@ public class FilmController {
 
     @GetMapping("/{id}")
     public ResponseEntity<FilmDTO> findFilmById(@PathVariable("id") long id) {
-        return new ResponseEntity<>(filmService.findFilmById(id), HttpStatus.OK);
+        return new ResponseEntity<>(filmService.getFilmById(id), HttpStatus.OK);
     }
 
     @GetMapping("/popular")
     public ResponseEntity<List<FilmDTO>> findPopularFilms(@RequestParam(value = "count", defaultValue = "10") int count) {
-        return new ResponseEntity<>(filmService.findPopularFilms(count), HttpStatus.OK);
+        return new ResponseEntity<>(filmService.getPopularFilms(count), HttpStatus.OK);
     }
 
     @PutMapping

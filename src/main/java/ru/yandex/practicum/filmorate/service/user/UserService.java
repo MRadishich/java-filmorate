@@ -7,9 +7,9 @@ import java.util.List;
 public interface UserService {
     UserDTO createUser(UserDTO user);
 
-    List<UserDTO> findAllUsers();
+    List<UserDTO> getAllUsers();
 
-    UserDTO findUserById(Long id);
+    UserDTO getUserById(Long id);
 
     UserDTO updateUser(UserDTO user);
 
@@ -19,8 +19,8 @@ public interface UserService {
 
     void deleteFriend(long userId, long friendId);
 
-    List<UserDTO> findFriends(long userId);
+    List<UserDTO> getFriends(long userId);
 
-    List<UserDTO> findCommonFriends(long userId, long otherId);
+    List<UserDTO> getCommonFriends(long userId, long otherId);
 
 }

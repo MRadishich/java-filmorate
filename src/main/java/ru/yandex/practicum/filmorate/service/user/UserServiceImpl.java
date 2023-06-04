@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public List<UserDTO> findAllUsers() {
+    public List<UserDTO> getAllUsers() {
         log.info("Получен запрос на поиск всех пользователей.");
 
         return userStorage.findAll().stream()
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDTO findUserById(Long userId) {
+    public UserDTO getUserById(Long userId) {
         log.info("Получен запрос на поиск пользователя с id = {}.", userId);
 
         return userStorage.findById(userId)
@@ -114,14 +114,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public List<UserDTO> findFriends(long userId) {
+    public List<UserDTO> getFriends(long userId) {
         log.info("Получен запрос на поиск друзей пользователя с id = {}.", userId);
 
         if (!userStorage.existsById(userId)) {
             throw new NotFoundException("Пользователь с id = " + userId + " не найден.");
         }
 
-        return userStorage.findAllById(friendshipService.findFriendsIds(userId))
+        return userStorage.findAllById(friendshipService.getFriendsIds(userId))
                 .stream()
                 .map(UserMapper::toDto)
                 .collect(Collectors.toList());
@@ -129,7 +129,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public List<UserDTO> findCommonFriends(long userId, long otherId) {
+    public List<UserDTO> getCommonFriends(long userId, long otherId) {
         log.info("Получен запрос на поиск общих друзей пользователя с id = {} и пользователя с id = {}.", userId, otherId);
 
         if (!userStorage.existsById(userId)) {
@@ -140,8 +140,8 @@ public class UserServiceImpl implements UserService {
             throw new NotFoundException("Пользователь с id = " + otherId + " не найден.");
         }
 
-        List<UserDTO> friends = findFriends(userId);
-        List<UserDTO> otherFriend = findFriends(otherId);
+        List<UserDTO> friends = getFriends(userId);
+        List<UserDTO> otherFriend = getFriends(otherId);
         friends.retainAll(otherFriend);
 
         return friends;

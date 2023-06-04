@@ -8,5 +8,5 @@ public interface LikeService {
 
     void deleteLike(long filmId, long userId);
 
-    List<Long> findTopFilmsByLikes(int limit);
+    List<Long> getTopFilmsByLikes(int limit);
 }

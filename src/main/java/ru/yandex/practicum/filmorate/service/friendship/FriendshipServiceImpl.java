@@ -41,7 +41,7 @@ public class FriendshipServiceImpl implements FriendshipService {
 
     @Override
     @Transactional
-    public List<Long> findFriendsIds(long userId) {
+    public List<Long> getFriendsIds(long userId) {
         return friendStorage.findAllByUserId(userId)
                 .stream()
                 .map(Friendship::getFriendId)

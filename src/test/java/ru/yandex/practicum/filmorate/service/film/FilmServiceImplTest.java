@@ -190,7 +190,7 @@ class FilmServiceImplTest {
         ));
 
         // When
-        Collection<FilmDTO> foundFilmDTOs = filmService.findAllFilms();
+        Collection<FilmDTO> foundFilmDTOs = filmService.getAllFilms();
 
         // Then
         assertEquals(expectedFilmDTOs, foundFilmDTOs);
@@ -230,7 +230,7 @@ class FilmServiceImplTest {
         given(genreStorage.findAllByFilmId(film.getId())).willReturn(genres);
 
         // When
-        FilmDTO foundFilmDTO = filmService.findFilmById(1L);
+        FilmDTO foundFilmDTO = filmService.getFilmById(1L);
 
         // Then
         assertEquals(expectedFilmDTO, foundFilmDTO);
@@ -255,7 +255,7 @@ class FilmServiceImplTest {
         String expectedMessage = "Фильм с id = " + film.getId() + " не найден.";
 
         // When
-        Exception exception = assertThrows(NotFoundException.class, () -> filmService.findFilmById(film.getId()));
+        Exception exception = assertThrows(NotFoundException.class, () -> filmService.getFilmById(film.getId()));
 
         // Then
         assertEquals(expectedMessage, exception.getMessage());
@@ -437,7 +437,7 @@ class FilmServiceImplTest {
         );
 
 
-        given(likeService.findTopFilmsByLikes(3)).willReturn(List.of(1L, 2L, 3L));
+        given(likeService.getTopFilmsByLikes(3)).willReturn(List.of(1L, 2L, 3L));
         given(filmStorage.findAllById(anyList())).willReturn(films);
         given(filmGenreStorage.getAllFilmGenres(films)).willReturn(Map.of(
                 1L, genres,
@@ -446,7 +446,7 @@ class FilmServiceImplTest {
         ));
 
         // When
-        Collection<FilmDTO> popularFilms = filmService.findPopularFilms(3);
+        Collection<FilmDTO> popularFilms = filmService.getPopularFilms(3);
 
         // Then
         assertEquals(expectedFilmDTOs, popularFilms);

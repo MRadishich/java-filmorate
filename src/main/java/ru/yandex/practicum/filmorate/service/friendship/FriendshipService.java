@@ -7,5 +7,5 @@ public interface FriendshipService {
 
     void deleteFriend(long userId, long friendId);
 
-    List<Long> findFriendsIds(long userId);
+    List<Long> getFriendsIds(long userId);
 }

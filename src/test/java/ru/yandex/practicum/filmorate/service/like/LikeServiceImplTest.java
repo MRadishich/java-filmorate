@@ -147,7 +147,7 @@ class LikeServiceImplTest {
         // Given
         int limit = 3;
         // When
-        likeService.findTopFilmsByLikes(limit);
+        likeService.getTopFilmsByLikes(limit);
 
         // Then
         Mockito.verify(likeStorage, Mockito.times(1)).findTopFilmIdByCountLikes(PageRequest.of(0, limit));

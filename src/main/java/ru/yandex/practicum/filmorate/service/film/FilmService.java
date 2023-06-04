@@ -7,13 +7,13 @@ import java.util.List;
 public interface FilmService {
     FilmDTO createFilm(FilmDTO film);
 
-    List<FilmDTO> findAllFilms();
+    List<FilmDTO> getAllFilms();
 
-    FilmDTO findFilmById(Long id);
+    FilmDTO getFilmById(Long id);
 
     FilmDTO updateFilm(FilmDTO filmDTO);
 
     void deleteFilmById(Long id);
 
-    List<FilmDTO> findPopularFilms(int count);
+    List<FilmDTO> getPopularFilms(int count);
 }

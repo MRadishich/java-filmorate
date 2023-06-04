@@ -58,7 +58,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     @Transactional
-    public List<FilmDTO> findAllFilms() {
+    public List<FilmDTO> getAllFilms() {
         log.info("Получен запрос на поиск всех фильмов.");
 
         List<Film> films = filmStorage.findAll();
@@ -81,7 +81,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     @Transactional
-    public FilmDTO findFilmById(Long filmId) {
+    public FilmDTO getFilmById(Long filmId) {
         log.info("Получен запрос на поиск фильма по filmId = {}", filmId);
 
         Film film = filmStorage.findById(filmId)
@@ -124,10 +124,10 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     @Transactional
-    public List<FilmDTO> findPopularFilms(int limit) {
+    public List<FilmDTO> getPopularFilms(int limit) {
 
         List<Film> films = filmStorage.findAllById(
-                likeService.findTopFilmsByLikes(limit)
+                likeService.getTopFilmsByLikes(limit)
         );
 
         setGenres(films);

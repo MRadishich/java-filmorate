@@ -23,7 +23,7 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> findAll() {
-        final List<UserDTO> users = service.findAllUsers();
+        final List<UserDTO> users = service.getAllUsers();
 
         return !users.isEmpty() ?
                 new ResponseEntity<>(users, HttpStatus.OK) :
@@ -32,17 +32,17 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> findById(@PathVariable long id) {
-        return new ResponseEntity<>(service.findUserById(id), HttpStatus.OK);
+        return new ResponseEntity<>(service.getUserById(id), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/friends")
     public ResponseEntity<List<UserDTO>> findFriends(@PathVariable long id) {
-        return new ResponseEntity<>(service.findFriends(id), HttpStatus.OK);
+        return new ResponseEntity<>(service.getFriends(id), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
     public ResponseEntity<List<UserDTO>> findCommonFriends(@PathVariable long id, @PathVariable long otherId) {
-        return new ResponseEntity<>(service.findCommonFriends(id, otherId), HttpStatus.OK);
+        return new ResponseEntity<>(service.getCommonFriends(id, otherId), HttpStatus.OK);
     }
 
     @PutMapping

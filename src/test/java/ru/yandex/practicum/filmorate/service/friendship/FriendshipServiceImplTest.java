@@ -82,7 +82,7 @@ class FriendshipServiceImplTest {
         ));
 
         // When
-        List<Long> friendsIds = friendshipService.findFriendsIds(userId);
+        List<Long> friendsIds = friendshipService.getFriendsIds(userId);
 
         // Then
         assertEquals(List.of(2L, 3L, 4L), friendsIds);
