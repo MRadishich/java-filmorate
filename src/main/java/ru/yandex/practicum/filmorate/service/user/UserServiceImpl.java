@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.filmorate.dto.UserDTO;
+import ru.yandex.practicum.filmorate.exception.AlreadyExistsException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.user.User;
 import ru.yandex.practicum.filmorate.service.friendship.FriendshipService;
@@ -26,6 +27,10 @@ public class UserServiceImpl implements UserService {
         log.info("Получен запрос на создание нового пользователя: {}.", userDTO);
 
         User user = UserMapper.toUser(userDTO);
+
+        if (userStorage.findByEmail(user.getEmail()).isPresent()) {
+            throw new AlreadyExistsException("Пользователь с email = " + user.getEmail() + " уже существует.");
+        }
 
         return UserMapper.toDto(userStorage.save(user));
     }

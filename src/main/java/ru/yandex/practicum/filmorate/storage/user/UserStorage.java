@@ -13,9 +13,12 @@ public interface UserStorage {
 
     Optional<User> findById(Long userId);
 
+    Optional<User> findByEmail(String email);
+
     boolean existsById(Long userId);
 
     void deleteById(long userId);
 
     List<User> findAllById(List<Long> ids);
+
 }

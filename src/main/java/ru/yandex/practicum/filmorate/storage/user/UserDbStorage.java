@@ -79,6 +79,17 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     @Transactional
+    public Optional<User> findByEmail(String email) {
+        String sql = "SELECT * FROM users WHERE email = ?";
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject(sql, mapRowToUser, email));
+        } catch (DataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    @Transactional
     public boolean existsById(Long userId) {
         return findById(userId).isPresent();
     }
