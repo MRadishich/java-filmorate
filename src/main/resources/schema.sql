@@ -71,3 +71,26 @@ CREATE TABLE IF NOT EXISTS films_genres
     CONSTRAINT film_genres_film_id_fkey FOREIGN KEY (film_id) REFERENCES films (id),
     CONSTRAINT film_genres_genre_id_fkey FOREIGN KEY (genre_id) REFERENCES genres (id)
 );
+
+CREATE TABLE IF NOT EXISTS reviews
+(
+    id          int8    NOT NULL GENERATED ALWAYS AS IDENTITY,
+    content     varchar NOT NULL,
+    is_positive boolean NOT NULL,
+    user_id     integer NOT NULL,
+    film_id     integer NOT NULL,
+    useful      integer DEFAULT 0,
+    CONSTRAINT reviews_pk PRIMARY KEY (id),
+    CONSTRAINT reviews_film_fk FOREIGN KEY (film_id) REFERENCES films (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT reviews_user_fk FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
+CREATE TABLE IF NOT EXISTS reviews_likes
+(
+    review_id int8    NOT NULL,
+    user_id   integer NOT NULL,
+    is_like   boolean NOT NULL,
+    CONSTRAINT reviews_likes_pk PRIMARY KEY (review_id, user_id),
+    CONSTRAINT reviews_likes_reviews_fk FOREIGN KEY (review_id) REFERENCES reviews (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT reviews_likes_users_fk FOREIGN KEY (user_id) REFERENCES users (id)
+);

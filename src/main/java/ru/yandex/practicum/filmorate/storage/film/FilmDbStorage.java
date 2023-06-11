@@ -114,11 +114,10 @@ public class FilmDbStorage implements FilmStorage {
 
         try {
             film = jdbcTemplate.queryForObject(sql, mapRowToFilm, id);
+            return Optional.ofNullable(film);
         } catch (DataAccessException e) {
             return Optional.empty();
         }
-
-        return Optional.ofNullable(film);
     }
 
     @Override
