@@ -68,8 +68,8 @@ CREATE TABLE IF NOT EXISTS films_genres
     film_id  int8 NOT NULL,
     genre_id int8 NOT NULL,
     CONSTRAINT film_genres_pk PRIMARY KEY (film_id, genre_id),
-    CONSTRAINT film_genres_film_id_fkey FOREIGN KEY (film_id) REFERENCES films (id),
-    CONSTRAINT film_genres_genre_id_fkey FOREIGN KEY (genre_id) REFERENCES genres (id)
+    CONSTRAINT film_genres_film_id_fkey FOREIGN KEY (film_id) REFERENCES films (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT film_genres_genre_id_fkey FOREIGN KEY (genre_id) REFERENCES genres (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS reviews

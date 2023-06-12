@@ -1,9 +1,6 @@
 package ru.yandex.practicum.filmorate.model.film;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +10,7 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Review {
     private Long id;
     private String content;
