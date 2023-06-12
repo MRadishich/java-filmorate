@@ -34,7 +34,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Optional<Film> findById(Long filmId) {
+    public Optional<Film> findById(long filmId) {
 
         return Optional.ofNullable(films.get(filmId));
 
@@ -58,14 +58,14 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public void deleteById(Long filmId) {
+    public void deleteById(long filmId) {
         if (films.remove(filmId) == null) {
             throw new NotFoundException(String.format("Фильм с id = %d не найден.", filmId));
         }
     }
 
     @Override
-    public boolean existsById(Long filmId) {
+    public boolean existsById(long filmId) {
         return films.containsKey(filmId);
     }
 }

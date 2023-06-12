@@ -63,7 +63,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public void deleteReviewById(Long reviewId) {
+    public void deleteReviewById(long reviewId) {
         log.info("Получен запрос на удаление отзыва с id = {}.", reviewId);
 
         if (!reviewStorage.existsById(reviewId)) {
@@ -75,7 +75,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public ReviewDTO getReviewById(Long reviewId) {
+    public ReviewDTO getReviewById(long reviewId) {
         log.info("Получен запрос на поиск отзыва с id = {}.", reviewId);
 
         Review review = reviewStorage.findById(reviewId)

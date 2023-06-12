@@ -5,7 +5,7 @@ import ru.yandex.practicum.filmorate.dto.GenreDTO;
 import java.util.List;
 
 public interface GenreService {
-    GenreDTO getById(Integer id);
+    GenreDTO getById(int id);
 
     List<GenreDTO> getAll();
 }

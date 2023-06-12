@@ -5,7 +5,7 @@ import ru.yandex.practicum.filmorate.model.friendship.Friendship;
 import java.util.List;
 
 public interface FriendStorage {
-    List<Friendship> findAllByUserId(Long userId);
+    List<Friendship> findAllByUserId(long userId);
 
     boolean existsById(Friendship friendship);
 

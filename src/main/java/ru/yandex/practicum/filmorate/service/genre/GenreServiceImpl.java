@@ -19,7 +19,7 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     @Transactional
-    public GenreDTO getById(Integer genreId) {
+    public GenreDTO getById(int genreId) {
         log.info("Получен запрос на поиск жанра с id = {}", genreId);
 
         return genreStorage.findById(genreId)

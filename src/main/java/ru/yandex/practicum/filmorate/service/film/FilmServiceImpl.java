@@ -81,7 +81,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     @Transactional
-    public FilmDTO getFilmById(Long filmId) {
+    public FilmDTO getFilmById(long filmId) {
         log.info("Получен запрос на поиск фильма по filmId = {}", filmId);
 
         Film film = filmStorage.findById(filmId)
@@ -111,7 +111,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     @Transactional
-    public void deleteFilmById(Long filmId) {
+    public void deleteFilmById(long filmId) {
         log.info("Получен запрос на удаление фильма с filmId = {}.", filmId);
 
         if (!filmStorage.existsById(filmId)) {

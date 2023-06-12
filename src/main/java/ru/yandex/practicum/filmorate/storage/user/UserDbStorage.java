@@ -68,7 +68,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     @Transactional
-    public Optional<User> findById(Long userId) {
+    public Optional<User> findById(long userId) {
         String sql = "SELECT * FROM users WHERE id = ?";
         try {
             return Optional.ofNullable(jdbcTemplate.queryForObject(sql, mapRowToUser, userId));
@@ -90,7 +90,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     @Transactional
-    public boolean existsById(Long userId) {
+    public boolean existsById(long userId) {
         return findById(userId).isPresent();
     }
 

@@ -41,7 +41,7 @@ public class FriendDbStorage implements FriendStorage {
     }
 
     @Override
-    public List<Friendship> findAllByUserId(Long userId) {
+    public List<Friendship> findAllByUserId(long userId) {
         String sql = "SELECt * FROM friendship WHERE user_id = ?";
 
         return jdbcTemplate.query(sql, mapRowToFriendship, userId);

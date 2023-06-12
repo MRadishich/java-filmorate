@@ -5,7 +5,7 @@ import ru.yandex.practicum.filmorate.dto.MpaDTO;
 import java.util.List;
 
 public interface MpaService {
-    MpaDTO getById(Integer id);
+    MpaDTO getById(int id);
 
     List<MpaDTO> getAll();
 }

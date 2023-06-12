@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDTO getUserById(Long userId) {
+    public UserDTO getUserById(long userId) {
         log.info("Получен запрос на поиск пользователя с id = {}.", userId);
 
         return userStorage.findById(userId)

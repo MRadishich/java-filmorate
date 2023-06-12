@@ -9,9 +9,9 @@ public interface ReviewService {
 
     ReviewDTO updateReview(ReviewDTO reviewDTO);
 
-    void deleteReviewById(Long reviewId);
+    void deleteReviewById(long reviewId);
 
-    ReviewDTO getReviewById(Long reviewId);
+    ReviewDTO getReviewById(long reviewId);
 
     List<ReviewDTO> getReviews(Long filmId, int count);
 

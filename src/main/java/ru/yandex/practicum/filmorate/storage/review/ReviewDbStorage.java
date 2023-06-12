@@ -77,13 +77,13 @@ public class ReviewDbStorage implements ReviewStorage {
     }
 
     @Override
-    public List<Review> findMostUsefulReviewsByFilmId(long filmId, int count) {
+    public List<Review> findMostUsefulReviewsByFilmId(long filmId, int limit) {
         String sql = "SELECT * FROM reviews " +
                 "WHERE film_id = ? " +
                 "ORDER BY useful DESC " +
                 "LIMIT ?";
 
-        return jdbcTemplate.query(sql, mapRowToReview, filmId, count);
+        return jdbcTemplate.query(sql, mapRowToReview, filmId, limit);
     }
 
     @Override

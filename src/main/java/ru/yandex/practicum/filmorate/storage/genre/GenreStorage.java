@@ -12,5 +12,5 @@ public interface GenreStorage {
 
     List<Genre> findAllById(List<Integer> ids);
 
-    List<Genre> findAllByFilmId(Long filmId);
+    List<Genre> findAllByFilmId(long filmId);
 }

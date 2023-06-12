@@ -11,11 +11,11 @@ public interface UserStorage {
 
     List<User> findAll();
 
-    Optional<User> findById(Long userId);
+    Optional<User> findById(long userId);
 
     Optional<User> findByEmail(String email);
 
-    boolean existsById(Long userId);
+    boolean existsById(long userId);
 
     void deleteById(long userId);
 

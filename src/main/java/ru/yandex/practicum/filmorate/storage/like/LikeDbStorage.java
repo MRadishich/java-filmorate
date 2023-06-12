@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.like;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.like.Like;
@@ -30,7 +29,7 @@ public class LikeDbStorage implements LikeStorage {
     }
 
     @Override
-    public List<Long> findTopFilmIdByCountLikes(Pageable pageable) {
+    public List<Long> findTopFilmIdByCountLikes(int limit) {
         String sql = "SELECT f.id " +
                 "FROM films f " +
                 "LEFT JOIN likes l ON f.id = l.film_id " +
@@ -38,6 +37,6 @@ public class LikeDbStorage implements LikeStorage {
                 "ORDER BY COUNT(l.user_id) DESC " +
                 "LIMIT ?";
 
-        return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getLong("id"), pageable.getPageSize());
+        return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getLong("id"), limit);
     }
 }

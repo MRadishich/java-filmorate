@@ -18,7 +18,7 @@ public class MpaServiceImpl implements MpaService {
 
     @Override
     @Transactional
-    public MpaDTO getById(Integer mpaId) {
+    public MpaDTO getById(int mpaId) {
         return mpaStorage.findById(mpaId)
                 .map(MpaMapper::toDto)
                 .orElseThrow(() -> new NotFoundException(

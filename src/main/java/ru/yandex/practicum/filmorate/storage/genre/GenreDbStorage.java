@@ -42,7 +42,7 @@ public class GenreDbStorage implements GenreStorage {
     }
 
     @Override
-    public List<Genre> findAllByFilmId(Long filmId) {
+    public List<Genre> findAllByFilmId(long filmId) {
         String sqlFindGenres = "SELECT " +
                 "g.id, " +
                 "g.name " +

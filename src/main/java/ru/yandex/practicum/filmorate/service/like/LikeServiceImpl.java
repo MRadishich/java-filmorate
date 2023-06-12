@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.service.like;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
@@ -58,6 +57,6 @@ public class LikeServiceImpl implements LikeService {
     public List<Long> getTopFilmsByLikes(int limit) {
         log.info("Получен запрос на поиск {} фильмов с наибольшим количеством лайков.", limit);
 
-        return likeStorage.findTopFilmIdByCountLikes(PageRequest.of(0, limit));
+        return likeStorage.findTopFilmIdByCountLikes(limit);
     }
 }

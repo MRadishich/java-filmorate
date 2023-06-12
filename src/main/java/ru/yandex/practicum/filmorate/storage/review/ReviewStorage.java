@@ -12,7 +12,7 @@ public interface ReviewStorage {
 
     List<Review> findMostUsefulReviews(int count);
 
-    List<Review> findMostUsefulReviewsByFilmId(long filmId, int count);
+    List<Review> findMostUsefulReviewsByFilmId(long filmId, int limit);
 
     void deleteById(long id);
 

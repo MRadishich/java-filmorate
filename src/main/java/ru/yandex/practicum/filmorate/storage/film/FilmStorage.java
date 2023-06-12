@@ -8,13 +8,13 @@ import java.util.Optional;
 public interface FilmStorage {
     Film save(Film film);
 
-    Optional<Film> findById(Long filmId);
+    Optional<Film> findById(long filmId);
 
     List<Film> findAll();
 
-    boolean existsById(Long id);
+    boolean existsById(long id);
 
-    void deleteById(Long id);
+    void deleteById(long id);
 
     List<Film> findAllById(List<Long> ids);
 }

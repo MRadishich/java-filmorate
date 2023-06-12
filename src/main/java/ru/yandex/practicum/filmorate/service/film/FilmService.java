@@ -9,11 +9,11 @@ public interface FilmService {
 
     List<FilmDTO> getAllFilms();
 
-    FilmDTO getFilmById(Long id);
+    FilmDTO getFilmById(long id);
 
     FilmDTO updateFilm(FilmDTO filmDTO);
 
-    void deleteFilmById(Long id);
+    void deleteFilmById(long id);
 
     List<FilmDTO> getPopularFilms(int count);
 }

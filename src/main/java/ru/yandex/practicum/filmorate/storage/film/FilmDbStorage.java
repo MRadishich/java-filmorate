@@ -101,7 +101,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     @Transactional
-    public Optional<Film> findById(Long id) {
+    public Optional<Film> findById(long id) {
         String sql = "SELECT f.*, " +
                 "mr.id AS mpa_rating_id, " +
                 "mr.name AS mpa_rating_name, " +
@@ -134,13 +134,13 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     @Transactional
-    public boolean existsById(Long id) {
+    public boolean existsById(long id) {
         return findById(id).isPresent();
     }
 
     @Override
     @Transactional
-    public void deleteById(Long filmId) {
+    public void deleteById(long filmId) {
         String sql = "DELETE FROM films WHERE id = ?";
 
         jdbcTemplate.update(sql, filmId);
