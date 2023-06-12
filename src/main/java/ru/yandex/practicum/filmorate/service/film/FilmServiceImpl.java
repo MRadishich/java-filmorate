@@ -95,15 +95,14 @@ public class FilmServiceImpl implements FilmService {
     @Override
     @Transactional
     public FilmDTO updateFilm(FilmDTO filmDTO) {
-        final Long filmId = filmDTO.getId();
+        Film film = FilmMapper.toFilm((filmDTO));
 
-        log.info("Получен запрос на обновление фильма с id = {}. Новое значение: {}", filmId, filmDTO);
+        log.info("Получен запрос на обновление фильма с id = {}. Новое значение: {}", film.getId(), filmDTO);
 
-        if (!filmStorage.existsById(filmId)) {
-            throw new NotFoundException("Фильм с id = " + filmId + " не найден.");
+        if (!filmStorage.existsById(film.getId())) {
+            throw new NotFoundException("Фильм с id = " + film.getId() + " не найден.");
         }
 
-        Film film = FilmMapper.toFilm((filmDTO));
         film.setGenres(getGenresByIds(filmDTO.getGenres()));
         film = filmStorage.save(film);
 
@@ -125,6 +124,7 @@ public class FilmServiceImpl implements FilmService {
     @Override
     @Transactional
     public List<FilmDTO> getPopularFilms(int limit) {
+        log.info("Получен запрос на поиск самых популярных фильмом. Кол-во требуемых фильмов: {}", limit);
 
         List<Film> films = filmStorage.findAllById(
                 likeService.getTopFilmsByLikes(limit)

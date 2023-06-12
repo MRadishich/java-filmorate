@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.service.review;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.filmorate.dto.ReviewDTO;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ReviewServiceImpl implements ReviewService {
     private final ReviewStorage reviewStorage;
     private final UserStorage userStorage;
@@ -29,6 +31,8 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional
     public ReviewDTO createReview(ReviewDTO reviewDTO) {
+        log.info("Получен запрос на создание нового отзыва: {}.", reviewDTO);
+
         if (!userStorage.existsById(reviewDTO.getUserId())) {
             throw new NotFoundException("Пользователь с id = " + reviewDTO.getUseful() + " не найден.");
         }
@@ -48,6 +52,8 @@ public class ReviewServiceImpl implements ReviewService {
     public ReviewDTO updateReview(ReviewDTO reviewDTO) {
         Review review = ReviewMapper.toReview(reviewDTO);
 
+        log.info("Получен запрос на обновление отзыва с id = {}. Новое значение: {}.", review.getId(), reviewDTO);
+
         if (!reviewStorage.existsById(review.getId())) {
             throw new NotFoundException("Отзыв с id = " + review.getId() + " не найден.");
         }
@@ -58,6 +64,8 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional
     public void deleteReviewById(Long reviewId) {
+        log.info("Получен запрос на удаление отзыва с id = {}.", reviewId);
+
         if (!reviewStorage.existsById(reviewId)) {
             throw new NotFoundException("Отзыв с id = " + reviewId + " не найден.");
         }
@@ -68,6 +76,8 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional
     public ReviewDTO getReviewById(Long reviewId) {
+        log.info("Получен запрос на поиск отзыва с id = {}.", reviewId);
+
         Review review = reviewStorage.findById(reviewId)
                 .orElseThrow(() -> new NotFoundException("Отзыв с id = " + reviewId + " не найден."));
 
@@ -78,11 +88,16 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     public List<ReviewDTO> getReviews(Long filmId, int count) {
         if (Objects.isNull(filmId)) {
+            log.info("Получен запрос на поиск самых полезных отзывов. Кол-во требуемых отзывов: {}.", count);
+
             return reviewStorage.findMostUsefulReviews(count)
                     .stream()
                     .map(ReviewMapper::toDto)
                     .collect(Collectors.toList());
         }
+
+        log.info("Получен запрос на поиск самых полезных отзывов к фильму с id = {}. " +
+                "Кол-во требуемых отзывов: {}.", filmId, count);
 
         return reviewStorage.findMostUsefulReviewsByFilmId(filmId, count)
                 .stream()
@@ -93,6 +108,8 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional
     public void addLike(long reviewId, long userId) {
+        log.info("Получен запрос на добавление лайка отзыву с id = {} от пользователя с id = {}.", reviewId, userId);
+
         if (!reviewStorage.existsById(reviewId)) {
             throw new NotFoundException("Отзыв с id = " + reviewId + " не найден.");
         }
@@ -108,6 +125,8 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional
     public void addDislike(long reviewId, long userId) {
+        log.info("Получен запрос на добавление дизлайка отзыву с id = {} от пользователя с id = {}.", reviewId, userId);
+
         if (!reviewStorage.existsById(reviewId)) {
             throw new NotFoundException("Отзыв с id = " + reviewId + " не найден.");
         }
@@ -123,6 +142,8 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional
     public void deleteLike(long reviewId, long userId) {
+        log.info("Получен запрос на удаление лайка у отзыва с id = {} от пользователя с id = {}.", reviewId, userId);
+
         if (!reviewStorage.existsById(reviewId)) {
             throw new NotFoundException("Отзыв с id = " + reviewId + " не найден.");
         }
@@ -142,6 +163,8 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional
     public void deleteDislike(long reviewId, long userId) {
+        log.info("Получен запрос на удаление дизлайка у отзыва с id = {} от пользователя с id = {}.", reviewId, userId);
+
         if (!reviewStorage.existsById(reviewId)) {
             throw new NotFoundException("Отзыв с id = " + reviewId + " не найден.");
         }
