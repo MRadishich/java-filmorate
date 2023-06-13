@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class ReviewDTO {
+public class ReviewDto {
     private final Long reviewId;
     @NotBlank(message = "Отзыв не может быть пустым и состоять только из пробелов.")
     private final String content;

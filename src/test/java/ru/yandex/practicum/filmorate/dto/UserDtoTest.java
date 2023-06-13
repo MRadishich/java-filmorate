@@ -13,14 +13,14 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UserDTOTest {
+public class UserDtoTest {
     private static final ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
     private static final Validator validator = validatorFactory.getValidator();
 
     @Test
     public void test1_shouldCreateUserDTO() {
         // Given
-        UserDTO user = new UserDTO(
+        UserDto user = new UserDto(
                 1L,
                 "email@email.com",
                 "SuperUser",
@@ -29,7 +29,7 @@ public class UserDTOTest {
         );
 
         // When
-        Set<ConstraintViolation<UserDTO>> violations = validator.validate(user);
+        Set<ConstraintViolation<UserDto>> violations = validator.validate(user);
 
         // Then
         assertTrue(violations.isEmpty());
@@ -49,7 +49,7 @@ public class UserDTOTest {
         };
 
         Arrays.stream(invalidEmails).forEach(email -> {
-            UserDTO user = new UserDTO(
+            UserDto user = new UserDto(
                     1L,
                     email,
                     "SuperUser",
@@ -58,7 +58,7 @@ public class UserDTOTest {
             );
 
             // When
-            Set<ConstraintViolation<UserDTO>> violations = validator.validate(user);
+            Set<ConstraintViolation<UserDto>> violations = validator.validate(user);
 
             // Then
             assertFalse(violations.isEmpty());
@@ -68,7 +68,7 @@ public class UserDTOTest {
     @Test
     public void test3_shouldNotCreateUserDTOIfLoginIsEmpty() {
         // Given
-        UserDTO user = new UserDTO(
+        UserDto user = new UserDto(
                 1L,
                 "email@email.com",
                 "",
@@ -77,7 +77,7 @@ public class UserDTOTest {
         );
 
         // When
-        Set<ConstraintViolation<UserDTO>> violations = validator.validate(user);
+        Set<ConstraintViolation<UserDto>> violations = validator.validate(user);
 
         String message = violations.stream()
                 .map(ConstraintViolation::getMessage)
@@ -90,7 +90,7 @@ public class UserDTOTest {
     @Test
     public void test4_shouldNotCreateUserDTOIfLoginIsBlank() {
         // Given
-        UserDTO user = new UserDTO(
+        UserDto user = new UserDto(
                 1L,
                 "email@email.com",
                 " ",
@@ -99,7 +99,7 @@ public class UserDTOTest {
         );
 
         // When
-        Set<ConstraintViolation<UserDTO>> violations = validator.validate(user);
+        Set<ConstraintViolation<UserDto>> violations = validator.validate(user);
 
         String message = violations.stream()
                 .map(ConstraintViolation::getMessage)
@@ -112,7 +112,7 @@ public class UserDTOTest {
     @Test
     public void test5_shouldNotCreateUserDTOIfLoginIsNull() {
         // Given
-        UserDTO user = new UserDTO(
+        UserDto user = new UserDto(
                 1L,
                 "email@email.com",
                 null,
@@ -121,7 +121,7 @@ public class UserDTOTest {
         );
 
         // When
-        Set<ConstraintViolation<UserDTO>> violations = validator.validate(user);
+        Set<ConstraintViolation<UserDto>> violations = validator.validate(user);
 
         String message = violations.stream()
                 .map(ConstraintViolation::getMessage)
@@ -134,7 +134,7 @@ public class UserDTOTest {
     @Test
     public void test6_shouldNotCreateUserDTOIfLoginHasWhitespace() {
         // Given
-        UserDTO user = new UserDTO(
+        UserDto user = new UserDto(
                 1L,
                 "email@email.com",
                 "Super User",
@@ -143,7 +143,7 @@ public class UserDTOTest {
         );
 
         // When
-        Set<ConstraintViolation<UserDTO>> violations = validator.validate(user);
+        Set<ConstraintViolation<UserDto>> violations = validator.validate(user);
 
         String message = violations.stream()
                 .map(ConstraintViolation::getMessage)
@@ -156,7 +156,7 @@ public class UserDTOTest {
     @Test
     public void test7_shouldCreateUserDTOIfNameIsNull() {
         // Given
-        UserDTO user = new UserDTO(
+        UserDto user = new UserDto(
                 1L,
                 "email@email.com",
                 "SuperUser",
@@ -165,7 +165,7 @@ public class UserDTOTest {
         );
 
         // When
-        Set<ConstraintViolation<UserDTO>> violations = validator.validate(user);
+        Set<ConstraintViolation<UserDto>> violations = validator.validate(user);
 
         // Then
         assertTrue(violations.isEmpty());
@@ -174,7 +174,7 @@ public class UserDTOTest {
     @Test
     public void test8_shouldNotCreateUserDTOIfBirthDayInFuture() {
         // Given
-        UserDTO user = new UserDTO(
+        UserDto user = new UserDto(
                 1L,
                 "email@email.com",
                 "SuperUser",
@@ -182,7 +182,7 @@ public class UserDTOTest {
                 LocalDate.now().plusDays(1)
         );
 
-        Set<ConstraintViolation<UserDTO>> violations = validator.validate(user);
+        Set<ConstraintViolation<UserDto>> violations = validator.validate(user);
 
         // When
         String message = violations.stream()

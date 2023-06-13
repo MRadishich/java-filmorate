@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.yandex.practicum.filmorate.dto.GenreDTO;
+import ru.yandex.practicum.filmorate.dto.GenreDto;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
 
@@ -19,7 +19,7 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     @Transactional
-    public GenreDTO getById(int genreId) {
+    public GenreDto getById(int genreId) {
         log.info("Получен запрос на поиск жанра с id = {}", genreId);
 
         return genreStorage.findById(genreId)
@@ -29,7 +29,7 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     @Transactional
-    public List<GenreDTO> getAll() {
+    public List<GenreDto> getAll() {
         log.info("Получен запрос на поиск всех жанров");
 
         return genreStorage.findAll().stream()

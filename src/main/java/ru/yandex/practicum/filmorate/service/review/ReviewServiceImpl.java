@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.yandex.practicum.filmorate.dto.ReviewDTO;
+import ru.yandex.practicum.filmorate.dto.ReviewDto;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Review;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
@@ -30,7 +30,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public ReviewDTO createReview(ReviewDTO reviewDTO) {
+    public ReviewDto createReview(ReviewDto reviewDTO) {
         log.info("Получен запрос на создание нового отзыва: {}.", reviewDTO);
 
         if (!userStorage.existsById(reviewDTO.getUserId())) {
@@ -49,7 +49,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public ReviewDTO updateReview(ReviewDTO reviewDTO) {
+    public ReviewDto updateReview(ReviewDto reviewDTO) {
         Review review = ReviewMapper.toReview(reviewDTO);
 
         log.info("Получен запрос на обновление отзыва с id = {}. Новое значение: {}.", review.getId(), reviewDTO);
@@ -75,7 +75,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public ReviewDTO getReviewById(long reviewId) {
+    public ReviewDto getReviewById(long reviewId) {
         log.info("Получен запрос на поиск отзыва с id = {}.", reviewId);
 
         Review review = reviewStorage.findById(reviewId)
@@ -86,7 +86,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public List<ReviewDTO> getReviews(Long filmId, int count) {
+    public List<ReviewDto> getReviews(Long filmId, int count) {
         if (Objects.isNull(filmId)) {
             log.info("Получен запрос на поиск самых полезных отзывов. Кол-во требуемых отзывов: {}.", count);
 

@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.service.film;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.yandex.practicum.filmorate.dto.FilmDTO;
+import ru.yandex.practicum.filmorate.dto.FilmDto;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
@@ -35,7 +35,7 @@ class FilmMapperTest {
         Mpa mpa = new Mpa(1, "G", "General Audiences");
 
         // When calling the mocked repository method
-        FilmDTO filmDTO = FilmMapper.toDto(film);
+        FilmDto filmDTO = FilmMapper.toDto(film);
 
         // Then
         assertEquals(film.getId(), filmDTO.getId());
@@ -51,7 +51,7 @@ class FilmMapperTest {
     @Test
     public void test2_shouldConversionFilmDTOToFilm() {
         // Given
-        FilmDTO filmDTO = new FilmDTO(
+        FilmDto filmDTO = new FilmDto(
                 1L,
                 "The best film",
                 LocalDate.now(),

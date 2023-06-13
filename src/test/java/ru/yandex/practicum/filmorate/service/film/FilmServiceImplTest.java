@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.yandex.practicum.filmorate.dto.FilmDTO;
+import ru.yandex.practicum.filmorate.dto.FilmDto;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
@@ -61,7 +61,7 @@ class FilmServiceImplTest {
         );
         Mpa mpa = new Mpa(1, "G", "У фильма нет возрастных ограничений");
 
-        FilmDTO filmDTO = new FilmDTO(
+        FilmDto filmDTO = new FilmDto(
                 1L,
                 "The best film",
                 LocalDate.now(),
@@ -98,16 +98,16 @@ class FilmServiceImplTest {
         given(filmStorage.save(any(Film.class))).willReturn(film);
 
         // When
-        FilmDTO savedFilmDTO = filmService.createFilm(filmDTO);
+        FilmDto savedFilmDto = filmService.createFilm(filmDTO);
 
         // Then
-        assertEquals(genres, savedFilmDTO.getGenres());
-        assertEquals(film.getId(), savedFilmDTO.getId());
-        assertEquals(filmDTO.getName(), savedFilmDTO.getName());
-        assertEquals(filmDTO.getDescription(), savedFilmDTO.getDescription());
-        assertEquals(filmDTO.getDuration(), savedFilmDTO.getDuration());
-        assertEquals(filmDTO.getReleaseDate(), savedFilmDTO.getReleaseDate());
-        assertEquals(mpa, savedFilmDTO.getMpa());
+        assertEquals(genres, savedFilmDto.getGenres());
+        assertEquals(film.getId(), savedFilmDto.getId());
+        assertEquals(filmDTO.getName(), savedFilmDto.getName());
+        assertEquals(filmDTO.getDescription(), savedFilmDto.getDescription());
+        assertEquals(filmDTO.getDuration(), savedFilmDto.getDuration());
+        assertEquals(filmDTO.getReleaseDate(), savedFilmDto.getReleaseDate());
+        assertEquals(mpa, savedFilmDto.getMpa());
     }
 
 
@@ -148,8 +148,8 @@ class FilmServiceImplTest {
                         .build()
         );
 
-        List<FilmDTO> expectedFilmDTOs = List.of(
-                new FilmDTO(
+        List<FilmDto> expectedFilmDtos = List.of(
+                new FilmDto(
                         1L,
                         "The best film 1",
                         LocalDate.now(),
@@ -158,7 +158,7 @@ class FilmServiceImplTest {
                         mpa,
                         genres
                 ),
-                new FilmDTO(
+                new FilmDto(
                         2L,
                         "The best film 2",
                         LocalDate.now(),
@@ -167,7 +167,7 @@ class FilmServiceImplTest {
                         mpa,
                         genres
                 ),
-                new FilmDTO(
+                new FilmDto(
                         3L,
                         "The best film 3",
                         LocalDate.now(),
@@ -186,10 +186,10 @@ class FilmServiceImplTest {
         ));
 
         // When
-        Collection<FilmDTO> foundFilmDTOs = filmService.getAllFilms();
+        Collection<FilmDto> foundFilmDtos = filmService.getAllFilms();
 
         // Then
-        assertEquals(expectedFilmDTOs, foundFilmDTOs);
+        assertEquals(expectedFilmDtos, foundFilmDtos);
 
     }
 
@@ -203,7 +203,7 @@ class FilmServiceImplTest {
         );
         Mpa mpa = new Mpa(1, "G", "У фильма нет возрастных ограничений");
 
-        FilmDTO expectedFilmDTO = new FilmDTO(
+        FilmDto expectedFilmDto = new FilmDto(
                 1L,
                 "The best film",
                 LocalDate.now(),
@@ -226,10 +226,10 @@ class FilmServiceImplTest {
         given(genreStorage.findAllByFilmId(film.getId())).willReturn(genres);
 
         // When
-        FilmDTO foundFilmDTO = filmService.getFilmById(1L);
+        FilmDto foundFilmDto = filmService.getFilmById(1L);
 
         // Then
-        assertEquals(expectedFilmDTO, foundFilmDTO);
+        assertEquals(expectedFilmDto, foundFilmDto);
     }
 
     @Test
@@ -267,7 +267,7 @@ class FilmServiceImplTest {
         );
         Mpa mpa = new Mpa(1, "G", "У фильма нет возрастных ограничений");
 
-        FilmDTO filmDTO = new FilmDTO(
+        FilmDto filmDTO = new FilmDto(
                 1L,
                 "Updated the best film",
                 LocalDate.now(),
@@ -292,7 +292,7 @@ class FilmServiceImplTest {
         given(genreStorage.findAllById(genres.stream().map(Genre::getId).collect(Collectors.toList()))).willReturn(genres);
 
         // When
-        FilmDTO updatedFilmDTo = filmService.updateFilm(filmDTO);
+        FilmDto updatedFilmDTo = filmService.updateFilm(filmDTO);
 
         // Then
         assertEquals(filmDTO, updatedFilmDTo);
@@ -308,7 +308,7 @@ class FilmServiceImplTest {
         );
         Mpa mpa = new Mpa(1, "G", "У фильма нет возрастных ограничений");
 
-        FilmDTO filmDTO = new FilmDTO(
+        FilmDto filmDTO = new FilmDto(
                 1L,
                 "Updated the best film",
                 LocalDate.now(),
@@ -403,8 +403,8 @@ class FilmServiceImplTest {
                         .build()
         );
 
-        List<FilmDTO> expectedFilmDTOs = List.of(
-                new FilmDTO(
+        List<FilmDto> expectedFilmDtos = List.of(
+                new FilmDto(
                         1L,
                         "The best film 1",
                         LocalDate.now(),
@@ -413,7 +413,7 @@ class FilmServiceImplTest {
                         mpa,
                         genres
                 ),
-                new FilmDTO(
+                new FilmDto(
                         2L,
                         "The best film 2",
                         LocalDate.now(),
@@ -422,7 +422,7 @@ class FilmServiceImplTest {
                         mpa,
                         genres
                 ),
-                new FilmDTO(
+                new FilmDto(
                         3L,
                         "The best film 3",
                         LocalDate.now(),
@@ -443,9 +443,9 @@ class FilmServiceImplTest {
         ));
 
         // When
-        Collection<FilmDTO> popularFilms = filmService.getPopularFilms(3);
+        Collection<FilmDto> popularFilms = filmService.getPopularFilms(3);
 
         // Then
-        assertEquals(expectedFilmDTOs, popularFilms);
+        assertEquals(expectedFilmDtos, popularFilms);
     }
 }

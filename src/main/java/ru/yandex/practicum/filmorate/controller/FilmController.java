@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.dto.FilmDTO;
+import ru.yandex.practicum.filmorate.dto.FilmDto;
 import ru.yandex.practicum.filmorate.service.film.FilmService;
 import ru.yandex.practicum.filmorate.service.like.LikeService;
 
@@ -19,13 +19,13 @@ public class FilmController {
     private final LikeService likeService;
 
     @PostMapping
-    public ResponseEntity<FilmDTO> createFilm(@Valid @RequestBody FilmDTO film) {
+    public ResponseEntity<FilmDto> createFilm(@Valid @RequestBody FilmDto film) {
         return new ResponseEntity<>(filmService.createFilm(film), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<FilmDTO>> findAllFilms() {
-        List<FilmDTO> films = filmService.getAllFilms();
+    public ResponseEntity<List<FilmDto>> findAllFilms() {
+        List<FilmDto> films = filmService.getAllFilms();
 
         return films != null ?
                 new ResponseEntity<>(films, HttpStatus.OK) :
@@ -33,17 +33,17 @@ public class FilmController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FilmDTO> findFilmById(@PathVariable(value = "id") long filmId) {
+    public ResponseEntity<FilmDto> findFilmById(@PathVariable(value = "id") long filmId) {
         return new ResponseEntity<>(filmService.getFilmById(filmId), HttpStatus.OK);
     }
 
     @GetMapping("/popular")
-    public ResponseEntity<List<FilmDTO>> findPopularFilms(@RequestParam(value = "count", defaultValue = "10") int count) {
+    public ResponseEntity<List<FilmDto>> findPopularFilms(@RequestParam(value = "count", defaultValue = "10") int count) {
         return new ResponseEntity<>(filmService.getPopularFilms(count), HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<FilmDTO> updateFilm(@Valid @RequestBody FilmDTO film) {
+    public ResponseEntity<FilmDto> updateFilm(@Valid @RequestBody FilmDto film) {
         return new ResponseEntity<>(filmService.updateFilm(film), HttpStatus.OK);
     }
 

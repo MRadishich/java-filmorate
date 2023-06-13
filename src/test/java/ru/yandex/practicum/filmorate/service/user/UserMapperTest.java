@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.service.user;
 
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.dto.UserDTO;
+import ru.yandex.practicum.filmorate.dto.UserDto;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
@@ -21,7 +21,7 @@ class UserMapperTest {
                 .birthday(LocalDate.now())
                 .build();
 
-        UserDTO userDTO = new UserDTO(
+        UserDto userDTO = new UserDto(
                 1L,
                 "email@email.ru",
                 "petro20",
@@ -30,7 +30,7 @@ class UserMapperTest {
         );
 
         // When
-        UserDTO convertedUserDTO = UserMapper.toDto(user);
+        UserDto convertedUserDTO = UserMapper.toDto(user);
 
         // Then
         assertEquals(userDTO, convertedUserDTO);
@@ -39,7 +39,7 @@ class UserMapperTest {
     @Test
     void test2_shouldConversionUserDTOToUser() {
         // Given
-        UserDTO userDTO = new UserDTO(
+        UserDto userDTO = new UserDto(
                 1L,
                 "email@email.ru",
                 "petro20",
@@ -65,7 +65,7 @@ class UserMapperTest {
     @Test
     void test3_shouldConversionUserDTOToUserAndSetNameIfNull() {
         // Given
-        UserDTO userDTO = new UserDTO(
+        UserDto userDTO = new UserDto(
                 1L,
                 "email@email.ru",
                 "petro20",
@@ -91,7 +91,7 @@ class UserMapperTest {
     @Test
     void test4_shouldConversionUserDTOToUserAndSetNameIfEmpty() {
         // Given
-        UserDTO userDTO = new UserDTO(
+        UserDto userDTO = new UserDto(
                 1L,
                 "email@email.ru",
                 "petro20",
@@ -117,7 +117,7 @@ class UserMapperTest {
     @Test
     void test5_shouldConversionUserDTOToUserAndSetNameIfBlank() {
         // Given
-        UserDTO userDTO = new UserDTO(
+        UserDto userDTO = new UserDto(
                 1L,
                 "email@email.ru",
                 "petro20",

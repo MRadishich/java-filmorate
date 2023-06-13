@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.yandex.practicum.filmorate.dto.UserDTO;
+import ru.yandex.practicum.filmorate.dto.UserDto;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.friendship.FriendshipService;
@@ -42,7 +42,7 @@ class UserServiceImplTest {
     @Test
     void test1_shouldSaveAndReturnNewUser() {
         // Given
-        UserDTO userDTO = new UserDTO(
+        UserDto userDTO = new UserDto(
                 1L,
                 "email@email.ru",
                 "petro20",
@@ -61,7 +61,7 @@ class UserServiceImplTest {
         given(userStorage.save(user)).willReturn(user);
 
         // When
-        UserDTO savedUser = userService.createUser(userDTO);
+        UserDto savedUser = userService.createUser(userDTO);
 
         // Then
         assertEquals(user.getId(), savedUser.getId());
@@ -98,22 +98,22 @@ class UserServiceImplTest {
                         .build()
         );
 
-        List<UserDTO> userDTOs = List.of(
-                new UserDTO(
+        List<UserDto> userDTOs = List.of(
+                new UserDto(
                         1L,
                         "email1@email.ru",
                         "petro1",
                         "Petrov1 Petr1 Petrovich1",
                         LocalDate.now()
                 ),
-                new UserDTO(
+                new UserDto(
                         2L,
                         "email2@email.ru",
                         "petro2",
                         "Petrov2 Petr2 Petrovich2",
                         LocalDate.now()
                 ),
-                new UserDTO(
+                new UserDto(
                         3L,
                         "email3@email.ru",
                         "petro3",
@@ -125,7 +125,7 @@ class UserServiceImplTest {
         given(userStorage.findAll()).willReturn(users);
 
         // When
-        Collection<UserDTO> foundUserDTOs = userService.getAllUsers();
+        Collection<UserDto> foundUserDTOs = userService.getAllUsers();
 
         // Then
         assertEquals(userDTOs, foundUserDTOs);
@@ -135,7 +135,7 @@ class UserServiceImplTest {
     @Test
     void test3_shouldReturnUserById() {
         // Given
-        UserDTO userDTO = new UserDTO(
+        UserDto userDTO = new UserDto(
                 1L,
                 "email@email.ru",
                 "petro20",
@@ -154,7 +154,7 @@ class UserServiceImplTest {
         given(userStorage.findById(user.getId())).willReturn(Optional.of(user));
 
         // When
-        UserDTO foundUserDTO = userService.getUserById(user.getId());
+        UserDto foundUserDTO = userService.getUserById(user.getId());
 
         // Then
         assertEquals(userDTO, foundUserDTO);
@@ -187,7 +187,7 @@ class UserServiceImplTest {
                 .birthday(LocalDate.now())
                 .build();
 
-        UserDTO userDTO = new UserDTO(
+        UserDto userDTO = new UserDto(
                 1L,
                 "updatedEmail@email.ru",
                 "updatedLogin",
@@ -199,7 +199,7 @@ class UserServiceImplTest {
         given(userStorage.save(user)).willReturn(user);
 
         // When
-        UserDTO updatedUserDTO = userService.updateUser(userDTO);
+        UserDto updatedUserDTO = userService.updateUser(userDTO);
 
         // Then
         assertEquals(userDTO, updatedUserDTO);
@@ -209,7 +209,7 @@ class UserServiceImplTest {
     @Test
     public void test5_shouldThrowNotFoundExceptionWhenUpdateUnknownUser() {
         // Given
-        UserDTO userDTO = new UserDTO(
+        UserDto userDTO = new UserDto(
                 1L,
                 "updatedEmail@email.ru",
                 "updatedLogin",
@@ -383,22 +383,22 @@ class UserServiceImplTest {
                         .build()
         );
 
-        List<UserDTO> userDTOs = List.of(
-                new UserDTO(
+        List<UserDto> userDTOs = List.of(
+                new UserDto(
                         1L,
                         "email1@email.ru",
                         "petro1",
                         "Petrov1 Petr1 Petrovich1",
                         LocalDate.now()
                 ),
-                new UserDTO(
+                new UserDto(
                         2L,
                         "email2@email.ru",
                         "petro2",
                         "Petrov2 Petr2 Petrovich2",
                         LocalDate.now()
                 ),
-                new UserDTO(
+                new UserDto(
                         3L,
                         "email3@email.ru",
                         "petro3",
@@ -412,7 +412,7 @@ class UserServiceImplTest {
         given(userStorage.findAllById(anyList())).willReturn(users);
 
         // Then
-        Collection<UserDTO> foundFriendsDTO = userService.getFriends(userId);
+        Collection<UserDto> foundFriendsDTO = userService.getFriends(userId);
 
         assertEquals(userDTOs, foundFriendsDTO);
     }
@@ -486,15 +486,15 @@ class UserServiceImplTest {
                         .build()
         );
 
-        List<UserDTO> expectedUserDTOs = List.of(
-                new UserDTO(
+        List<UserDto> expectedUserDTOs = List.of(
+                new UserDto(
                         1L,
                         "email1@email.ru",
                         "petro1",
                         "Petrov1 Petr1 Petrovich1",
                         LocalDate.now()
                 ),
-                new UserDTO(
+                new UserDto(
                         2L,
                         "email2@email.ru",
                         "petro2",
@@ -511,7 +511,7 @@ class UserServiceImplTest {
         given(userStorage.findAllById(List.of(1L, 2L, 4L))).willReturn(otherUsers);
 
         // When
-        Collection<UserDTO> commonFriends = userService.getCommonFriends(userId, otherId);
+        Collection<UserDto> commonFriends = userService.getCommonFriends(userId, otherId);
 
         // Then
         assertEquals(expectedUserDTOs, commonFriends);

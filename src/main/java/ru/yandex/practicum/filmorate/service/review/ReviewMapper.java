@@ -1,11 +1,11 @@
 package ru.yandex.practicum.filmorate.service.review;
 
-import ru.yandex.practicum.filmorate.dto.ReviewDTO;
+import ru.yandex.practicum.filmorate.dto.ReviewDto;
 import ru.yandex.practicum.filmorate.model.Review;
 
 public class ReviewMapper {
-    public static ReviewDTO toDto(Review review) {
-        return new ReviewDTO(
+    public static ReviewDto toDto(Review review) {
+        return new ReviewDto(
                 review.getId(),
                 review.getContent(),
                 review.getIsPositive(),
@@ -15,7 +15,7 @@ public class ReviewMapper {
         );
     }
 
-    public static Review toReview(ReviewDTO reviewDTO) {
+    public static Review toReview(ReviewDto reviewDTO) {
         return new Review(
                 reviewDTO.getReviewId(),
                 reviewDTO.getContent(),

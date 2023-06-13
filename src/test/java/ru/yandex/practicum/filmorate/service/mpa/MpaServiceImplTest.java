@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.yandex.practicum.filmorate.dto.MpaDTO;
+import ru.yandex.practicum.filmorate.dto.MpaDto;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.mpa.MpaStorage;
@@ -33,15 +33,15 @@ class MpaServiceImplTest {
     public void test1_shouldReturnMpaDTOByMpaId() {
         // Given
         Mpa mpa = new Mpa(1, "G", "General Audiences");
-        MpaDTO expectedMpaDTO = new MpaDTO(1, "G", "General Audiences");
+        MpaDto expectedMpaDto = new MpaDto(1, "G", "General Audiences");
 
         given(mpaStorage.findById(mpa.getId())).willReturn(Optional.of(mpa));
 
         // When
-        MpaDTO foundMpaDTO = mpaService.getById(mpa.getId());
+        MpaDto foundMpaDto = mpaService.getById(mpa.getId());
 
         // Then
-        assertEquals(expectedMpaDTO, foundMpaDTO);
+        assertEquals(expectedMpaDto, foundMpaDto);
     }
 
     @Test
@@ -68,18 +68,18 @@ class MpaServiceImplTest {
                 new Mpa(3, "PG-13", "Parents strongly cautioned")
         );
 
-        List<MpaDTO> expectedMpaDTOs = List.of(
-                new MpaDTO(1, "G", "General Audiences"),
-                new MpaDTO(2, "PG", "Parental guidance suggested"),
-                new MpaDTO(3, "PG-13", "Parents strongly cautioned")
+        List<MpaDto> expectedMpaDtos = List.of(
+                new MpaDto(1, "G", "General Audiences"),
+                new MpaDto(2, "PG", "Parental guidance suggested"),
+                new MpaDto(3, "PG-13", "Parents strongly cautioned")
         );
 
         given(mpaStorage.findAll()).willReturn(mpa);
 
         // When
-        Collection<MpaDTO> foundMpaDTOs = mpaService.getAll();
+        Collection<MpaDto> foundMpaDtos = mpaService.getAll();
 
         // Then
-        assertEquals(expectedMpaDTOs, foundMpaDTOs);
+        assertEquals(expectedMpaDtos, foundMpaDtos);
     }
 }

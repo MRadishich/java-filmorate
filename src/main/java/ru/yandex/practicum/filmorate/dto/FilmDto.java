@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class FilmDTO {
+public class FilmDto {
     public static final int DESCRIPTION_MAX_LENGTH = 200;
     public static final String MIN_DATE_RELEASE = "1895-12-28";
 

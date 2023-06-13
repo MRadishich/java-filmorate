@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.dto.ReviewDTO;
+import ru.yandex.practicum.filmorate.dto.ReviewDto;
 import ru.yandex.practicum.filmorate.service.review.ReviewService;
 
 import javax.validation.Valid;
@@ -17,12 +17,12 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping
-    public ResponseEntity<ReviewDTO> createReview(@Valid @RequestBody ReviewDTO reviewDTO) {
+    public ResponseEntity<ReviewDto> createReview(@Valid @RequestBody ReviewDto reviewDTO) {
         return new ResponseEntity<>(reviewService.createReview(reviewDTO), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<ReviewDTO> updateReview(@Valid @RequestBody ReviewDTO reviewDTO) {
+    public ResponseEntity<ReviewDto> updateReview(@Valid @RequestBody ReviewDto reviewDTO) {
         return new ResponseEntity<>(reviewService.updateReview(reviewDTO), HttpStatus.OK);
     }
 
@@ -33,12 +33,12 @@ public class ReviewController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReviewDTO> getReviewById(@PathVariable(value = "id") long reviewId) {
+    public ResponseEntity<ReviewDto> getReviewById(@PathVariable(value = "id") long reviewId) {
         return new ResponseEntity<>(reviewService.getReviewById(reviewId), HttpStatus.OK);
     }
 
     @GetMapping
-    public List<ReviewDTO> getReviews(@RequestParam(required = false) Long filmId,
+    public List<ReviewDto> getReviews(@RequestParam(required = false) Long filmId,
                                       @RequestParam(defaultValue = "10", required = false) int count) {
         return reviewService.getReviews(filmId, count);
     }

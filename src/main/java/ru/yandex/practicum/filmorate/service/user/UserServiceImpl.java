@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.yandex.practicum.filmorate.dto.UserDTO;
+import ru.yandex.practicum.filmorate.dto.UserDto;
 import ru.yandex.practicum.filmorate.exception.AlreadyExistsException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDTO createUser(UserDTO userDTO) {
+    public UserDto createUser(UserDto userDTO) {
         log.info("Получен запрос на создание нового пользователя: {}.", userDTO);
 
         User user = UserMapper.toUser(userDTO);
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public List<UserDTO> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         log.info("Получен запрос на поиск всех пользователей.");
 
         return userStorage.findAll().stream()
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDTO getUserById(long userId) {
+    public UserDto getUserById(long userId) {
         log.info("Получен запрос на поиск пользователя с id = {}.", userId);
 
         return userStorage.findById(userId)
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDTO updateUser(UserDTO userDTO) {
+    public UserDto updateUser(UserDto userDTO) {
         Long userId = userDTO.getId();
 
         log.info("Получен запрос на обновление пользователя с id = {}. Новое значение: {}", userId, userDTO);
@@ -119,7 +119,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public List<UserDTO> getFriends(long userId) {
+    public List<UserDto> getFriends(long userId) {
         log.info("Получен запрос на поиск друзей пользователя с id = {}.", userId);
 
         if (!userStorage.existsById(userId)) {
@@ -134,7 +134,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public List<UserDTO> getCommonFriends(long userId, long otherId) {
+    public List<UserDto> getCommonFriends(long userId, long otherId) {
         log.info("Получен запрос на поиск общих друзей пользователя с id = {} и пользователя с id = {}.", userId, otherId);
 
         if (!userStorage.existsById(userId)) {
@@ -145,8 +145,8 @@ public class UserServiceImpl implements UserService {
             throw new NotFoundException("Пользователь с id = " + otherId + " не найден.");
         }
 
-        List<UserDTO> friends = getFriends(userId);
-        List<UserDTO> otherFriend = getFriends(otherId);
+        List<UserDto> friends = getFriends(userId);
+        List<UserDto> otherFriend = getFriends(otherId);
         friends.retainAll(otherFriend);
 
         return friends;

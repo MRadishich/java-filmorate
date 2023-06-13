@@ -1,11 +1,11 @@
 package ru.yandex.practicum.filmorate.service.user;
 
-import ru.yandex.practicum.filmorate.dto.UserDTO;
+import ru.yandex.practicum.filmorate.dto.UserDto;
 import ru.yandex.practicum.filmorate.model.User;
 
 class UserMapper {
 
-    public static User toUser(UserDTO user) {
+    public static User toUser(UserDto user) {
         return new User(
                 user.getId(),
                 user.getEmail(),
@@ -15,8 +15,8 @@ class UserMapper {
         );
     }
 
-    public static UserDTO toDto(User user) {
-        return new UserDTO(
+    public static UserDto toDto(User user) {
+        return new UserDto(
                 user.getId(),
                 user.getEmail(),
                 user.getLogin(),

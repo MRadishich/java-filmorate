@@ -6,7 +6,7 @@ import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 @Data
-public class UserDTO {
+public class UserDto {
     private final Long id;
 
     @Email(message = "Некорректный адрес электронной почты.")

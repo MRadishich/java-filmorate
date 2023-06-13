@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.yandex.practicum.filmorate.dto.FilmDTO;
+import ru.yandex.practicum.filmorate.dto.FilmDto;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
@@ -29,7 +29,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     @Transactional
-    public FilmDTO createFilm(FilmDTO filmDTO) {
+    public FilmDto createFilm(FilmDto filmDTO) {
         log.info("Получен запрос на создание нового фильма: {}", filmDTO);
 
         Film film = FilmMapper.toFilm(filmDTO);
@@ -56,7 +56,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     @Transactional
-    public List<FilmDTO> getAllFilms() {
+    public List<FilmDto> getAllFilms() {
         log.info("Получен запрос на поиск всех фильмов.");
 
         List<Film> films = filmStorage.findAll();
@@ -80,7 +80,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     @Transactional
-    public FilmDTO getFilmById(long filmId) {
+    public FilmDto getFilmById(long filmId) {
         log.info("Получен запрос на поиск фильма по filmId = {}", filmId);
 
         Film film = filmStorage.findById(filmId)
@@ -93,7 +93,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     @Transactional
-    public FilmDTO updateFilm(FilmDTO filmDTO) {
+    public FilmDto updateFilm(FilmDto filmDTO) {
         Film film = FilmMapper.toFilm((filmDTO));
 
         log.info("Получен запрос на обновление фильма с id = {}. Новое значение: {}", film.getId(), filmDTO);
@@ -122,7 +122,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     @Transactional
-    public List<FilmDTO> getPopularFilms(int limit) {
+    public List<FilmDto> getPopularFilms(int limit) {
         log.info("Получен запрос на поиск самых популярных фильмом. Кол-во требуемых фильмов: {}", limit);
 
         List<Film> films = filmStorage.findAllById(

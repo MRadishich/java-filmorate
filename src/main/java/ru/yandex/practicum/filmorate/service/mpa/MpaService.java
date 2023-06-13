@@ -1,11 +1,11 @@
 package ru.yandex.practicum.filmorate.service.mpa;
 
-import ru.yandex.practicum.filmorate.dto.MpaDTO;
+import ru.yandex.practicum.filmorate.dto.MpaDto;
 
 import java.util.List;
 
 public interface MpaService {
-    MpaDTO getById(int id);
+    MpaDto getById(int id);
 
-    List<MpaDTO> getAll();
+    List<MpaDto> getAll();
 }

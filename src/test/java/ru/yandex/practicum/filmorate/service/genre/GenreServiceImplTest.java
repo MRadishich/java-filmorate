@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.yandex.practicum.filmorate.dto.GenreDTO;
+import ru.yandex.practicum.filmorate.dto.GenreDto;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
@@ -33,12 +33,12 @@ class GenreServiceImplTest {
     public void test1_shouldReturnGenreDTOByGenreId() {
         // Given
         Genre genre = new Genre(1, "Боевик");
-        GenreDTO expectedGenreDTO = new GenreDTO(1, "Боевик");
+        GenreDto expectedGenreDTO = new GenreDto(1, "Боевик");
 
         given(genreStorage.findById(genre.getId())).willReturn(Optional.of(genre));
 
         // When
-        GenreDTO foundGenreDTO = genreService.getById(genre.getId());
+        GenreDto foundGenreDTO = genreService.getById(genre.getId());
 
         // Then
         assertEquals(expectedGenreDTO, foundGenreDTO);
@@ -67,16 +67,16 @@ class GenreServiceImplTest {
                 new Genre(2, "Ужасы"),
                 new Genre(3, "Комедия")
         );
-        List<GenreDTO> expectedGenreDTOS = List.of(
-                new GenreDTO(1, "Боевик"),
-                new GenreDTO(2, "Ужасы"),
-                new GenreDTO(3, "Комедия")
+        List<GenreDto> expectedGenreDTOS = List.of(
+                new GenreDto(1, "Боевик"),
+                new GenreDto(2, "Ужасы"),
+                new GenreDto(3, "Комедия")
         );
 
         given(genreStorage.findAll()).willReturn(genres);
 
         // When
-        Collection<GenreDTO> foundGenreDTOs = genreService.getAll();
+        Collection<GenreDto> foundGenreDTOs = genreService.getAll();
 
         // Then
         assertEquals(expectedGenreDTOS, foundGenreDTOs);
