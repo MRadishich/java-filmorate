@@ -13,15 +13,4 @@ public enum FriendshipStatus {
     public int getValue() {
         return value;
     }
-
-    public static FriendshipStatus getStatus(int value) {
-        for (FriendshipStatus status : FriendshipStatus.values()) {
-            if (status.getValue() == value) {
-                return status;
-            }
-        }
-
-        return null;
-    }
-
 }
