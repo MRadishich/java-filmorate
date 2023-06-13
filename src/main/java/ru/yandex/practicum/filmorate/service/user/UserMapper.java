@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.service.user;
 
 import ru.yandex.practicum.filmorate.dto.UserDTO;
-import ru.yandex.practicum.filmorate.model.user.User;
+import ru.yandex.practicum.filmorate.model.User;
 
 class UserMapper {
 

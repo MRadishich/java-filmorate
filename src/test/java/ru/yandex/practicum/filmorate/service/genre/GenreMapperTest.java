@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.service.genre;
 
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.dto.GenreDTO;
-import ru.yandex.practicum.filmorate.model.film.Genre;
+import ru.yandex.practicum.filmorate.model.Genre;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

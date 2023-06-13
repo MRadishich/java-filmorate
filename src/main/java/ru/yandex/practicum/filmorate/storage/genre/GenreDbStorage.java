@@ -4,11 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ru.yandex.practicum.filmorate.model.film.Genre;
+import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -56,5 +55,32 @@ public class GenreDbStorage implements GenreStorage {
         } catch (DataAccessException e) {
             return List.of();
         }
+    }
+
+    @Override
+    public Map<Long, List<Genre>> getGenresByFilms(Collection<Film> films) {
+        String inSql = String.join(",", Collections.nCopies(films.size(), "?"));
+        final String sql = String.format("SELECT " +
+                "fg.film_id, " +
+                "g.id AS genre_id, " +
+                "g.name " +
+                "FROM films_genres fg " +
+                "LEFT JOIN genres g ON fg.genre_id = g.id " +
+                "WHERE fg.film_id in (%s)", inSql);
+
+        Map<Long, List<Genre>> genresByFilms = new HashMap<>();
+
+        jdbcTemplate.query(sql, rs -> {
+            Genre genre = new Genre(rs.getInt("genre_id"), rs.getString("name"));
+            Long filmId = rs.getLong("film_id");
+
+            genresByFilms.putIfAbsent(filmId, new ArrayList<>());
+            genresByFilms.get(filmId).add(genre);
+        }, films
+                .stream()
+                .map(film -> String.valueOf(film.getId()))
+                .toArray());
+
+        return genresByFilms;
     }
 }

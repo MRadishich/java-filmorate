@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ru.yandex.practicum.filmorate.model.film.Mpa;
+import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.util.List;
 import java.util.Optional;

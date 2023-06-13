@@ -8,12 +8,11 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.yandex.practicum.filmorate.dto.FilmDTO;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.model.film.Film;
-import ru.yandex.practicum.filmorate.model.film.Genre;
-import ru.yandex.practicum.filmorate.model.film.Mpa;
+import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.service.like.LikeService;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.filmGenre.FilmGenreStorage;
 import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
 import ru.yandex.practicum.filmorate.storage.mpa.MpaStorage;
 
@@ -39,8 +38,6 @@ class FilmServiceImplTest {
     private MpaStorage mpaStorage;
     @Mock
     private LikeService likeService;
-    @Mock
-    private FilmGenreStorage filmGenreStorage;
     private FilmService filmService;
 
 
@@ -50,7 +47,6 @@ class FilmServiceImplTest {
                 genreStorage,
                 filmStorage,
                 mpaStorage,
-                filmGenreStorage,
                 likeService
         );
     }
@@ -183,7 +179,7 @@ class FilmServiceImplTest {
         );
 
         given(filmStorage.findAll()).willReturn(films);
-        given(filmGenreStorage.getAllFilmGenres(films)).willReturn(Map.of(
+        given(genreStorage.getGenresByFilms(films)).willReturn(Map.of(
                 1L, genres,
                 2L, genres,
                 3L, genres
@@ -346,13 +342,14 @@ class FilmServiceImplTest {
     @Test
     public void test7_shouldDeleteFilmById() {
         // Given
-        given(filmStorage.existsById(any())).willReturn(true);
+        long filmId = 1L;
+        given(filmStorage.existsById(filmId)).willReturn(true);
 
         // When
         filmService.deleteFilmById(1L);
 
         // Then
-        Mockito.verify(filmStorage, Mockito.times(1)).deleteById(1L);
+        Mockito.verify(filmStorage, Mockito.times(1)).deleteById(filmId);
     }
 
     @Test
@@ -439,7 +436,7 @@ class FilmServiceImplTest {
 
         given(likeService.getTopFilmsByLikes(3)).willReturn(List.of(1L, 2L, 3L));
         given(filmStorage.findAllById(anyList())).willReturn(films);
-        given(filmGenreStorage.getAllFilmGenres(films)).willReturn(Map.of(
+        given(genreStorage.getGenresByFilms(films)).willReturn(Map.of(
                 1L, genres,
                 2L, genres,
                 3L, genres

@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.model.friendship;
+package ru.yandex.practicum.filmorate.enums;
 
 public enum FriendshipStatus {
     NOTAPPROVED(0),

@@ -6,11 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.filmorate.dto.FilmDTO;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.model.film.Film;
-import ru.yandex.practicum.filmorate.model.film.Genre;
+import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.service.like.LikeService;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.filmGenre.FilmGenreStorage;
 import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
 import ru.yandex.practicum.filmorate.storage.mpa.MpaStorage;
 
@@ -26,7 +25,6 @@ public class FilmServiceImpl implements FilmService {
     private final GenreStorage genreStorage;
     private final FilmStorage filmStorage;
     private final MpaStorage mpaStorage;
-    private final FilmGenreStorage filmGenreStorage;
     private final LikeService likeService;
 
     @Override
@@ -71,11 +69,12 @@ public class FilmServiceImpl implements FilmService {
     }
 
     private void setGenres(List<Film> films) {
-        Map<Long, List<Genre>> allFilmGenres = filmGenreStorage.getAllFilmGenres(films);
+        Map<Long, List<Genre>> genresByFilms = genreStorage.getGenresByFilms(films);
+
 
         films.forEach(film -> {
             Long filmId = film.getId();
-            film.setGenres(allFilmGenres.getOrDefault(filmId, new ArrayList<>()));
+            film.setGenres(genresByFilms.getOrDefault(filmId, new ArrayList<>()));
         });
     }
 

@@ -8,9 +8,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.yandex.practicum.filmorate.FilmorateApplication;
-import ru.yandex.practicum.filmorate.model.film.Film;
-import ru.yandex.practicum.filmorate.model.film.Genre;
-import ru.yandex.practicum.filmorate.model.film.Mpa;
+import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.time.LocalDate;
 import java.util.List;

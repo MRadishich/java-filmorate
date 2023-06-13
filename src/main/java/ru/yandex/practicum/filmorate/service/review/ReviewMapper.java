@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.service.review;
 
 import ru.yandex.practicum.filmorate.dto.ReviewDTO;
-import ru.yandex.practicum.filmorate.model.film.Review;
+import ru.yandex.practicum.filmorate.model.Review;
 
 public class ReviewMapper {
     public static ReviewDTO toDto(Review review) {

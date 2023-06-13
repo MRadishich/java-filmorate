@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.storage.review;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.model.film.Review;
+import ru.yandex.practicum.filmorate.model.Review;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

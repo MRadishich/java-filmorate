@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.yandex.practicum.filmorate.model.film.Review;
+import ru.yandex.practicum.filmorate.model.Review;
 
 import java.util.List;
 import java.util.Optional;

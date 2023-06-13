@@ -6,8 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.yandex.practicum.filmorate.model.friendship.Friendship;
-import ru.yandex.practicum.filmorate.model.friendship.FriendshipStatus;
+import ru.yandex.practicum.filmorate.enums.FriendshipStatus;
 import ru.yandex.practicum.filmorate.storage.friend.FriendStorage;
 
 import java.util.List;
@@ -32,13 +31,13 @@ class FriendshipServiceImplTest {
         long userId = 1L;
         long friendId = 2L;
 
-        given(friendStorage.existsById(new Friendship(friendId, userId))).willReturn(false);
+        given(friendStorage.existsById(friendId, userId)).willReturn(false);
 
         // When
         friendshipService.addFriend(userId, friendId);
 
         // Then
-        Mockito.verify(friendStorage).save(new Friendship(userId, friendId, FriendshipStatus.NOTAPPROVED));
+        Mockito.verify(friendStorage).save(userId, friendId, FriendshipStatus.NOTAPPROVED);
     }
 
     @Test
@@ -47,13 +46,13 @@ class FriendshipServiceImplTest {
         long userId = 1L;
         long friendId = 2L;
 
-        given(friendStorage.existsById(new Friendship(friendId, userId))).willReturn(true);
+        given(friendStorage.existsById(friendId, userId)).willReturn(true);
 
         // When
         friendshipService.addFriend(userId, friendId);
 
         // Then
-        Mockito.verify(friendStorage).save(new Friendship(userId, friendId, FriendshipStatus.APPROVED));
+        Mockito.verify(friendStorage).save(userId, friendId, FriendshipStatus.APPROVED);
     }
 
     @Test
@@ -66,8 +65,8 @@ class FriendshipServiceImplTest {
         friendshipService.deleteFriend(userId, friendId);
 
         // Then
-        Mockito.verify(friendStorage).delete(new Friendship(userId, friendId));
-        Mockito.verify(friendStorage).save(new Friendship(friendId, userId, FriendshipStatus.NOTAPPROVED));
+        Mockito.verify(friendStorage).delete(userId, friendId);
+        Mockito.verify(friendStorage).save(friendId, userId, FriendshipStatus.NOTAPPROVED);
     }
 
     @Test
@@ -75,11 +74,8 @@ class FriendshipServiceImplTest {
         // Given
         long userId = 1L;
 
-        given(friendStorage.findAllByUserId(userId)).willReturn(List.of(
-                new Friendship(1L, 2L, FriendshipStatus.APPROVED),
-                new Friendship(1L, 3L, FriendshipStatus.APPROVED),
-                new Friendship(1L, 4L, FriendshipStatus.APPROVED)
-        ));
+        given(friendStorage.findAllFriendIdsByUserId(userId))
+                .willReturn(List.of(2L, 3L, 4L));
 
         // When
         List<Long> friendsIds = friendshipService.getFriendsIds(userId);

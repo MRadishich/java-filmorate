@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.service.genre;
 
 import ru.yandex.practicum.filmorate.dto.GenreDTO;
-import ru.yandex.practicum.filmorate.model.film.Genre;
+import ru.yandex.practicum.filmorate.model.Genre;
 
 class GenreMapper {
     public static GenreDTO toDto(Genre genre) {

@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.filmorate.dto.ReviewDTO;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.model.film.Review;
+import ru.yandex.practicum.filmorate.model.Review;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.like.LikeStorage;
 import ru.yandex.practicum.filmorate.storage.review.ReviewStorage;
-import ru.yandex.practicum.filmorate.storage.reviewLike.ReviewLikeStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewStorage reviewStorage;
     private final UserStorage userStorage;
     private final FilmStorage filmStorage;
-    private final ReviewLikeStorage reviewLikeStorage;
+    private final LikeStorage likeStorage;
 
     private static final int INCREMENT = 1;
     private static final int DECREMENT = -1;
@@ -118,7 +118,7 @@ public class ReviewServiceImpl implements ReviewService {
             throw new NotFoundException("Пользователь с id = " + userId + " не найден.");
         }
 
-        reviewLikeStorage.addLike(reviewId, userId);
+        likeStorage.saveLikeReview(reviewId, userId);
         reviewStorage.changeUseful(reviewId, INCREMENT);
     }
 
@@ -135,7 +135,7 @@ public class ReviewServiceImpl implements ReviewService {
             throw new NotFoundException("Пользователь с id = " + userId + " не найден.");
         }
 
-        reviewLikeStorage.addDislike(reviewId, userId);
+        likeStorage.saveDislikeReview(reviewId, userId);
         reviewStorage.changeUseful(reviewId, DECREMENT);
     }
 
@@ -152,7 +152,7 @@ public class ReviewServiceImpl implements ReviewService {
             throw new NotFoundException("Пользователь с id = " + userId + " не найден.");
         }
 
-        if (!reviewLikeStorage.deleteLike(reviewId, userId)) {
+        if (!likeStorage.deleteLikeReview(reviewId, userId)) {
             throw new NotFoundException("Пользователь с id = " + userId +
                     " не ставил лайк отзыву с id = " + reviewId + ".");
         }
@@ -173,7 +173,7 @@ public class ReviewServiceImpl implements ReviewService {
             throw new NotFoundException("Пользователь с id = " + userId + " не найден.");
         }
 
-        if (!reviewLikeStorage.deleteDislike(reviewId, userId)) {
+        if (!likeStorage.deleteDislikeReview(reviewId, userId)) {
             throw new NotFoundException("Пользователь с id = " + userId +
                     " не ставил дизлайк отзыву с id = " + reviewId + ".");
         }

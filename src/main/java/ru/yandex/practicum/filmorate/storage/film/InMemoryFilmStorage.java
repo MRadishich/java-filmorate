@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.storage.film;
 
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.model.film.Film;
+import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;

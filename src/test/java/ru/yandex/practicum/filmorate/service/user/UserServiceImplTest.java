@@ -8,7 +8,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.yandex.practicum.filmorate.dto.UserDTO;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.model.user.User;
+import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.friendship.FriendshipService;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 

@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.dto;
 
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.model.film.Mpa;
+import ru.yandex.practicum.filmorate.model.Mpa;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;

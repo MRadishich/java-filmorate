@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.model.like.Like;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.like.LikeStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
@@ -33,7 +32,7 @@ public class LikeServiceImpl implements LikeService {
             throw new NotFoundException("Пользователь с id = " + userId + " не найден.");
         }
 
-        likeStorage.save(new Like(filmId, userId));
+        likeStorage.saveLikeFilm(filmId, userId);
     }
 
     @Override
@@ -49,7 +48,7 @@ public class LikeServiceImpl implements LikeService {
             throw new NotFoundException("Пользователь с id = " + userId + " не найден.");
         }
 
-        likeStorage.delete(new Like(filmId, userId));
+        likeStorage.deleteLikeFilm(filmId, userId);
     }
 
     @Override

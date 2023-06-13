@@ -6,9 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageRequest;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.model.like.Like;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.like.LikeStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
@@ -42,8 +40,6 @@ class LikeServiceImplTest {
         long filmId = 1L;
         long userId = 2L;
 
-        Like like = new Like(filmId, userId);
-
         given(filmStorage.existsById(filmId)).willReturn(true);
         given(userStorage.existsById(userId)).willReturn(true);
 
@@ -51,7 +47,7 @@ class LikeServiceImplTest {
         likeService.addLike(filmId, userId);
 
         // Then
-        Mockito.verify(likeStorage, Mockito.times(1)).save(like);
+        Mockito.verify(likeStorage, Mockito.times(1)).saveLikeFilm(filmId, userId);
     }
 
     @Test
@@ -95,8 +91,6 @@ class LikeServiceImplTest {
         long filmId = 1L;
         long userId = 2L;
 
-        Like like = new Like(filmId, userId);
-
         given(filmStorage.existsById(filmId)).willReturn(true);
         given(userStorage.existsById(userId)).willReturn(true);
 
@@ -104,7 +98,7 @@ class LikeServiceImplTest {
         likeService.deleteLike(filmId, userId);
 
         // Then
-        Mockito.verify(likeStorage, Mockito.times(1)).delete(like);
+        Mockito.verify(likeStorage, Mockito.times(1)).deleteLikeFilm(filmId, userId);
     }
 
     @Test
@@ -150,6 +144,6 @@ class LikeServiceImplTest {
         likeService.getTopFilmsByLikes(limit);
 
         // Then
-        Mockito.verify(likeStorage, Mockito.times(1)).findTopFilmIdByCountLikes(PageRequest.of(0, limit));
+        Mockito.verify(likeStorage, Mockito.times(1)).findTopFilmIdByCountLikes(limit);
     }
 }

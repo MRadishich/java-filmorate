@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ru.yandex.practicum.filmorate.model.friendship.Friendship;
+import ru.yandex.practicum.filmorate.enums.FriendshipStatus;
 
 import java.util.List;
 
@@ -12,21 +12,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FriendDbStorage implements FriendStorage {
     private final JdbcTemplate jdbcTemplate;
-    private final MapRowToFriendship mapRowToFriendship;
 
     @Override
-    public void save(Friendship friendship) {
+    public void save(long userId, long friendId, FriendshipStatus status) {
         String sql = "INSERT INTO friendship VALUES(?, ?, ?)";
 
-        jdbcTemplate.update(sql, friendship.getUserId(), friendship.getFriendId(), friendship.getStatus().getValue());
+        jdbcTemplate.update(sql, userId, friendId, status.getValue());
     }
 
     @Override
-    public boolean existsById(Friendship friendship) {
-        String sql = "SELECT * FROM friendship WHERE user_id = ? AND friend_id = ?";
+    public boolean existsById(long userId, long friendId) {
+        String sql = "SELECT COUNT() FROM friendship WHERE user_id = ? AND friend_id = ?";
 
         try {
-            jdbcTemplate.queryForObject(sql, mapRowToFriendship, friendship.getUserId(), friendship.getFriendId());
+            jdbcTemplate.queryForObject(sql, Integer.class, userId, friendId);
             return true;
         } catch (DataAccessException e) {
             return false;
@@ -34,16 +33,16 @@ public class FriendDbStorage implements FriendStorage {
     }
 
     @Override
-    public void delete(Friendship friendship) {
+    public void delete(long userId, long friendId) {
         String sql = "DELETE FROM friendship WHERE user_id = ? AND friend_id = ?";
 
-        jdbcTemplate.update(sql, friendship.getUserId(), friendship.getFriendId());
+        jdbcTemplate.update(sql, userId, friendId);
     }
 
     @Override
-    public List<Friendship> findAllByUserId(long userId) {
-        String sql = "SELECt * FROM friendship WHERE user_id = ?";
+    public List<Long> findAllFriendIdsByUserId(long userId) {
+        String sql = "SELECT friend_id FROM friendship WHERE user_id = ?";
 
-        return jdbcTemplate.query(sql, mapRowToFriendship, userId);
+        return jdbcTemplate.queryForList(sql, Long.class, userId);
     }
 }
