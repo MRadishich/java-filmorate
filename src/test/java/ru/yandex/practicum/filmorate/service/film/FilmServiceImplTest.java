@@ -434,8 +434,7 @@ class FilmServiceImplTest {
         );
 
 
-        given(likeService.getTopFilmsByLikes(3)).willReturn(List.of(1L, 2L, 3L));
-        given(filmStorage.findAllById(anyList())).willReturn(films);
+        given(filmStorage.findTopFilmsByCountLikes(3)).willReturn(films);
         given(genreStorage.getGenresByFilms(films)).willReturn(Map.of(
                 1L, genres,
                 2L, genres,
@@ -443,7 +442,7 @@ class FilmServiceImplTest {
         ));
 
         // When
-        Collection<FilmDto> popularFilms = filmService.getPopularFilms(3);
+        Collection<FilmDto> popularFilms = filmService.getTopFilmsByLikes(3);
 
         // Then
         assertEquals(expectedFilmDtos, popularFilms);

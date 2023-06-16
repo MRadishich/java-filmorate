@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 @RequiredArgsConstructor
 public class LikeDbStorage implements LikeStorage {
@@ -25,18 +23,6 @@ public class LikeDbStorage implements LikeStorage {
         String sql = "INSERT INTO likes (film_id, user_id) VALUES (?, ?)";
 
         jdbcTemplate.update(sql, filmId, userId);
-    }
-
-    @Override
-    public List<Long> findTopFilmIdByCountLikes(int limit) {
-        String sql = "SELECT f.id " +
-                "FROM films f " +
-                "LEFT JOIN likes l ON f.id = l.film_id " +
-                "GROUP BY f.id " +
-                "ORDER BY COUNT(l.user_id) DESC " +
-                "LIMIT ?";
-
-        return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getLong("id"), limit);
     }
 
     @Override

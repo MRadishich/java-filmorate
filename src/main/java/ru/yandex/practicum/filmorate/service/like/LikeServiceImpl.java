@@ -9,8 +9,6 @@ import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.like.LikeStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
-import java.util.List;
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -49,13 +47,5 @@ public class LikeServiceImpl implements LikeService {
         }
 
         likeStorage.deleteLikeFilm(filmId, userId);
-    }
-
-    @Override
-    @Transactional
-    public List<Long> getTopFilmsByLikes(int limit) {
-        log.info("Получен запрос на поиск фильмов с наибольшим количеством лайков. Кол-во требуемых фильмов: {}", limit);
-
-        return likeStorage.findTopFilmIdByCountLikes(limit);
     }
 }

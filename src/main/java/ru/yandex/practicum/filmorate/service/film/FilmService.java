@@ -15,5 +15,5 @@ public interface FilmService {
 
     void deleteFilmById(long id);
 
-    List<FilmDto> getPopularFilms(int count);
+    List<FilmDto> getTopFilmsByLikes(int limit);
 }

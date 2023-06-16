@@ -119,6 +119,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
+    @Transactional
     public List<Film> findAll() {
         String sql = "SELECT f.*, " +
                 "mr.id AS mpa_rating_id, " +
@@ -160,5 +161,25 @@ public class FilmDbStorage implements FilmStorage {
                 "WHERE f.id IN (%s)", inSql);
 
         return jdbcTemplate.query(sql, mapRowToFilm, ids.toArray());
+    }
+
+    @Override
+    @Transactional
+    public List<Film> findTopFilmsByCountLikes(int limit) {
+        String sql = "SELECT f.*, " +
+                "mr.id AS mpa_rating_id, " +
+                "mr.name AS mpa_rating_name, " +
+                "mr.description AS mpa_rating_description " +
+                "FROM films f " +
+                "LEFT JOIN (" +
+                    "SELECT film_id, COUNT(user_id) likes_count " +
+                    "FROM likes " +
+                    "GROUP BY film_id " +
+                ") AS j ON j.film_id = f.id " +
+                "LEFT JOIN mpa_rating mr ON mr.id = f.mpa_rating_id " +
+                "ORDER BY j.likes_count DESC " +
+                "LIMIT ? ";
+
+        return jdbcTemplate.query(sql, mapRowToFilm, limit);
     }
 }

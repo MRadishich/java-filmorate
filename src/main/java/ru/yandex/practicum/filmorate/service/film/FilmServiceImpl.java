@@ -122,12 +122,10 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     @Transactional
-    public List<FilmDto> getPopularFilms(int limit) {
+    public List<FilmDto> getTopFilmsByLikes(int limit) {
         log.info("Получен запрос на поиск самых популярных фильмом. Кол-во требуемых фильмов: {}", limit);
 
-        List<Film> films = filmStorage.findAllById(
-                likeService.getTopFilmsByLikes(limit)
-        );
+        List<Film> films = filmStorage.findTopFilmsByCountLikes(limit);
 
         setGenres(films);
 

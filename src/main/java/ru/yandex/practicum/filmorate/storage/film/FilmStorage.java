@@ -17,4 +17,6 @@ public interface FilmStorage {
     void deleteById(long id);
 
     List<Film> findAllById(List<Long> ids);
+
+    List<Film> findTopFilmsByCountLikes(int limit);
 }

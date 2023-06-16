@@ -135,15 +135,4 @@ class LikeServiceImplTest {
         // Then
         assertEquals(expectedMessage, exception.getMessage());
     }
-
-    @Test
-    void findTopFilmsByLikes() {
-        // Given
-        int limit = 3;
-        // When
-        likeService.getTopFilmsByLikes(limit);
-
-        // Then
-        Mockito.verify(likeStorage, Mockito.times(1)).findTopFilmIdByCountLikes(limit);
-    }
 }
