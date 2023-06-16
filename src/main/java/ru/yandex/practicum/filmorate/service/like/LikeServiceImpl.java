@@ -54,7 +54,7 @@ public class LikeServiceImpl implements LikeService {
     @Override
     @Transactional
     public List<Long> getTopFilmsByLikes(int limit) {
-        log.info("Получен запрос на поиск {} фильмов с наибольшим количеством лайков.", limit);
+        log.info("Получен запрос на поиск фильмов с наибольшим количеством лайков. Кол-во требуемых фильмов: {}", limit);
 
         return likeStorage.findTopFilmIdByCountLikes(limit);
     }
