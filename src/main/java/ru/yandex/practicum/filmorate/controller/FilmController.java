@@ -27,9 +27,7 @@ public class FilmController {
     public ResponseEntity<List<FilmDto>> findAllFilms() {
         List<FilmDto> films = filmService.getAllFilms();
 
-        return films != null ?
-                new ResponseEntity<>(films, HttpStatus.OK) :
-                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(films, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
