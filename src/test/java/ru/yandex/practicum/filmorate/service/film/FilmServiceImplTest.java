@@ -11,7 +11,6 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
-import ru.yandex.practicum.filmorate.service.like.LikeService;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
 import ru.yandex.practicum.filmorate.storage.mpa.MpaStorage;
@@ -36,8 +35,6 @@ class FilmServiceImplTest {
     private FilmStorage filmStorage;
     @Mock
     private MpaStorage mpaStorage;
-    @Mock
-    private LikeService likeService;
     private FilmService filmService;
 
 
@@ -46,8 +43,7 @@ class FilmServiceImplTest {
         filmService = new FilmServiceImpl(
                 genreStorage,
                 filmStorage,
-                mpaStorage,
-                likeService
+                mpaStorage
         );
     }
 

@@ -8,7 +8,6 @@ import ru.yandex.practicum.filmorate.dto.FilmDto;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.service.like.LikeService;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
 import ru.yandex.practicum.filmorate.storage.mpa.MpaStorage;
@@ -25,7 +24,6 @@ public class FilmServiceImpl implements FilmService {
     private final GenreStorage genreStorage;
     private final FilmStorage filmStorage;
     private final MpaStorage mpaStorage;
-    private final LikeService likeService;
 
     @Override
     @Transactional
